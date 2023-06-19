@@ -33,14 +33,29 @@ public class GameMath {
 		
 		return speed;
 	}
-	
+
+	/**
+	 *returns number between <b>min</b> and <b>max</b> limits
+	 * returns <b>FLOAT</b>
+	 * @param value <b>FLOAT</b> input to be limited
+	 * @param min <b>FLOAT</b> lower bound
+	 * @param max <b>FLOAT</b> upper bound
+	 */
 	public static float gate( float min, float value, float max ) {
-		if (value < min) {
-			return min;
-		} else if (value > max) {
-			return max;
-		} else {
-			return value;
-		}
+		value = Math.max(value, min);
+		value = Math.min(value, max);
+		return value;
+	}
+	/**
+	 *returns number between <b>min</b> and <b>max</b> limits
+	 * returns <b>INT</b>
+	 * @param value <b>INT</b> input to be limited
+	 * @param min <b>INT</b> lower bound
+	 * @param max <b>INT</b> upper bound   
+	 */
+	public static int gate( int min, int value, int max ) {
+		value = Math.max(value, min);
+		value = Math.min(value, max);
+		return value;
 	}
 }
