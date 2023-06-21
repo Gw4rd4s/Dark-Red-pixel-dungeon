@@ -566,14 +566,14 @@ public class Hero extends Char {
 		if (belongings.armor() != null) {
 			int armDr = Random.NormalIntRange( belongings.armor().DRMin(), belongings.armor().DRMax());
 			if (STR() < belongings.armor().STRReq()){
-				armDr -= 2*(belongings.armor().STRReq() - STR());
+				armDr -= (belongings.armor().STRReq() - lvl);
 			}
 			if (armDr > 0) dr += armDr;
 		}
 		if (belongings.weapon() != null && !RingOfForce.fightingUnarmed(this))  {
 			int wepDr = Random.NormalIntRange( 0 , belongings.weapon().defenseFactor( this ) );
 			if (STR() < ((Weapon)belongings.weapon()).STRReq()){
-				wepDr -= 2*(((Weapon)belongings.weapon()).STRReq() - STR());
+				wepDr -= 2*(((Weapon)belongings.weapon()).STRReq() - lvl);
 			}
 			if (wepDr > 0) dr += wepDr;
 		}
@@ -656,7 +656,7 @@ public class Hero extends Char {
 		KindOfWeapon w = belongings.attackingWeapon();
 		if (!(w instanceof Weapon))             return true;
 		if (RingOfForce.fightingUnarmed(this))  return true;
-		if (STR() < ((Weapon)w).STRReq())       return false;
+		if (lvl < ((Weapon)w).STRReq())       return false;
 		if (w instanceof Flail)                 return false;
 
 		return super.canSurpriseAttack();

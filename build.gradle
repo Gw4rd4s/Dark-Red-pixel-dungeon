@@ -12,10 +12,10 @@ allprojects {
 
     ext {
         appName = 'Dark-Red Pixel Dungeon'
-        appPackageName = 'com.darkredpixdun.darkredpixeldungeon'
+        appPackageName = 'com.darkred.darkredpixeldungeon'
 
-        appVersionCode = 2
-        appVersionName = '0.0.2'
+        appVersionCode = 3
+        appVersionName = '0.0.3'
 
         appJavaCompatibility = JavaVersion.VERSION_1_8
 

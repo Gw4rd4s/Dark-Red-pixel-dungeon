@@ -112,7 +112,7 @@ public class MeleeWeapon extends Weapon {
 					GLog.w(Messages.get(this, "ability_need_equip"));
 					usesTargeting = false;
 				}
-			} else if (STRReq() > hero.STR()){
+			} else if (STRReq() > hero.lvl){
 				GLog.w(Messages.get(this, "ability_low_str"));
 				usesTargeting = false;
 			} else if (hero.belongings.weapon == this &&
@@ -284,8 +284,8 @@ public class MeleeWeapon extends Weapon {
 				lvl*(tier+1);   //level scaling
 	}
 
-	public int STRReq(int lvl){
-		return STRReq(tier, lvl);
+	public int wepTier(){
+		return tier;
 	}
 
 	private static boolean evaluatingTwinUpgrades = false;
@@ -340,7 +340,7 @@ public class MeleeWeapon extends Weapon {
 		int damage = augment.damageFactor(super.damageRoll( owner ));
 
 		if (owner instanceof Hero) {
-			int exStr = ((Hero)owner).STR() - STRReq();
+			int exStr = ((Hero)owner).lvl - STRReq();
 			if (exStr > 0) {
 				damage += Random.IntRange( 0, exStr );
 			}
@@ -356,14 +356,14 @@ public class MeleeWeapon extends Weapon {
 
 		if (levelKnown) {
 			info += "\n\n" + Messages.get(MeleeWeapon.class, "stats_known", tier, augment.damageFactor(min()), augment.damageFactor(max()), STRReq());
-			if (STRReq() > Dungeon.hero.STR()) {
+			if (STRReq() > Dungeon.hero.lvl) {
 				info += " " + Messages.get(Weapon.class, "too_heavy");
-			} else if (Dungeon.hero.STR() > STRReq()){
-				info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
+			} else if (Dungeon.hero.lvl > STRReq()){
+				info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.lvl - STRReq());
 			}
 		} else {
-			info += "\n\n" + Messages.get(MeleeWeapon.class, "stats_unknown", tier, min(0), max(0), STRReq(0));
-			if (STRReq(0) > Dungeon.hero.STR()) {
+			info += "\n\n" + Messages.get(MeleeWeapon.class, "stats_unknown", tier, min(0), max(0), STRReq());
+			if (STRReq() > Dungeon.hero.lvl) {
 				info += " " + Messages.get(MeleeWeapon.class, "probably_too_heavy");
 			}
 		}

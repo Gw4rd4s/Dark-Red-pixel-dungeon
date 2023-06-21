@@ -76,8 +76,8 @@ public class Pickaxe extends MeleeWeapon {
 	public boolean bloodStained = false;
 
 	@Override
-	public int STRReq(int lvl) {
-		return super.STRReq(lvl) + 2; //tier 3 strength requirement with tier 2 damage stats
+	public int wepTier() {
+		return super.wepTier() + 1; //tier 3 strength requirement with tier 2 damage stats
 	}
 
 	@Override

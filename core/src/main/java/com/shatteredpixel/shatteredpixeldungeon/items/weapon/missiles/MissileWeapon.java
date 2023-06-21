@@ -95,8 +95,8 @@ abstract public class MissileWeapon extends Weapon {
 				(tier == 1 ? 2*lvl : tier*lvl); //level scaling
 	}
 	
-	public int STRReq(int lvl){
-		return STRReq(tier, lvl) - 1; //1 less str than normal for their tier
+	public int wepTier(){
+		return tier;
 	}
 	
 	@Override
@@ -355,7 +355,7 @@ abstract public class MissileWeapon extends Weapon {
 		int damage = augment.damageFactor(super.damageRoll( owner ));
 		
 		if (owner instanceof Hero) {
-			int exStr = ((Hero)owner).STR() - STRReq();
+			int exStr = ((Hero)owner).lvl - STRReq();
 			if (exStr > 0) {
 				damage += Random.IntRange( 0, exStr );
 			}
@@ -426,10 +426,10 @@ abstract public class MissileWeapon extends Weapon {
 				Math.round(augment.damageFactor(max())),
 				STRReq());
 
-		if (STRReq() > Dungeon.hero.STR()) {
+		if (STRReq() > Dungeon.hero.lvl) {
 			info += " " + Messages.get(Weapon.class, "too_heavy");
-		} else if (Dungeon.hero.STR() > STRReq()){
-			info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
+		} else if (Dungeon.hero.lvl > STRReq()){
+			info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.lvl - STRReq());
 		}
 
 		if (enchantment != null && (cursedKnown || !enchantment.curse())){

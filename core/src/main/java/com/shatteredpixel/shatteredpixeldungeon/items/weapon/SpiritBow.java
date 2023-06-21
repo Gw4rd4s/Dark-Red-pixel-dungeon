@@ -142,10 +142,10 @@ public class SpiritBow extends Weapon {
 				Math.round(augment.damageFactor(max())),
 				STRReq());
 		
-		if (STRReq() > Dungeon.hero.STR()) {
+		if (STRReq() > Dungeon.hero.lvl) {
 			info += " " + Messages.get(Weapon.class, "too_heavy");
-		} else if (Dungeon.hero.STR() > STRReq()){
-			info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
+		} else if (Dungeon.hero.lvl > STRReq()){
+			info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.lvl - STRReq());
 		}
 		
 		switch (augment) {
@@ -177,8 +177,8 @@ public class SpiritBow extends Weapon {
 	}
 	
 	@Override
-	public int STRReq(int lvl) {
-		return STRReq(1, lvl); //tier 1
+	public int wepTier() {
+		return 1; //tier 1
 	}
 	
 	@Override
@@ -209,7 +209,7 @@ public class SpiritBow extends Weapon {
 		int damage = augment.damageFactor(super.damageRoll(owner));
 		
 		if (owner instanceof Hero) {
-			int exStr = ((Hero)owner).STR() - STRReq();
+			int exStr = ((Hero)owner).lvl - STRReq();
 			if (exStr > 0) {
 				damage += Random.IntRange( 0, exStr );
 			}
@@ -337,8 +337,8 @@ public class SpiritBow extends Weapon {
 		}
 		
 		@Override
-		public int STRReq(int lvl) {
-			return SpiritBow.this.STRReq();
+		public int wepTier() {
+			return SpiritBow.this.wepTier();
 		}
 
 		@Override

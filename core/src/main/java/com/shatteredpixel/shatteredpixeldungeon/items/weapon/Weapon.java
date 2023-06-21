@@ -178,7 +178,7 @@ abstract public class Weapon extends KindOfWeapon {
 		int encumbrance = 0;
 		
 		if( owner instanceof Hero ){
-			encumbrance = STRReq() - ((Hero)owner).STR();
+			encumbrance = STRReq() - ((Hero)owner).lvl;
 		}
 
 		float ACC = this.ACC;
@@ -198,7 +198,7 @@ abstract public class Weapon extends KindOfWeapon {
 	protected float baseDelay( Char owner ){
 		float delay = augment.delayFactor(this.DLY);
 		if (owner instanceof Hero) {
-			int encumbrance = STRReq() - ((Hero)owner).STR();
+			int encumbrance = STRReq() - ((Hero)owner).lvl;
 			if (encumbrance > 0){
 				delay *= Math.pow( 1.2, encumbrance );
 			}
@@ -234,21 +234,15 @@ abstract public class Weapon extends KindOfWeapon {
 	}
 
 	public int STRReq(){
-		int req = STRReq(level());
+		int req = 4*wepTier();
 		if (masteryPotionBonus){
 			req -= 2;
 		}
 		return req;
 	}
 
-	public abstract int STRReq(int lvl);
+	public abstract int wepTier();
 
-	protected static int STRReq(int tier, int lvl){
-		lvl = Math.max(0, lvl);
-
-		//strength req decreases at +1,+3,+6,+10,etc.
-		return (8 + tier * 2) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2;
-	}
 
 	@Override
 	public int level() {
