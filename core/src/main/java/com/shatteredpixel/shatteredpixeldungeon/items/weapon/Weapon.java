@@ -234,7 +234,7 @@ abstract public class Weapon extends KindOfWeapon {
 	}
 
 	public int STRReq(){
-		int req = 4*wepTier();
+		int req = Math.max(1, 5*wepTier()-5);
 		if (masteryPotionBonus){
 			req -= 2;
 		}

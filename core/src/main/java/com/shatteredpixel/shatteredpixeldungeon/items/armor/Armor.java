@@ -557,7 +557,7 @@ public class Armor extends EquipableItem {
 	}
 
 	public int STRReq(){
-		int req = 4*tier;
+		int req = Math.min(1, 5*tier-5);
 		if (masteryPotionBonus){
 			req -= 2;
 		}
