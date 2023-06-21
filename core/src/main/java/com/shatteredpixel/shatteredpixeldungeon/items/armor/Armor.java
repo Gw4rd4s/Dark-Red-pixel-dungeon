@@ -83,8 +83,8 @@ public class Armor extends EquipableItem {
 		DEFENSE (-2f, 1f),
 		NONE	(0f   ,  0f);
 		
-		private float evasionFactor;
-		private float defenceFactor;
+		private final float evasionFactor;
+		private final float defenceFactor;
 		
 		Augment(float eva, float df){
 			evasionFactor = eva;
@@ -285,11 +285,12 @@ public class Armor extends EquipableItem {
 		return hero.belongings.armor() == this;
 	}
 
-	public final int DRMax(){
-		return DRMax(buffedLvl());
-	}
-
-	public int DRMax(int lvl){
+	/**
+	 *Calculates upper defense bound of the armor
+	 * @return max possible damage reduction
+	 */
+	public int DRMax(){
+		int lvl = buffedLvl();
 		if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
 			return 1 + tier + lvl + augment.defenseFactor(lvl);
 		}
@@ -302,16 +303,17 @@ public class Armor extends EquipableItem {
 		}
 	}
 
-	public final int DRMin(){
-		return DRMin(buffedLvl());
-	}
-
-	public int DRMin(int lvl){
+	/**
+	 * Calculates lower defense bound of the armor
+	 * @return min possible damage reduction
+	 */
+	public int DRMin(){
+		int lvl = buffedLvl();
 		if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
 			return 0;
 		}
 
-		int max = DRMax(lvl);
+		int max = DRMax();
 		if (lvl >= max){
 			return (lvl - max);
 		} else {
@@ -477,7 +479,8 @@ public class Armor extends EquipableItem {
 				info += " " + Messages.get(Armor.class, "too_heavy");
 			}
 		} else {
-			info += "\n\n" + Messages.get(Armor.class, "avg_absorb", DRMin(0), DRMax(0), STRReq(0));
+			//testing DRMin() and DRMax() without params. This should work though.
+			info += "\n\n" + Messages.get(Armor.class, "avg_absorb", DRMin(), DRMax(), STRReq(0));
 
 			if (STRReq(0) > Dungeon.hero.STR()) {
 				info += " " + Messages.get(Armor.class, "probably_too_heavy");

@@ -51,7 +51,7 @@ public class GameMath {
 	 * returns <b>INT</b>
 	 * @param value <b>INT</b> input to be limited
 	 * @param min <b>INT</b> lower bound
-	 * @param max <b>INT</b> upper bound   
+	 * @param max <b>INT</b> upper bound
 	 */
 	public static int gate( int min, int value, int max ) {
 		value = Math.max(value, min);
