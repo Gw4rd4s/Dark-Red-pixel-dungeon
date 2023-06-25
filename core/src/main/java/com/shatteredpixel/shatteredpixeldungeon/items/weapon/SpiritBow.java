@@ -78,7 +78,12 @@ public class SpiritBow extends Weapon {
 		actions.add(AC_SHOOT);
 		return actions;
 	}
-	
+
+	/**
+	 * Extends execute( ) from KindOfWeapon.java. Adds new action SHOOT.
+	 * @param hero hero performing the action
+	 * @param action action to do for this ITEM
+	 */
 	@Override
 	public void execute(Hero hero, String action) {
 		

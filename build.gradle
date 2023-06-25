@@ -14,8 +14,8 @@ allprojects {
         appName = 'Dark-Red Pixel Dungeon'
         appPackageName = 'com.darkred.darkredpixeldungeon'
 
-        appVersionCode = 3
-        appVersionName = '0.0.3'
+        appVersionCode = 4
+        appVersionName = '0.0.4'
 
         appJavaCompatibility = JavaVersion.VERSION_1_8
 

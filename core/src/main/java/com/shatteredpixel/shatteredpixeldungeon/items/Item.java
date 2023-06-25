@@ -143,7 +143,14 @@ public class Item implements Bundlable {
 	public void doThrow( Hero hero ) {
 		GameScene.selectCell(thrower);
 	}
-	
+
+	/**
+	 * Do inventory actions.
+	 * Here at Item.java, it is DROP and THROW.
+	 * Child classes add more actions
+	 * @param hero hero performing the action
+	 * @param action action to do for this ITEM
+	 */
 	public void execute( Hero hero, String action ) {
 
 		GameScene.cancel();

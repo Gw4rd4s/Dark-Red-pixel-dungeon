@@ -68,6 +68,12 @@ public abstract class EquipableItem extends Item {
 
 	protected static int slotOfUnequipped = -1;
 
+	/**
+	 * Extends execute() at Item.java. It does inventory actions such as DROP and THROW.
+	 * This implementation runs original execute() first, then adds EQUIP action.
+	 * @param hero hero performing the action
+	 * @param action action to do for this ITEM
+	 */
 	@Override
 	public void execute( Hero hero, String action ) {
 

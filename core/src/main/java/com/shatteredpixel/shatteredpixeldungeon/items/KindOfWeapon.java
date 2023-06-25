@@ -47,7 +47,13 @@ abstract public class KindOfWeapon extends EquipableItem {
 
 	protected String hitSound = Assets.Sounds.HIT;
 	protected float hitSoundPitch = 1f;
-	
+
+	/**
+	 * Extends execute( ) in EquipableItem.java. Inventory actions DROP, THROW and EQUIP.
+	 * This implementation adds second weapon slot for CHAMPION, then runs parent execute( ).
+	 * @param hero hero performing the action
+	 * @param action action to do for this ITEM
+	 */
 	@Override
 	public void execute(Hero hero, String action) {
 		if (hero.subClass == HeroSubClass.CHAMPION && action.equals(AC_EQUIP)){

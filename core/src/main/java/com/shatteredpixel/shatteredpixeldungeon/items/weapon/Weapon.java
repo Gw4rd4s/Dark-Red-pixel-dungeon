@@ -79,8 +79,8 @@ abstract public class Weapon extends KindOfWeapon {
 		DAMAGE  (1.5f, 5/3f),
 		NONE	(1.0f, 1f);
 
-		private float damageFactor;
-		private float delayFactor;
+		private final float damageFactor;
+		private final float delayFactor;
 
 		Augment(float dmg, float dly){
 			damageFactor = dmg;
