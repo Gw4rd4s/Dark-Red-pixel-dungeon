@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.ranged.Bow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Bolas;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.FishingSpear;
@@ -36,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSp
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpike;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Trident;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.ranged.RangedWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.Visual;
 import com.watabou.noosa.tweeners.PosTweener;
@@ -86,7 +88,10 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 	}
 	
 	private static final int DEFAULT_ANGULAR_SPEED = 720;
-	
+
+	/**
+	 * Hardcoded angular velocities of thrown and ranged weapons
+	 */
 	private static final HashMap<Class<?extends Item>, Integer> ANGULAR_SPEEDS = new HashMap<>();
 	static {
 		ANGULAR_SPEEDS.put(Dart.class,          0);
@@ -100,7 +105,7 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 		
 		ANGULAR_SPEEDS.put(SpiritBow.SpiritArrow.class,       0);
 		ANGULAR_SPEEDS.put(ScorpioSprite.ScorpioShot.class,   0);
-		
+		ANGULAR_SPEEDS.put(RangedWeapon.Projectile.class,	  0);
 		//720 is default
 		
 		ANGULAR_SPEEDS.put(HeavyBoomerang.class,1440);

@@ -130,6 +130,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RoundShield;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sai;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scimitar;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Ammo;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -439,7 +440,13 @@ public class Hero extends Char {
 			return 0;
 		}
 	}
-	
+
+	/**
+	 * Handles ranged logic for THROWING WEAPONS
+	 * @param enemy target
+	 * @param wep throwing weapon used
+	 * @return whether attack hit or missed
+	 */
 	public boolean shoot( Char enemy, MissileWeapon wep ) {
 
 		this.enemy = enemy;
@@ -463,7 +470,33 @@ public class Hero extends Char {
 
 		return hit;
 	}
-	
+
+	/**
+	 * Handles ranged logic for RANGED WEAPONS
+	 * @param enemy target
+	 * @param wep throwing weapon used
+	 * @return whether attack hit or missed
+	 */
+	public boolean shooting( Char enemy, Ammo wep ) {
+
+		this.enemy = enemy;
+		boolean wasEnemy = enemy.alignment == Alignment.ENEMY
+				|| (enemy instanceof Mimic && enemy.alignment == Alignment.NEUTRAL);
+
+		boolean hit = attack( enemy );
+		Invisibility.dispel();
+
+		if (hit && subClass == HeroSubClass.GLADIATOR && wasEnemy){
+			Buff.affect( this, Combo.class ).hit( enemy );
+		}
+
+		if (hit && heroClass == HeroClass.DUELIST && wasEnemy){
+			Buff.affect( this, Sai.ComboStrikeTracker.class).addHit();
+		}
+
+		return hit;
+	}
+
 	@Override
 	public int attackSkill( Char target ) {
 		KindOfWeapon wep = belongings.attackingWeapon();

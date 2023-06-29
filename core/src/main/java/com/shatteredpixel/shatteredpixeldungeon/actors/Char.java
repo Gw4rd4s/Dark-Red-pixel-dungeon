@@ -199,7 +199,7 @@ public abstract class Char extends Actor {
 			return false;
 		}
 	}
-	
+	//TODO: This returns TRUE only
 	//swaps places by default
 	public boolean interact(Char c){
 
@@ -260,7 +260,7 @@ public abstract class Char extends Actor {
 		
 		return true;
 	}
-	
+	//TODO: This returns TRUE only
 	protected boolean moveSprite( int from, int to ) {
 		
 		if (sprite.isVisible() && (Dungeon.level.heroFOV[from] || Dungeon.level.heroFOV[to])) {

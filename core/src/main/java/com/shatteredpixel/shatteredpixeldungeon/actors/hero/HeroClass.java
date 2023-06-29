@@ -71,6 +71,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortswor
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpike;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingStone;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.WoodenQuiver;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.watabou.utils.DeviceCompat;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.ranged.Bow;//temporary for testing
@@ -160,6 +161,8 @@ public enum HeroClass {
 		(hero.belongings.weapon = new Bow()).identify();
 		ThrowingStone stones = new ThrowingStone();
 		stones.quantity(3).collect();
+		WoodenQuiver quiver = new WoodenQuiver();
+		quiver.quantity(1).collect();
 		Dungeon.quickslot.setSlot(0, stones);
 
 		if (hero.belongings.armor != null){

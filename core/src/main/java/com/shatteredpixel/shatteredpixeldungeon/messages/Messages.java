@@ -129,7 +129,7 @@ public class Messages {
 			//this is so child classes can inherit properties from their parents.
 			//in cases where text is commonly grabbed as a utility from classes that aren't mean to be instantiated
 			//(e.g. flavourbuff.dispTurns()) using .class directly is probably smarter to prevent unnecessary recursive calls.
-			if (c != null && c.getSuperclass() != null){
+			if (c != null && c.getSuperclass() != null) {
 				return get(c.getSuperclass(), k, args);
 			} else {
 				return NO_TEXT_FOUND;
