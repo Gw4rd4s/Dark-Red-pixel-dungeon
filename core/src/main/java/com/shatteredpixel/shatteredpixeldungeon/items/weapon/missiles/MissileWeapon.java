@@ -489,6 +489,16 @@ abstract public class MissileWeapon extends Weapon {
 		{
 			image = ItemSpriteSheet.MISSILE_HOLDER;
 		}
+		//TODO teporary
+		@Override
+		public int dealPunch() {
+			return 0;
+		}
+		//TODO teporary
+		@Override
+		public int dealPierce() {
+			return 0;
+		}
 
 		@Override
 		public boolean isSimilar(Item item) {

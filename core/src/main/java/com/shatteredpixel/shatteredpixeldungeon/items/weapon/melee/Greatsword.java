@@ -35,6 +35,9 @@ public class Greatsword extends MeleeWeapon {
 		hitSoundPitch = 1f;
 
 		tier = 5;
+
+		pierceDMG = 17;
+		punchDMG = 5;
 	}
 
 	@Override

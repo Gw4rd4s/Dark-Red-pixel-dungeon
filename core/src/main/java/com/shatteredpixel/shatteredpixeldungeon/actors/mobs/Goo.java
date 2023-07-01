@@ -198,7 +198,7 @@ public class Goo extends Mob {
 				if (pumpedUp >= 2){
 					((GooSprite)sprite).triggerEmitters();
 				}
-				attack( enemy );
+				attack( enemy, 1f );
 				Invisibility.dispel(this);
 				spend( attackDelay() );
 			}

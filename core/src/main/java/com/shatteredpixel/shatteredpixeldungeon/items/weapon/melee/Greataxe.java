@@ -42,6 +42,9 @@ public class Greataxe extends MeleeWeapon {
 		hitSoundPitch = 1f;
 
 		tier = 5;
+
+		pierceDMG = 13;
+		punchDMG = 13;
 	}
 
 	@Override

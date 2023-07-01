@@ -56,7 +56,6 @@ import com.watabou.utils.Random;
 import java.util.ArrayList;
 
 public class MeleeWeapon extends Weapon {
-
 	public static String AC_ABILITY = "ABILITY";
 
 	@Override
@@ -284,6 +283,13 @@ public class MeleeWeapon extends Weapon {
 				lvl*(tier+1);   //level scaling
 	}
 
+	public int dealPierce(){
+		return pierceDMG + pierceDMG * (1 + buffedLvl() )/2;
+	}
+
+	public int dealPunch(){
+		return punchDMG + punchDMG * ( 1+ buffedLvl() )/2;
+	}
 	public int wepTier(){
 		return tier;
 	}

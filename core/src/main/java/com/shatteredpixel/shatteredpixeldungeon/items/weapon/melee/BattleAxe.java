@@ -36,7 +36,9 @@ public class BattleAxe extends MeleeWeapon {
 		hitSoundPitch = 0.9f;
 
 		tier = 4;
-		ACC = 1.24f; //24% boost to accuracy
+		//ACC = 1.24f; //24% boost to accuracy
+		pierceDMG = 10;
+		punchDMG = 10;
 	}
 
 	@Override

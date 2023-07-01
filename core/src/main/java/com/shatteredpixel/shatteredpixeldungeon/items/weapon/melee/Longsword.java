@@ -35,6 +35,9 @@ public class Longsword extends MeleeWeapon {
 		hitSoundPitch = 1f;
 
 		tier = 4;
+
+		pierceDMG = 14;
+		punchDMG = 4;
 	}
 
 	@Override

@@ -47,7 +47,22 @@ abstract public class KindOfWeapon extends EquipableItem {
 
 	protected String hitSound = Assets.Sounds.HIT;
 	protected float hitSoundPitch = 1f;
+	/**
+	 * <p>multiplier for SWING ATTACK dmg</p>
+	 * <p>works in swing attack logic</p>
+	 * <p>Currently only player can use swing</p>
+	 */
+	public float[] swingCoefs = {0,0,0};//swing DMG multiplier
+	/**
+	 * <p>multiplier for STAB ATTACK dmg</p>
+	 * <p>works in standard attack logic</p>
+	 * <p>Everyone uses this but it affects only certain player's weapons</p>
+	 */
+	public float stabCoef;//stab DMG multiplier
 
+	protected int 	pierceDMG;  //sharp cutting piercing damage  // BOTH these DMGs are meant
+	// are meant
+	protected int 	punchDMG;  //blunt smashing crushing damage  //as average damage
 	/**
 	 * Extends execute( ) in EquipableItem.java. Inventory actions DROP, THROW and EQUIP.
 	 * This implementation adds second weapon slot for CHAMPION, then runs parent execute( ).
@@ -110,8 +125,7 @@ abstract public class KindOfWeapon extends EquipableItem {
 		detachAll( hero.belongings.backpack );
 		
 		if (hero.belongings.weapon == null || hero.belongings.weapon.doUnequip( hero, true )) {
-			
-			hero.belongings.weapon = this;
+			hero.belongings.weapon = this;//equip weapon
 			activate( hero );
 			Talent.onItemEquipped(hero, this);
 			Badges.validateDuelistUnlock();
@@ -230,6 +244,34 @@ abstract public class KindOfWeapon extends EquipableItem {
 	abstract public int min(int lvl);
 	abstract public int max(int lvl);
 
+	/**
+	 * calculating piercing damage of the weapon
+	 * @return piercing damage
+	 */
+	public int dealPierce() {
+	 return 0;
+	}
+
+	/**calculating punching damage of the weapon
+	 *
+	 * @return punching damage
+	 */
+	public int dealPunch(){
+		return 0;
+	}
+
+	/**
+	 * Calculates roll DMG both for Piercing and Punching damage.
+	 * Uses normal distribution: mean = base DMG, min/max = +-base DMG /2
+	 * @param owner it may be used is child classes
+	 * @return array: index 0 is Piercing DMG, index 1 is Punching DMG
+	 */
+	public int[] damageRoll2(Char owner){
+		int[] outDMG = new int[2];
+		outDMG[0] = Random.NormalIntRange( dealPierce()-pierceDMG/2, dealPierce()+pierceDMG/2 );
+		outDMG[1] = Random.NormalIntRange( dealPunch()-punchDMG/2, dealPunch()+punchDMG/2 );
+		return outDMG;
+	}
 	public int damageRoll( Char owner ) {
 		return Random.NormalIntRange( min(), max() );
 	}

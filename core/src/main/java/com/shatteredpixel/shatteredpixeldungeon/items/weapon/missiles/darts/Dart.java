@@ -57,7 +57,17 @@ public class Dart extends MissileWeapon {
 		//infinite, even with penalties
 		baseUses = 1000;
 	}
-	
+	//TODO teporary
+	@Override
+	public int dealPierce() {
+		return 0;
+	}
+	//TODO teporary
+	@Override
+	public int dealPunch() {
+		return 0;
+	}
+
 	protected static final String AC_TIP = "TIP";
 	
 	@Override

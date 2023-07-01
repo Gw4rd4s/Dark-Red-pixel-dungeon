@@ -45,9 +45,12 @@ public class Rapier extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_SLASH;
 		hitSoundPitch = 1.3f;
 
-		tier = 1;
+		tier = 2;
 
 		bones = false;
+		pierceDMG = 7;
+		punchDMG = 2;
+		RCH = 2;
 	}
 
 	@Override

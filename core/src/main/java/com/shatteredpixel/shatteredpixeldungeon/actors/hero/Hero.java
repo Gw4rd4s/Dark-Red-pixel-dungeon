@@ -130,7 +130,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RoundShield;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sai;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scimitar;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Ammo;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -223,6 +222,87 @@ public class Hero extends Char {
 	// for enemies we know we aren't seeing normally, resulting in better performance
 	public ArrayList<Mob> mindVisionEnemies = new ArrayList<>();
 
+	//Support for swing logic starts here
+	//===================================================================================================================
+	/**
+	 * <p>multiplier for SWING ATTACK dmg</p>
+	 * <p>works in swing attack logic</p>
+	 * <p>Currently only player can use swing</p>
+	 */
+	private Char[] swingRange(int targetPos){
+		int width = Dungeon.level.width();//width of current level
+		//TRANSFORM FUNCTION:-----------------------------------------------------------------
+		//targetPos -> simple array index
+		targetPos = targetPos - pos;//this should be in range 1
+		//This conversion works except for case inside IFs bellow
+		int dx = targetPos % width;
+		int dy = targetPos / width;
+		if(targetPos == width-1){//breaks for this
+			dx = -1;
+			dy = 1;
+		}
+		if(targetPos==1-width){//also for this
+			dx = 1;
+			dy = -1;
+		}
+		/*target map for swing attack
+		 *	  -1  0	 1
+		 *   +---------> dx
+		 *-1 | 0  1	 2
+		 * 0 | 7     3
+		 * 1 | 6  5  4
+		 *   V
+		 *   dy
+		 * numbers in map are indices in target array, used bellow
+		 * middle pos [dx=1,dy=1] is starting pos, THIS SHOULD NEVER HAPPEN!
+		 */
+		int moveDir;//final index
+		if(dx >= dy){
+			moveDir = 2 + dx + dy;
+		}else{
+			moveDir = 6 - dx - dy;
+		}
+		//END TRANSFORM FUNCTION--------------------------------------------------------------
+		/* Array of positions in real level
+		 * index 1 = index just calculated
+		 * index 2 = Character here will receive dmg
+		 */
+		//Positions
+		//                                          Direction of Move
+		//											On target map above
+		int[][] swingTrgts = {
+				{ -width,       -1},                  //up left
+				{      1,  1-width,-1-width,     -1}, //up
+				{      1,   -width},                  //up right
+				{  width,  1+width, 1-width, -width}, //right
+				{  width,        1},                  //down right
+				{     -1, -1+width, 1+width,      1}, //down
+				{     -1,    width},                  //down left
+				{ -width, -1-width,-1+width,  width}  //left
+		};
+		int tgrtCnt = 0;//targets hit
+		int idt = 0; //iteration counter
+
+		/* if diagonal move (even index): only 2 targets
+		   if vert/horizontal move (odd index): up to 3 targets
+		   */
+		int maxTgrtCnt = 2 + moveDir % 2;
+
+		Char[] output = new Char[maxTgrtCnt];//return Characters hit by swing
+		while(tgrtCnt < maxTgrtCnt && idt < 2 + 2*(moveDir % 2) ){ //max 2 or 4 cells to check
+			int tgrtPos = pos + swingTrgts[moveDir][idt];//relative to position BEFORE movement
+			idt++;
+			Char tgrt = Actor.findChar( tgrtPos );
+
+			if( tgrt != null ){
+				output[tgrtCnt] = tgrt;//add target to list
+				tgrtCnt++;
+			}
+		}
+		return output;
+	}
+	//===================================================================================================================
+	//end of swing logic
 	public Hero() {
 		super();
 
@@ -456,35 +536,9 @@ public class Hero extends Char {
 		//temporarily set the hero's weapon to the missile weapon being used
 		//TODO improve this!
 		belongings.thrownWeapon = wep;
-		boolean hit = attack( enemy );
+		boolean hit = attack( enemy, 1f );
 		Invisibility.dispel();
 		belongings.thrownWeapon = null;
-
-		if (hit && subClass == HeroSubClass.GLADIATOR && wasEnemy){
-			Buff.affect( this, Combo.class ).hit( enemy );
-		}
-
-		if (hit && heroClass == HeroClass.DUELIST && wasEnemy){
-			Buff.affect( this, Sai.ComboStrikeTracker.class).addHit();
-		}
-
-		return hit;
-	}
-
-	/**
-	 * Handles ranged logic for RANGED WEAPONS
-	 * @param enemy target
-	 * @param wep throwing weapon used
-	 * @return whether attack hit or missed
-	 */
-	public boolean shooting( Char enemy, Ammo wep ) {
-
-		this.enemy = enemy;
-		boolean wasEnemy = enemy.alignment == Alignment.ENEMY
-				|| (enemy instanceof Mimic && enemy.alignment == Alignment.NEUTRAL);
-
-		boolean hit = attack( enemy );
-		Invisibility.dispel();
 
 		if (hit && subClass == HeroSubClass.GLADIATOR && wasEnemy){
 			Buff.affect( this, Combo.class ).hit( enemy );
@@ -617,7 +671,7 @@ public class Hero extends Char {
 		
 		return dr;
 	}
-	
+
 	@Override
 	public int damageRoll() {
 		KindOfWeapon wep = belongings.attackingWeapon();
@@ -653,7 +707,38 @@ public class Hero extends Char {
 		if (dmg < 0) dmg = 0;
 		return dmg;
 	}
-	
+
+	/**
+	 * Damage roll off the Hero
+	 * Adds some power up bonuses
+	 * @return Array: piercing at 0, punching at 1
+	 */
+	@Override
+	public int[] damageRoll2() {
+		KindOfWeapon wep = belongings.attackingWeapon();
+		//remember
+		int dmgPierce = wep.damageRoll2( this )[0]; //index 0 piercing
+		int dmgPunch = wep.damageRoll2( this )[1];//index 1 punching
+
+		PhysicalEmpower emp = buff(PhysicalEmpower.class);
+		if (emp != null){
+			dmgPierce += emp.dmgBoost;
+			dmgPunch += emp.dmgBoost;
+			emp.left--;
+			if (emp.left <= 0) {
+				emp.detach();
+			}
+			Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG, 0.75f, 1.2f);
+		}
+
+		dmgPierce = Math.max(0, dmgPierce);
+		dmgPunch = Math.max(0, dmgPunch);
+		int[] outDMG = new int[2];
+		outDMG[0] = dmgPierce;
+		outDMG[1] = dmgPunch;
+		return outDMG;
+	}
+
 	@Override
 	public float speed() {
 
@@ -1515,7 +1600,8 @@ public class Hero extends Char {
 	//FIXME this is a fairly crude way to track this, really it would be nice to have a short
 	//history of hero actions
 	public boolean justMoved = false;
-	
+
+	//This function handles Hero movement, apparantely
 	private boolean getCloser( final int target ) {
 
 		if (target == pos)
@@ -1579,11 +1665,21 @@ public class Hero extends Char {
 			step = path.removeFirst();
 
 		}
-
+		//moving
 		if (step != -1) {
-
 			float delay = 1 / speed();
+			Char[] hitBySwing = swingRange( step );//targets in swing range
+			//Perform swing attack if Actor is able to
+			if(hitBySwing[0] != null && belongings.weapon.swingCoefs[0] > 0){
+				System.out.println("target found");
+				delay = attackDelay();//swing used melee speed, not movement speed!!!
+				for(int idt = 0; idt < hitBySwing.length; idt++){
+					//
+					attack( hitBySwing[idt], belongings.weapon.swingCoefs[idt], 0, 1);
+				}
+			}
 
+			//THIS could cause problems with swing, keep eye on it!
 			if (Dungeon.level.pit[step] && !Dungeon.level.solid[step]
 					&& (!flying || buff(Levitation.class) != null && buff(Levitation.class).detachesWithinDelay(delay))){
 				if (!Chasm.jumpConfirmed){
@@ -1601,13 +1697,14 @@ public class Hero extends Char {
 			if (subClass == HeroSubClass.FREERUNNER){
 				Buff.affect(this, Momentum.class).gainStack();
 			}
-			
+
 			sprite.move(pos, step);
 			move(step);
 
 			spend( delay );
 			justMoved = true;
-			
+			//run FORESIGHT logic
+			//player might have FORESIGHT buff active
 			search(false);
 
 			return true;
@@ -2036,7 +2133,7 @@ public class Hero extends Char {
 		boolean wasEnemy = enemy.alignment == Alignment.ENEMY
 				|| (enemy instanceof Mimic && enemy.alignment == Alignment.NEUTRAL);
 
-		boolean hit = attack( enemy );
+		boolean hit = attack( enemy, belongings.weapon.stabCoef);
 		
 		Invisibility.dispel();
 		spend( attackDelay() );

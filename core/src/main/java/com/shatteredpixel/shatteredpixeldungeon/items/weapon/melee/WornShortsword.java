@@ -37,6 +37,13 @@ public class WornShortsword extends MeleeWeapon {
 		tier = 1;
 		
 		bones = false;
+
+		pierceDMG = 4;
+		punchDMG = 1;
+		swingCoefs[0] = 0.8f;
+		swingCoefs[1] = 0.4f;
+		swingCoefs[2] = 0.1f;
+		stabCoef = 1f;
 	}
 
 	@Override

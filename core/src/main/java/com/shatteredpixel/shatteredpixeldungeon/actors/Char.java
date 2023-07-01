@@ -141,7 +141,7 @@ public abstract class Char extends Actor {
 	public boolean rooted		= false;
 	public boolean flying		= false;
 	public int invisible		= 0;
-	
+
 	//these are relative to the hero
 	public enum Alignment{
 		ENEMY,
@@ -155,7 +155,7 @@ public abstract class Char extends Actor {
 	public boolean[] fieldOfView = null;
 	
 	private LinkedHashSet<Buff> buffs = new LinkedHashSet<>();
-	
+
 	@Override
 	protected boolean act() {
 		if (fieldOfView == null || fieldOfView.length != Dungeon.level.length()){
@@ -314,8 +314,8 @@ public abstract class Char extends Actor {
 		}
 	}
 
-	final public boolean attack( Char enemy ){
-		return attack(enemy, 1f, 0f, 1f);
+	final public boolean attack( Char enemy, float dmgMulti ){
+		return attack(enemy, dmgMulti, 0f, 1f);
 	}
 	
 	public boolean attack( Char enemy, float dmgMulti, float dmgBonus, float accMulti ) {
@@ -584,7 +584,12 @@ public abstract class Char extends Actor {
 	public int damageRoll() {
 		return 1;
 	}
-	
+
+	/**
+	 * This exists only to be overriden, I suppose
+	 * @return empty array of size 2
+	 */
+	public int[] damageRoll2(){ return new int[2];}
 	//TODO it would be nice to have a pre-armor and post-armor proc.
 	// atm attack is always post-armor and defence is already pre-armor
 	
@@ -973,24 +978,30 @@ public abstract class Char extends Actor {
 		return 0;
 	}
 
+	/**
+	 * Movement of actor to given position only 1 tile away!
+	 * @param step target position, code should make sure it is adjacent (distance = 1)!
+	 * @return performing SWING attack (enemies at adjacent tiles)
+	 */
 	public final void move( int step ) {
 		move( step, true );
 	}
 
 	//travelling may be false when a character is moving instantaneously, such as via teleportation
 	public void move( int step, boolean travelling ) {
-
+		//Vertigo debuff takes effect
 		if (travelling && Dungeon.level.adjacent( step, pos ) && buff( Vertigo.class ) != null) {
 			sprite.interruptMotion();
-			int newPos = pos + PathFinder.NEIGHBOURS8[Random.Int( 8 )];
+			//int newPos = pos + PathFinder.NEIGHBOURS8[Random.Int(8)];
+			int newPos = -step;//TESTING this should send Char to opposite direction
+			//some checking
 			if (!(Dungeon.level.passable[newPos] || Dungeon.level.avoid[newPos])
 					|| (properties().contains(Property.LARGE) && !Dungeon.level.openSpace[newPos])
-					|| Actor.findChar( newPos ) != null)
-				return;
-			else {
-				sprite.move(pos, newPos);
-				step = newPos;
+					|| Actor.findChar(newPos) != null){
+				return; //abort if this is true
 			}
+				sprite.move(pos, newPos);//handling this here could cause issues for swing
+				step = newPos;
 		}
 
 		if (Dungeon.level.map[pos] == Terrain.OPEN_DOOR) {
@@ -1002,7 +1013,7 @@ public abstract class Char extends Actor {
 		if (this != Dungeon.hero) {
 			sprite.visible = Dungeon.level.heroFOV[pos];
 		}
-		
+
 		Dungeon.level.occupyCell(this );
 	}
 	

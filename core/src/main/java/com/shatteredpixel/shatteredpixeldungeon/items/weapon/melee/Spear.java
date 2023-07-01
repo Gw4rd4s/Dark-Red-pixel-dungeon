@@ -43,9 +43,11 @@ public class Spear extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_STAB;
 		hitSoundPitch = 0.9f;
 
-		tier = 2;
-		DLY = 1.5f; //0.67x speed
+		tier = 3;
+		//DLY = 1.5f; //0.67x speed
 		RCH = 2;    //extra reach
+		pierceDMG = 10;
+		punchDMG = 3;
 	}
 
 	@Override

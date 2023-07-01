@@ -631,7 +631,7 @@ public abstract class Mob extends Char {
 			return false;
 			
 		} else {
-			attack( enemy );
+			attack( enemy, 1f );
 			Invisibility.dispel(this);
 			spend( attackDelay() );
 			return true;
@@ -640,7 +640,7 @@ public abstract class Mob extends Char {
 	
 	@Override
 	public void onAttackComplete() {
-		attack( enemy );
+		attack( enemy, 1f );
 		Invisibility.dispel(this);
 		spend( attackDelay() );
 		super.onAttackComplete();

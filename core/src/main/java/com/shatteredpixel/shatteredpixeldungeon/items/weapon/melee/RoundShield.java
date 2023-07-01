@@ -39,6 +39,9 @@ public class RoundShield extends MeleeWeapon {
 		hitSoundPitch = 1f;
 
 		tier = 3;
+
+		pierceDMG = 3;
+		punchDMG = 5;
 	}
 
 	@Override

@@ -32,6 +32,8 @@ public class Greatshield extends MeleeWeapon {
 		image = ItemSpriteSheet.GREATSHIELD;
 
 		tier = 5;
+		pierceDMG = 5;
+		punchDMG = 7;
 	}
 
 	@Override

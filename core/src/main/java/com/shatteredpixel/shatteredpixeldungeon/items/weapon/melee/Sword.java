@@ -45,6 +45,8 @@ public class Sword extends MeleeWeapon {
 		hitSoundPitch = 1f;
 
 		tier = 3;
+		pierceDMG = 10;
+		punchDMG = 3;
 	}
 
 	@Override
