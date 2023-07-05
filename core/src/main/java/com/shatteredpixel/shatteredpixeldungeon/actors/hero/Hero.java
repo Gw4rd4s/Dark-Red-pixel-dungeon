@@ -147,6 +147,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.WeaponSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
@@ -165,9 +166,11 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Point;
+import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 
@@ -222,17 +225,17 @@ public class Hero extends Char {
 	// for enemies we know we aren't seeing normally, resulting in better performance
 	public ArrayList<Mob> mindVisionEnemies = new ArrayList<>();
 
-	//Support for swing logic starts here
+	//Support for slash logic starts here
 	//===================================================================================================================
 	/**
-	 * <p>multiplier for SWING ATTACK dmg</p>
-	 * <p>works in swing attack logic</p>
-	 * <p>Currently only player can use swing</p>
+	 * <p>multiplier for SLASH ATTACK dmg</p>
+	 * <p>works in slash attack logic</p>
+	 * <p>Currently only player can use slash</p>
 	 */
-	private Char[] swingRange(int targetPos){
+	private Char[] slashRange(int targetPos){
 		int width = Dungeon.level.width();//width of current level
 		//TRANSFORM FUNCTION:-----------------------------------------------------------------
-		//targetPos -> simple array index
+		//targetPos -> [dx, dy] -> simple array index
 		targetPos = targetPos - pos;//this should be in range 1
 		//This conversion works except for case inside IFs bellow
 		int dx = targetPos % width;
@@ -245,7 +248,7 @@ public class Hero extends Char {
 			dx = 1;
 			dy = -1;
 		}
-		/*target map for swing attack
+		/*target map for slash attack
 		 *	  -1  0	 1
 		 *   +---------> dx
 		 *-1 | 0  1	 2
@@ -267,10 +270,9 @@ public class Hero extends Char {
 		 * index 1 = index just calculated
 		 * index 2 = Character here will receive dmg
 		 */
-		//Positions
 		//                                          Direction of Move
 		//											On target map above
-		int[][] swingTrgts = {
+		int[][] slashTrgts = {
 				{ -width,       -1},                  //up left
 				{      1,  1-width,-1-width,     -1}, //up
 				{      1,   -width},                  //up right
@@ -287,26 +289,33 @@ public class Hero extends Char {
 		   if vert/horizontal move (odd index): up to 3 targets
 		   */
 		int maxTgrtCnt = 2 + moveDir % 2;
-
-		Char[] output = new Char[maxTgrtCnt];//return Characters hit by swing
+		//array reserved for all possible targets
+		//sometimes it is not filled completely
+		Char[] hit = new Char[maxTgrtCnt];//return Characters hit by slash
 		while(tgrtCnt < maxTgrtCnt && idt < 2 + 2*(moveDir % 2) ){ //max 2 or 4 cells to check
-			int tgrtPos = pos + swingTrgts[moveDir][idt];//relative to position BEFORE movement
+			int tgrtPos = pos + slashTrgts[moveDir][idt];//relative to position BEFORE movement
 			idt++;
 			Char tgrt = Actor.findChar( tgrtPos );
 
 			if( tgrt != null ){
-				output[tgrtCnt] = tgrt;//add target to list
+				hit[tgrtCnt] = tgrt;//add target to list
 				tgrtCnt++;
 			}
 		}
-		return output;
+		//no targets hit
+		if(tgrtCnt <= 0){
+			return null;
+		}
+		//make compression to smaller array
+		//size = number of targets actually hit
+		return Arrays.copyOf(hit,tgrtCnt);
 	}
 	//===================================================================================================================
-	//end of swing logic
+	//end of slash logic
 	public Hero() {
 		super();
 
-		HP = HT = 20;
+		HP = HT = 50;
 		STR = STARTING_STR;
 		
 		belongings = new Belongings( this );
@@ -317,7 +326,7 @@ public class Hero extends Char {
 	public void updateHT( boolean boostHP ){
 		int curHT = HT;
 		
-		HT = 20 + 5*(lvl-1) + HTBoost;
+		HT = 50 + 5*(lvl-1) + HTBoost;
 		float multiplier = RingOfMight.HTMultiplier(this);
 		HT = Math.round(multiplier * HT);
 		
@@ -715,11 +724,17 @@ public class Hero extends Char {
 	 */
 	@Override
 	public int[] damageRoll2() {
+		//damage added by weapon
 		KindOfWeapon wep = belongings.attackingWeapon();
-		//remember
-		int dmgPierce = wep.damageRoll2( this )[0]; //index 0 piercing
-		int dmgPunch = wep.damageRoll2( this )[1];//index 1 punching
-
+		int[] dmg2 = wep.damageRoll2(this);
+		int dmgPierce = dmg2[0]; //index 0 piercing
+		int dmgPunch = dmg2[1];//index 1 punching
+		//base damage
+		dmg2 = super.damageRoll2();
+		//when unarmed, player deals punching dmg only
+		//when armed, piercing weapon dmg is raised by base dmg
+		if(wep != null) dmgPierce += dmg2[0]; //index 0 piercing
+		dmgPunch += dmg2[1];//index 1 punching
 		PhysicalEmpower emp = buff(PhysicalEmpower.class);
 		if (emp != null){
 			dmgPierce += emp.dmgBoost;
@@ -733,10 +748,10 @@ public class Hero extends Char {
 
 		dmgPierce = Math.max(0, dmgPierce);
 		dmgPunch = Math.max(0, dmgPunch);
-		int[] outDMG = new int[2];
-		outDMG[0] = dmgPierce;
-		outDMG[1] = dmgPunch;
-		return outDMG;
+		//recycled array: used for output
+		dmg2[0] = dmgPierce;
+		dmg2[1] = dmgPunch;
+		return dmg2;
 	}
 
 	@Override
@@ -1668,18 +1683,22 @@ public class Hero extends Char {
 		//moving
 		if (step != -1) {
 			float delay = 1 / speed();
-			Char[] hitBySwing = swingRange( step );//targets in swing range
-			//Perform swing attack if Actor is able to
-			if(hitBySwing[0] != null && belongings.weapon.swingCoefs[0] > 0){
-				System.out.println("target found");
-				delay = attackDelay();//swing used melee speed, not movement speed!!!
-				for(int idt = 0; idt < hitBySwing.length; idt++){
-					//
-					attack( hitBySwing[idt], belongings.weapon.swingCoefs[idt], 0, 1);
+			Char[] hitBySlash = slashRange( step );//targets in slash range
+			//Perform slash attack if Actor is able to
+			if(hitBySlash != null && hitBySlash[0] != null && belongings.weapon.slashCoefs[0] > 0){
+				delay = attackDelay();//slash used melee speed, not movement speed!!!
+				PointF destination = new PointF( (step % Dungeon.level.width())*16, (step / Dungeon.level.width())*16 );
+				((WeaponSprite) this.sprite.parent.recycle(WeaponSprite.class)).
+						reset(this.sprite,								//the one who swings weapon, rotate around
+								hitBySlash[0].sprite,					//1st target
+								this.belongings.weapon);				//weapon to show
+
+				for(int idt = 0; idt < hitBySlash.length; idt++){
+					attack( hitBySlash[idt], belongings.weapon.slashCoefs[idt], 0, 1);
 				}
 			}
 
-			//THIS could cause problems with swing, keep eye on it!
+			//THIS could cause problems with slash, keep eye on it!
 			if (Dungeon.level.pit[step] && !Dungeon.level.solid[step]
 					&& (!flying || buff(Levitation.class) != null && buff(Levitation.class).detachesWithinDelay(delay))){
 				if (!Chasm.jumpConfirmed){

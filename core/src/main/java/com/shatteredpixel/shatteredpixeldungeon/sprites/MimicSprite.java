@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.watabou.noosa.TextureFilm;
 
 public class MimicSprite extends MobSprite {
@@ -102,4 +103,10 @@ public class MimicSprite extends MobSprite {
 		}
 	}
 
+	public static class Ebony extends MimicSprite{
+		@Override
+		protected int texOffset() {
+			return 48;
+		}
+	}
 }

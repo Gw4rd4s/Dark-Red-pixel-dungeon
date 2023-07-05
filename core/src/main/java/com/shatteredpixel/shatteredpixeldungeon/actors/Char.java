@@ -133,7 +133,7 @@ public abstract class Char extends Actor {
 	
 	public int HT;
 	public int HP;
-	
+	public int dmg;
 	protected float baseSpeed	= 1;
 	protected PathFinder.Path path;
 
@@ -324,17 +324,16 @@ public abstract class Char extends Actor {
 		
 		boolean visibleFight = Dungeon.level.heroFOV[pos] || Dungeon.level.heroFOV[enemy.pos];
 
+		//enemy is invulnerable: no damage
 		if (enemy.isInvulnerable(getClass())) {
-
 			if (visibleFight) {
 				enemy.sprite.showStatus( CharSprite.POSITIVE, Messages.get(this, "invulnerable") );
-
 				Sample.INSTANCE.play(Assets.Sounds.HIT_PARRY, 1f, Random.Float(0.96f, 1.05f));
 			}
-
 			return false;
+		}
 
-		} else if (hit( this, enemy, accMulti, false )) {
+		if (hit( this, enemy, accMulti)) {
 			
 			int dr = Math.round(enemy.drRoll() * AscensionChallenge.statModifier(enemy));
 			
@@ -493,27 +492,25 @@ public abstract class Char extends Actor {
 			
 			return true;
 			
-		} else {
+		}
 
-			enemy.sprite.showStatus( CharSprite.NEUTRAL, enemy.defenseVerb() );
-			if (visibleFight) {
-				//TODO enemy.defenseSound? currently miss plays for monks/crab even when they parry
-				Sample.INSTANCE.play(Assets.Sounds.MISS);
-			}
+		enemy.sprite.showStatus( CharSprite.NEUTRAL, enemy.defenseVerb() );
+		if (visibleFight) {
+			//TODO enemy.defenseSound? currently miss plays for monks/crab even when they parry
+			Sample.INSTANCE.play(Assets.Sounds.MISS);
+		}
 			
 			return false;
-			
-		}
 	}
 
 	public static int INFINITE_ACCURACY = 1_000_000;
 	public static int INFINITE_EVASION = 1_000_000;
 
-	final public static boolean hit( Char attacker, Char defender, boolean magic ) {
-		return hit(attacker, defender, magic ? 2f : 1f, magic);
+	public static final boolean hit( Char attacker, Char defender) {
+		return hit(attacker, defender, 1f);
 	}
 
-	public static boolean hit( Char attacker, Char defender, float accMulti, boolean magic ) {
+	public static boolean hit( Char attacker, Char defender, float accMulti) {
 		float acuStat = attacker.attackSkill( defender );
 		float defStat = defender.defenseSkill( attacker );
 
@@ -526,7 +523,7 @@ public abstract class Char extends Actor {
 			acuStat = INFINITE_ACCURACY;
 		}
 
-		if (defender.buff(MonkEnergy.MonkAbility.Focus.FocusBuff.class) != null && !magic){
+		if (defender.buff(MonkEnergy.MonkAbility.Focus.FocusBuff.class) != null){
 			defStat = INFINITE_EVASION;
 			defender.buff(MonkEnergy.MonkAbility.Focus.FocusBuff.class).detach();
 			Buff.affect(defender, MonkEnergy.MonkAbility.Focus.FocusActivation.class, 0);
@@ -589,7 +586,12 @@ public abstract class Char extends Actor {
 	 * This exists only to be overriden, I suppose
 	 * @return empty array of size 2
 	 */
-	public int[] damageRoll2(){ return new int[2];}
+	public int[] damageRoll2(){
+		int[] damage = new int[2];
+		damage[0] = dmg;
+		damage[1] = dmg;
+		return damage;
+	}
 	//TODO it would be nice to have a pre-armor and post-armor proc.
 	// atm attack is always post-armor and defence is already pre-armor
 	
@@ -981,7 +983,6 @@ public abstract class Char extends Actor {
 	/**
 	 * Movement of actor to given position only 1 tile away!
 	 * @param step target position, code should make sure it is adjacent (distance = 1)!
-	 * @return performing SWING attack (enemies at adjacent tiles)
 	 */
 	public final void move( int step ) {
 		move( step, true );
@@ -1000,7 +1001,7 @@ public abstract class Char extends Actor {
 					|| Actor.findChar(newPos) != null){
 				return; //abort if this is true
 			}
-				sprite.move(pos, newPos);//handling this here could cause issues for swing
+				sprite.move(pos, newPos);//handling this here could cause issues for slash
 				step = newPos;
 		}
 

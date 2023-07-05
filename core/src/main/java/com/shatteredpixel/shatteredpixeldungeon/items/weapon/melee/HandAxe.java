@@ -35,10 +35,14 @@ public class HandAxe extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_SLASH;
 		hitSoundPitch = 1f;
 
-		tier = 2;
+		tier = 1;
 		//ACC = 1.32f; //32% boost to accuracy
-		pierceDMG = 6;
-		punchDMG = 6;
+		pierceDMG = 3;
+		punchDMG = 3;
+		stabCoef = 0.2f;
+		slashCoefs[0] = 1;
+		slashCoefs[1] = 0.8f;
+		slashCoefs[2] = 0.5f;
 	}
 
 	@Override

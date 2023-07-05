@@ -136,11 +136,19 @@ public class Visual extends Gizmo {
 		y = p.y;
 		return p;
 	}
-	
+
+	/**
+	 * Center point of image instead of corner
+	 * @return Center point, type PointF
+	 */
 	public PointF center() {
 		return new PointF( x + width() / 2, y + height() / 2 );
 	}
-	
+	/**
+	 * Center point of image instead of corner
+	 * @param p point to calculate center
+	 * @return Center point, type PointF
+	 */
 	public PointF center( PointF p ) {
 		x = p.x - width() / 2;
 		y = p.y - height() / 2;

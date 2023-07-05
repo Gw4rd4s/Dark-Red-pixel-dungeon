@@ -48,20 +48,20 @@ abstract public class KindOfWeapon extends EquipableItem {
 	protected String hitSound = Assets.Sounds.HIT;
 	protected float hitSoundPitch = 1f;
 	/**
-	 * <p>multiplier for SWING ATTACK dmg</p>
-	 * <p>works in swing attack logic</p>
-	 * <p>Currently only player can use swing</p>
+	 * <p>multiplier for SLASH ATTACK dmg</p>
+	 * <p>works in slash attack logic</p>
+	 * <p>Currently only player can use slash</p>
 	 */
-	public float[] swingCoefs = {0,0,0};//swing DMG multiplier
+	public float[] slashCoefs = {0,0,0};//swing DMG multiplier
 	/**
 	 * <p>multiplier for STAB ATTACK dmg</p>
 	 * <p>works in standard attack logic</p>
 	 * <p>Everyone uses this but it affects only certain player's weapons</p>
 	 */
 	public float stabCoef;//stab DMG multiplier
-
+	//base Damage of 2 types
 	protected int 	pierceDMG;  //sharp cutting piercing damage  // BOTH these DMGs are meant
-	// are meant
+																 // are meant
 	protected int 	punchDMG;  //blunt smashing crushing damage  //as average damage
 	/**
 	 * Extends execute( ) in EquipableItem.java. Inventory actions DROP, THROW and EQUIP.
@@ -249,7 +249,7 @@ abstract public class KindOfWeapon extends EquipableItem {
 	 * @return piercing damage
 	 */
 	public int dealPierce() {
-	 return 0;
+	 return pierceDMG;
 	}
 
 	/**calculating punching damage of the weapon
@@ -257,12 +257,12 @@ abstract public class KindOfWeapon extends EquipableItem {
 	 * @return punching damage
 	 */
 	public int dealPunch(){
-		return 0;
+		return punchDMG;
 	}
 
 	/**
 	 * Calculates roll DMG both for Piercing and Punching damage.
-	 * Uses normal distribution: mean = base DMG, min/max = +-base DMG /2
+	 * Uses normal distribution: mean = base DMG, min, max = -+base DMG /2
 	 * @param owner it may be used is child classes
 	 * @return array: index 0 is Piercing DMG, index 1 is Punching DMG
 	 */

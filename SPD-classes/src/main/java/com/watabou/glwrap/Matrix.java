@@ -21,6 +21,10 @@
 
 package com.watabou.glwrap;
 
+/**
+ * <p>Handling matrix calculations</p>
+ * <p>Matrices are 1D float array here</p>
+ */
 public class Matrix {
 
 	public static final float G2RAD = 0.01745329251994329576923690768489f;
@@ -45,7 +49,7 @@ public class Matrix {
 
 	}
 
-	private static float[] identity = new float[]{
+	private static final float[] identity = new float[]{
 			1, 0, 0, 0,
 			0, 1, 0, 0,
 			0, 0, 1, 0,
@@ -98,7 +102,7 @@ public class Matrix {
 		m[13] += m[1] * x + m[5] * y;
 	}
 	
-	public static void multiply( float[] left, float right[], float[] result ) {
+	public static void multiply( float[] left, float[] right, float[] result ) {
 		final float ax1 = left[0];
 		final float ay1 = left[1];
 		final float az1 = left[2];
