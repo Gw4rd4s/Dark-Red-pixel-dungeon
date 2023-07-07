@@ -42,9 +42,10 @@ public class Wraith extends Mob {
 	{
 		spriteClass = WraithSprite.class;
 		
-		HP = HT = 1;
+		HP = HT = level;
 		EXP = 0;
-
+		pierceDmg = 3;
+		punchDmg = 3;
 		maxLvl = -2;
 		
 		flying = true;
@@ -71,7 +72,16 @@ public class Wraith extends Mob {
 	public int damageRoll() {
 		return Random.NormalIntRange( 1 + level/2, 2 + level );
 	}
-	
+
+	@Override
+	public int[] damageRoll2(){
+		int[] dmg = super.damageRoll2();
+		dmg[0] += level*3/2;
+		dmg[1] += level*3/2;
+		dmg[0] = Random.NormalIntRange(dmg[0] - pierceDmg/2, dmg[0] + pierceDmg/2);
+		dmg[1] = Random.NormalIntRange(dmg[1] - punchDmg/2, dmg[1] + punchDmg/2);
+		return  dmg;
+	}
 	@Override
 	public int attackSkill( Char target ) {
 		return 10 + level;

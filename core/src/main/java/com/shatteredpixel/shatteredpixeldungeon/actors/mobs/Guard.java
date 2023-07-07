@@ -48,11 +48,15 @@ public class Guard extends Mob {
 	{
 		spriteClass = GuardSprite.class;
 
-		HP = HT = 40;
+		HP = HT = 60;
 		defenseSkill = 10;
 
 		EXP = 7;
 		maxLvl = 14;
+		pierceDmg = 10;
+		punchDmg = 5;
+		pierceArmor = 5;
+		punchArmor = 9;
 
 		loot = Generator.Category.ARMOR;
 		lootChance = 0.2f; //by default, see lootChance()

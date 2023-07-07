@@ -206,13 +206,27 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	public void idle() {
 		play(idle);
 	}
-	
-	public void move( int from, int to ) {
+
+	/**
+	 * Simplified function move( from, to, prolongMotion ). Prolong motion is 0
+	 * @param from starting position
+	 * @param to destination
+	 */
+	public void move( int from, int to){
+		move( from, to, 0);
+	}
+	/**
+	 * Moving animation from given pos to given pos
+	 * @param from starting position
+	 * @param to destination
+	 * @param prolongMotion extend animation duration by this time
+	 */
+	public void move( int from, int to , float prolongMotion) {
 		turnTo( from , to );
 
 		play( run );
 		
-		motion = new PosTweener( this, worldToCamera( to ), moveInterval );
+		motion = new PosTweener( this, worldToCamera( to ), moveInterval + prolongMotion );
 		motion.listener = this;
 		parent.add( motion );
 

@@ -64,7 +64,7 @@ import com.watabou.utils.Random;
 public abstract class YogFist extends Mob {
 
 	{
-		HP = HT = 300;
+		HP = HT = 600;
 		defenseSkill = 20;
 
 		viewDistance = Light.DISTANCE;
@@ -336,7 +336,7 @@ public abstract class YogFist extends Mob {
 
 			Invisibility.dispel(this);
 			Char enemy = this.enemy;
-			if (hit( this, enemy, true )) {
+			if (hit( this, enemy)) {
 
 				Buff.affect( enemy, Roots.class, 3f );
 
@@ -496,7 +496,7 @@ public abstract class YogFist extends Mob {
 
 			Invisibility.dispel(this);
 			Char enemy = this.enemy;
-			if (hit( this, enemy, true )) {
+			if (hit( this, enemy)) {
 
 				enemy.damage( Random.NormalIntRange(10, 20), new LightBeam() );
 				Buff.prolong( enemy, Blindness.class, Blindness.DURATION/2f );
@@ -562,7 +562,7 @@ public abstract class YogFist extends Mob {
 
 			Invisibility.dispel(this);
 			Char enemy = this.enemy;
-			if (hit( this, enemy, true )) {
+			if (hit( this, enemy)) {
 
 				enemy.damage( Random.NormalIntRange(10, 20), new DarkBolt() );
 

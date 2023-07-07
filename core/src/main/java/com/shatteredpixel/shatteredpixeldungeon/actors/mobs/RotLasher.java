@@ -36,7 +36,7 @@ public class RotLasher extends Mob {
 	{
 		spriteClass = RotLasherSprite.class;
 
-		HP = HT = 40;
+		HP = HT = 80;
 		defenseSkill = 0;
 
 		EXP = 1;

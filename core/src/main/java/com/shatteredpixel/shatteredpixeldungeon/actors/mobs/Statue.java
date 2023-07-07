@@ -60,7 +60,7 @@ public class Statue extends Mob {
 		
 		weapon.enchant( Enchantment.random() );
 		
-		HP = HT = 15 + Dungeon.depth * 5;
+		HP = HT = 40 + Dungeon.depth * 5;
 		defenseSkill = 4 + Dungeon.depth;
 	}
 	
@@ -90,7 +90,10 @@ public class Statue extends Mob {
 	public int damageRoll() {
 		return weapon.damageRoll(this);
 	}
-	
+	@Override
+	public int[] damageRoll2(){
+		return weapon.damageRoll2(this);
+	}
 	@Override
 	public int attackSkill( Char target ) {
 		return (int)((9 + Dungeon.depth) * weapon.accuracyFactor( this, target ));

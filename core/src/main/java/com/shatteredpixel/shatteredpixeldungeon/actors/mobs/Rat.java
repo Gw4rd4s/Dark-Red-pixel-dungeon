@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatSprite;
 import com.watabou.utils.Bundle;
@@ -32,10 +33,13 @@ public class Rat extends Mob {
 
 	{
 		spriteClass = RatSprite.class;
-		
-		HP = HT = 16;
+		//experimenting with randomized stats
+		HP = HT = 16 + Random.NormalIntRange(-2,2);
 		defenseSkill = 2;
-		
+		punchArmor = 1+ Random.NormalIntRange(-1,1);
+		pierceArmor = 1+ Random.NormalIntRange(-1,1);
+		pierceDmg = 4;
+		punchDmg = 1;
 		maxLvl = 5;
 	}
 
@@ -56,11 +60,6 @@ public class Rat extends Mob {
 	@Override
 	public int attackSkill( Char target ) {
 		return 8;
-	}
-	
-	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 1);
 	}
 
 	private static final String RAT_ALLY = "rat_ally";

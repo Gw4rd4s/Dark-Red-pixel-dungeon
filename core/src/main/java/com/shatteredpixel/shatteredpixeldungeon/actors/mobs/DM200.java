@@ -40,9 +40,12 @@ public class DM200 extends Mob {
 	{
 		spriteClass = DM200Sprite.class;
 
-		HP = HT = 80;
+		HP = HT = 160;
 		defenseSkill = 12;
-
+		pierceDmg = 12;
+		punchDmg = 28;
+		pierceArmor = 7;
+		punchArmor = 2;
 		EXP = 9;
 		maxLvl = 17;
 

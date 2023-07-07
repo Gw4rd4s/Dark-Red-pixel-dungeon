@@ -48,9 +48,12 @@ public class Warlock extends Mob implements Callback {
 	{
 		spriteClass = WarlockSprite.class;
 		
-		HP = HT = 70;
+		HP = HT = 140;
 		defenseSkill = 18;
-		
+		pierceDmg = 20;
+		punchDmg = 5;
+		pierceArmor = 2;
+		punchArmor = 6;
 		EXP = 11;
 		maxLvl = 21;
 		
@@ -108,7 +111,7 @@ public class Warlock extends Mob implements Callback {
 
 		Invisibility.dispel(this);
 		Char enemy = this.enemy;
-		if (hit( this, enemy, true )) {
+		if (hit( this, enemy)) {
 			//TODO would be nice for this to work on ghost/statues too
 			if (enemy == Dungeon.hero && Random.Int( 2 ) == 0) {
 				Buff.prolong( enemy, Degrade.class, Degrade.DURATION );

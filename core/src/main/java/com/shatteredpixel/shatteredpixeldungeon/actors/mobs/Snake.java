@@ -37,9 +37,10 @@ public class Snake extends Mob {
 	{
 		spriteClass = SnakeSprite.class;
 		
-		HP = HT = 4;
+		HP = HT = 8;
 		defenseSkill = 25;
-		
+		pierceDmg = 5;
+		punchDmg = 1;
 		EXP = 2;
 		maxLvl = 7;
 		

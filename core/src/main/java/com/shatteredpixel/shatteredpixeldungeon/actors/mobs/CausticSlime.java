@@ -34,7 +34,8 @@ public class CausticSlime extends Slime {
 	
 	{
 		spriteClass = CausticSlimeSprite.class;
-		
+		pierceDmg = 7;
+		punchDmg = 2;
 		properties.add(Property.ACIDIC);
 	}
 	

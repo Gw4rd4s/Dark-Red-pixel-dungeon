@@ -36,7 +36,7 @@ public class DM201 extends DM200 {
 	{
 		spriteClass = DM201Sprite.class;
 
-		HP = HT = 120;
+		HP = HT = 240;
 
 		properties.add(Property.IMMOVABLE);
 

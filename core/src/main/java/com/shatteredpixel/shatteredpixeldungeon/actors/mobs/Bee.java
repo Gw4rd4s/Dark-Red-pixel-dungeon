@@ -46,7 +46,6 @@ public class Bee extends Mob {
 		
 		flying = true;
 		state = WANDERING;
-		
 		//only applicable when the bee is charmed with elixir of honeyed healing
 		intelligentAlly = true;
 	}
@@ -84,8 +83,12 @@ public class Bee extends Mob {
 	public void spawn( int level ) {
 		this.level = level;
 		
-		HT = (2 + level) * 4;
+		HT = (2 + level) * 8;
+		pierceDmg = (2 + level) * 3;
+		punchDmg = 2 + level;
 		defenseSkill = 9 + level;
+		pierceArmor = level/2;
+		punchArmor = level/4;
 	}
 
 	public void setPotInfo(int potPos, Char potHolder){

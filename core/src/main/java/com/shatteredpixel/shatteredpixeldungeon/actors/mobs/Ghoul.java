@@ -45,9 +45,12 @@ public class Ghoul extends Mob {
 	{
 		spriteClass = GhoulSprite.class;
 		
-		HP = HT = 45;
+		HP = HT = 90;
 		defenseSkill = 20;
-		
+		pierceDmg = 6;
+		punchDmg = 32;
+		pierceArmor = 2;
+		punchArmor = 2;
 		EXP = 5;
 		maxLvl = 20;
 		

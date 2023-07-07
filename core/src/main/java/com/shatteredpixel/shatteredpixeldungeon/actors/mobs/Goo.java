@@ -51,18 +51,19 @@ import com.watabou.utils.Random;
 public class Goo extends Mob {
 
 	{
-		HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 120 : 100;
+		HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 240 : 200;
 		EXP = 10;
 		defenseSkill = 8;
 		spriteClass = GooSprite.class;
-
+		pierceDmg = 4;
+		punchDmg = 7;
 		properties.add(Property.BOSS);
 		properties.add(Property.DEMONIC);
 		properties.add(Property.ACIDIC);
 	}
 
 	private int pumpedUp = 0;
-	private int healInc = 1;
+	private int healInc = 0;
 
 	@Override
 	public int damageRoll() {
@@ -79,7 +80,27 @@ public class Goo extends Mob {
 			return Random.NormalIntRange( min, max );
 		}
 	}
+	@Override
+	public int[] damageRoll2(){
+		int[] dmg = new int[2];
+		int min = (HP*2 <= HT) ? pierceDmg*3/2 : pierceDmg/2;
+		int max = (HP*2 <= HT) ? pierceDmg*2 : pierceDmg*3/2;
+		dmg[0] = Random.NormalIntRange(min,max);
+		min = (HP*2 <= HT) ? punchDmg*3/2 : punchDmg/2;
+		max = (HP*2 <= HT) ? punchDmg*2 : punchDmg*3/2;
+		dmg[1] = Random.NormalIntRange(min,max);
 
+		if(pumpedUp > 0){
+			pumpedUp = 0;
+			if(enemy == Dungeon.hero){
+				Statistics.qualifiedForBossChallengeBadge = false;
+				Statistics.bossScores[0] -= 100;
+			}
+			dmg[0] *= 3;
+			dmg[1] *= 3;
+		}
+		return dmg;
+	}
 	@Override
 	public int attackSkill( Char target ) {
 		int attack = 10;
@@ -119,7 +140,7 @@ public class Goo extends Mob {
 			if (Dungeon.level.heroFOV[pos] ){
 				sprite.emitter().burst( Speck.factory( Speck.HEALING ), healInc );
 			}
-			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) && healInc < 3) {
+			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) && healInc < 7) {
 				healInc++;
 			}
 			if (HP*2 > HT) {
@@ -128,7 +149,7 @@ public class Goo extends Mob {
 				HP = Math.min(HP, HT);
 			}
 		} else {
-			healInc = 1;
+			healInc = 0;
 		}
 		
 		if (state != SLEEPING){

@@ -44,9 +44,12 @@ import com.watabou.utils.Random;
 public abstract class Shaman extends Mob {
 	
 	{
-		HP = HT = 35;
+		HP = HT = 70;
 		defenseSkill = 15;
-		
+		pierceDmg = 7;
+		punchDmg = 7;
+		pierceArmor = 1;
+		punchArmor = 9;
 		EXP = 8;
 		maxLvl = 16;
 		
@@ -115,7 +118,7 @@ public abstract class Shaman extends Mob {
 
 		Invisibility.dispel(this);
 		Char enemy = this.enemy;
-		if (hit( this, enemy, true )) {
+		if (hit( this, enemy)) {
 			
 			if (Random.Int( 2 ) == 0) {
 				debuff( enemy );

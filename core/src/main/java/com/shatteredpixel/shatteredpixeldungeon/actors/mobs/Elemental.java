@@ -55,7 +55,7 @@ import java.util.ArrayList;
 public abstract class Elemental extends Mob {
 
 	{
-		HP = HT = 60;
+		HP = HT = 120;
 		defenseSkill = 20;
 		
 		EXP = 10;
@@ -75,7 +75,6 @@ public abstract class Elemental extends Mob {
 			return Random.NormalIntRange(5*regionScale, 5 + 5*regionScale);
 		}
 	}
-	
 	@Override
 	public int attackSkill( Char target ) {
 		if (!summonedALly) {
@@ -152,7 +151,7 @@ public abstract class Elemental extends Mob {
 
 		Invisibility.dispel(this);
 		Char enemy = this.enemy;
-		if (hit( this, enemy, true )) {
+		if (hit( this, enemy)) {
 			
 			rangedProc( enemy );
 			

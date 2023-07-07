@@ -75,7 +75,7 @@ public class YogDzewa extends Mob {
 	{
 		spriteClass = YogSprite.class;
 
-		HP = HT = 1000;
+		HP = HT = 2000;
 
 		EXP = 50;
 
@@ -232,7 +232,7 @@ public class YogDzewa extends Mob {
 						Statistics.bossScores[4] -= 500;
 					}
 
-					if (hit( this, ch, true )) {
+					if (hit( this, ch)) {
 						if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) {
 							ch.damage(Random.NormalIntRange(30, 50), new Eye.DeathGaze());
 						} else {

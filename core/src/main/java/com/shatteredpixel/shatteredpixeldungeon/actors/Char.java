@@ -130,10 +130,16 @@ public abstract class Char extends Actor {
 	public int pos = 0;
 	
 	public CharSprite sprite;
-	
+	/**Max HP*/
 	public int HT;
+	/**Current HP*/
 	public int HP;
-	public int dmg;
+	/**Base damage*/
+	public int baseDmg;
+	/**armor against piercing*/
+	protected int pierceArmor;
+	/**armor against punching*/
+	protected int punchArmor;
 	protected float baseSpeed	= 1;
 	protected PathFinder.Path path;
 
@@ -286,7 +292,9 @@ public abstract class Char extends Actor {
 	protected static final String TAG_HT    = "HT";
 	protected static final String TAG_SHLD  = "SHLD";
 	protected static final String BUFFS	    = "buffs";
-	
+	protected static final String PIERCE_ARMOR = "pierceArmor";
+	protected static final String PUNCH_ARMOR = "punchArmor";
+	protected static final String BASE_DMG = "baseDmg";
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		
@@ -296,6 +304,9 @@ public abstract class Char extends Actor {
 		bundle.put( TAG_HP, HP );
 		bundle.put( TAG_HT, HT );
 		bundle.put( BUFFS, buffs );
+		bundle.put(PIERCE_ARMOR, pierceArmor);
+		bundle.put(PUNCH_ARMOR, punchArmor);
+		bundle.put(BASE_DMG, baseDmg);
 	}
 	
 	@Override
@@ -306,6 +317,9 @@ public abstract class Char extends Actor {
 		pos = bundle.getInt( POS );
 		HP = bundle.getInt( TAG_HP );
 		HT = bundle.getInt( TAG_HT );
+		pierceArmor = bundle.getInt(PIERCE_ARMOR);
+		punchArmor = bundle.getInt(PUNCH_ARMOR);
+		baseDmg = bundle.getInt(BASE_DMG);
 		
 		for (Bundlable b : bundle.getCollection( BUFFS )) {
 			if (b != null) {
@@ -334,81 +348,104 @@ public abstract class Char extends Actor {
 		}
 
 		if (hit( this, enemy, accMulti)) {
-			
-			int dr = Math.round(enemy.drRoll() * AscensionChallenge.statModifier(enemy));
-			
+
+			int[] def = enemy.defenseRoll2();
+			int defPierce = (int) Math.round(def[0] * AscensionChallenge.statModifier(enemy) );
+			int defPunch = (int) Math.round(def[1] * AscensionChallenge.statModifier(enemy) );
 			if (this instanceof Hero){
 				Hero h = (Hero)this;
 				if (h.belongings.attackingWeapon() instanceof MissileWeapon
 						&& h.subClass == HeroSubClass.SNIPER
 						&& !Dungeon.level.adjacent(h.pos, enemy.pos)){
-					dr = 0;
+					defPierce = 0;
+					defPunch = 0;
 				}
 
+				/*
 				if (h.buff(MonkEnergy.MonkAbility.UnarmedAbilityTracker.class) != null){
-					dr = 0;
+					defPierce = 0;
+					defPunch = 0;
 				} else if (h.subClass == HeroSubClass.MONK) {
 					//3 turns with standard attack delay
 					Buff.prolong(h, MonkEnergy.MonkAbility.JustHitTracker.class, 4f);
-				}
+				}*/
 			}
 
 			//we use a float here briefly so that we don't have to constantly round while
 			// potentially applying various multiplier effects
-			float dmg;
+			float pierceDmg;
+			float punchDmg;
+
 			Preparation prep = buff(Preparation.class);
 			if (prep != null){
-				dmg = prep.damageRoll(this);
+				pierceDmg = prep.damageRoll(this);
+				punchDmg = prep.damageRoll(this);
 				if (this == Dungeon.hero && Dungeon.hero.hasTalent(Talent.BOUNTY_HUNTER)) {
 					Buff.affect(Dungeon.hero, Talent.BountyHunterTracker.class, 0.0f);
 				}
 			} else {
-				dmg = damageRoll();
+				int[] temp = damageRoll2();
+				pierceDmg = temp[0];
+				punchDmg = temp[1];
 			}
 
-			dmg = Math.round(dmg*dmgMulti);
+			pierceDmg = Math.round(pierceDmg*dmgMulti);
+			punchDmg = Math.round(punchDmg*dmgMulti);
 
 			Berserk berserk = buff(Berserk.class);
-			if (berserk != null) dmg = berserk.damageFactor(dmg);
+			if (berserk != null) pierceDmg = berserk.damageFactor(pierceDmg);
+			if (berserk != null) punchDmg = berserk.damageFactor(punchDmg);
 
 			if (buff( Fury.class ) != null) {
-				dmg *= 1.5f;
+				pierceDmg *= 1.5f;
+				punchDmg *= 1.5f;
 			}
 
 			for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
-				dmg *= buff.meleeDamageFactor();
+				pierceDmg *= buff.meleeDamageFactor();
+				punchDmg *= buff.meleeDamageFactor();
 			}
 
-			dmg *= AscensionChallenge.statModifier(this);
-
+			pierceDmg *= AscensionChallenge.statModifier(this);
+			punchDmg *= AscensionChallenge.statModifier(this);
 			//flat damage bonus is applied after positive multipliers, but before negative ones
-			dmg += dmgBonus;
-
+			//applied to greater dmg type
+			pierceDmg += dmgBonus;
+			if(punchDmg > pierceDmg){
+				punchDmg += dmgBonus;
+				pierceDmg -= dmgBonus;
+			}
 			//friendly endure
 			Endure.EndureTracker endure = buff(Endure.EndureTracker.class);
-			if (endure != null) dmg = endure.damageFactor(dmg);
-
+			if (endure != null) punchDmg = endure.damageFactor(punchDmg);
+			if (endure != null) pierceDmg = endure.damageFactor(pierceDmg);
 			//enemy endure
 			endure = enemy.buff(Endure.EndureTracker.class);
 			if (endure != null){
-				dmg = endure.adjustDamageTaken(dmg);
+				punchDmg = endure.adjustDamageTaken(punchDmg);
+				pierceDmg = endure.adjustDamageTaken(pierceDmg);
 			}
 
 			if (enemy.buff(ScrollOfChallenge.ChallengeArena.class) != null){
-				dmg *= 0.67f;
+				pierceDmg *= 0.67f;
+				punchDmg *= 0.67f;
 			}
 
 			if (enemy.buff(MonkEnergy.MonkAbility.Meditate.MeditateResistance.class) != null){
-				dmg *= 0.2f;
+				pierceDmg *= 0.2f;
+				punchDmg *= 0.2f;
 			}
 
 			if ( buff(Weakness.class) != null ){
-				dmg *= 0.67f;
+				pierceDmg *= 0.67f;
+				punchDmg *= 0.67f;
 			}
-			
-			int effectiveDamage = enemy.defenseProc( this, Math.round(dmg) );
-			effectiveDamage = Math.max( effectiveDamage - dr, 0 );
 
+			int pierceDmgInt = enemy.defenseProc( this, Math.round(pierceDmg) );
+			int punchDmgInt = enemy.defenseProc( this, Math.round(punchDmg) );
+			pierceDmgInt = Math.max( pierceDmgInt - defPierce, 0 );
+			punchDmgInt = Math.max( punchDmgInt - defPunch, 0 );
+			int effectiveDamage = pierceDmgInt + punchDmgInt;
 			if (enemy.buff(Viscosity.ViscosityTracker.class) != null){
 				effectiveDamage = enemy.buff(Viscosity.ViscosityTracker.class).deferDamage(effectiveDamage);
 				enemy.buff(Viscosity.ViscosityTracker.class).detach();
@@ -470,7 +507,7 @@ public abstract class Char extends Actor {
 
 			enemy.sprite.bloodBurstA( sprite.center(), effectiveDamage );
 			enemy.sprite.flash();
-
+			//enemy dead check
 			if (!enemy.isAlive() && visibleFight) {
 				if (enemy == Dungeon.hero) {
 					
@@ -569,7 +606,17 @@ public abstract class Char extends Actor {
 	public String defenseVerb() {
 		return Messages.get(this, "def_verb");
 	}
-	
+
+	/**
+	 * Defense roll
+	 * @return array. Index: 0 piercing armor, index 1: punching armor
+	 */
+	public int[] defenseRoll2(){
+		int[] def = new int[2];
+		def[0] = pierceArmor + Random.NormalIntRange( 0 , Barkskin.currentLevel(this) );
+		def[1] = punchArmor + Random.NormalIntRange( 0 , Barkskin.currentLevel(this) );
+		return def;
+	}
 	public int drRoll() {
 		int dr = 0;
 
@@ -583,15 +630,17 @@ public abstract class Char extends Actor {
 	}
 
 	/**
-	 * This exists only to be overriden, I suppose
+	 * This exists only to be overridden, I suppose
+	 * There no actual roll. Just const numbers
 	 * @return empty array of size 2
 	 */
 	public int[] damageRoll2(){
 		int[] damage = new int[2];
-		damage[0] = dmg;
-		damage[1] = dmg;
+		damage[0] = baseDmg;
+		damage[1] = baseDmg;
 		return damage;
 	}
+
 	//TODO it would be nice to have a pre-armor and post-armor proc.
 	// atm attack is always post-armor and defence is already pre-armor
 	
@@ -643,10 +692,15 @@ public abstract class Char extends Actor {
 		needsShieldUpdate = false;
 		return cachedShield;
 	}
-	
+
+	/**
+	 * Apply damage to this character
+	 * @param dmg damage to receive, if this is weapon dmg, then it is after armor applied and piercing and punching added to gather
+	 * @param src Used for Life Link buff
+	 */
 	public void damage( int dmg, Object src ) {
 		
-		if (!isAlive() || dmg < 0) {
+		if (!isAlive() ||  dmg < 0) {
 			return;
 		}
 
@@ -655,10 +709,10 @@ public abstract class Char extends Actor {
 			return;
 		}
 
-		for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
-			dmg = (int) Math.ceil(dmg * buff.damageTakenFactor());
-		}
-
+		//for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
+		//	dmg = (int) Math.ceil(dmg * buff.damageTakenFactor());
+		//}
+		//Damage spread through life link
 		if (!(src instanceof LifeLink) && buff(LifeLink.class) != null){
 			HashSet<LifeLink> links = buffs(LifeLink.class);
 			for (LifeLink link : links.toArray(new LifeLink[0])){
@@ -723,7 +777,7 @@ public abstract class Char extends Actor {
 				buff(Sickle.HarvestBleedTracker.class).detach();
 				return;
 			}
-
+			/*
 			Bleeding b = buff(Bleeding.class);
 			if (b == null){
 				b = new Bleeding();
@@ -733,7 +787,7 @@ public abstract class Char extends Actor {
 			b.attachTo(this);
 			sprite.showStatus(CharSprite.WARNING, Messages.titleCase(b.name()) + " " + (int)b.level());
 			buff(Sickle.HarvestBleedTracker.class).detach();
-			return;
+			return;*/
 		}
 		
 		if (buff( Paralysis.class ) != null) {
@@ -751,6 +805,8 @@ public abstract class Char extends Actor {
 		shielded -= dmg;
 		HP -= dmg;
 
+		//Grim logic
+		//TODO this is retarded! Improve or remove this!
 		if (HP > 0 && buff(Grim.GrimTracker.class) != null){
 
 			float finalChance = buff(Grim.GrimTracker.class).maxChance;
@@ -759,7 +815,7 @@ public abstract class Char extends Actor {
 			if (Random.Float() < finalChance) {
 				int extraDmg = Math.round(HP*resist(Grim.class));
 				dmg += extraDmg;
-				HP -= extraDmg;
+				HP -= extraDmg;//unassigned dmg
 
 				sprite.emitter().burst( ShadowParticle.UP, 5 );
 				if (!isAlive() && buff(Grim.GrimTracker.class).qualifiesForBadge){
@@ -1001,7 +1057,7 @@ public abstract class Char extends Actor {
 					|| Actor.findChar(newPos) != null){
 				return; //abort if this is true
 			}
-				sprite.move(pos, newPos);//handling this here could cause issues for slash
+				sprite.move(pos, newPos, 0.3f);//handling this here could cause issues for slash
 				step = newPos;
 		}
 

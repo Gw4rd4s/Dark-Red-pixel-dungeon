@@ -39,16 +39,19 @@ public class GreatCrab extends Crab {
 	{
 		spriteClass = GreatCrabSprite.class;
 
-		HP = HT = 25;
+		HP = HT = 50;
 		defenseSkill = 0; //see damage()
 		baseSpeed = 1f;
-
+		pierceDmg = 8;
+		punchDmg = 3;
+		pierceArmor = 7;
+		punchArmor = 3;
 		EXP = 6;
 
 		state = WANDERING;
 
 		loot = new MysteryMeat().quantity(2);
-		lootChance = 1f;
+		lootChance = 1.5f;
 
 		properties.add(Property.MINIBOSS);
 	}
@@ -59,7 +62,7 @@ public class GreatCrab extends Crab {
 	protected boolean getCloser( int target ) {
 		//this is used so that the crab remains slower, but still detects the player at the expected rate.
 		moving++;
-		if (moving < 3) {
+		if (moving < 2) {
 			return super.getCloser( target );
 		} else {
 			moving = 0;

@@ -712,7 +712,19 @@ public class DriedRose extends Artifact {
 			}
 			return dr;
 		}
-
+		@Override
+		public int[] defenseRoll2(){
+			int[] def = super.defenseRoll2();
+			if (rose != null && rose.armor != null){
+				int[] armorDef = rose.armor.defenseRoll2();
+				def[0] += armorDef[0];
+				def[1] += armorDef[1];
+			}
+			//if (rose != null && rose.weapon != null){
+			//	def += Random.NormalIntRange( 0, rose.weapon.defenseFactor( this ));
+			//}
+			return def;
+		}
 		//used in some glyph calculations
 		public Armor armor(){
 			if (rose != null){

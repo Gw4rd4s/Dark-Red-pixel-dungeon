@@ -122,6 +122,8 @@ public abstract class Mob extends Char {
 	protected boolean enemySeen;
 	protected boolean alerted = false;
 
+	protected int pierceDmg;
+	protected int punchDmg;
 	protected static final float TIME_TO_WAKE_UP = 1f;
 
 	protected boolean firstAdded = true;
@@ -246,7 +248,14 @@ public abstract class Mob extends Char {
 
 		return state.act( enemyInFOV, justAlerted );
 	}
-	
+
+	@Override
+	public int[] damageRoll2(){
+		int[] dmg = super.damageRoll2();
+		dmg[0] += Random.NormalIntRange(pierceDmg/2, pierceDmg*3/2);
+		dmg[1] += Random.NormalIntRange(punchDmg/2, punchDmg*3/2);
+		return dmg;
+	}
 	//FIXME this is sort of a band-aid correction for allies needing more intelligent behaviour
 	protected boolean intelligentAlly = false;
 	
@@ -656,7 +665,7 @@ public abstract class Mob extends Char {
 			return 0;
 		}
 	}
-	
+
 	@Override
 	public int defenseProc( Char enemy, int damage ) {
 		

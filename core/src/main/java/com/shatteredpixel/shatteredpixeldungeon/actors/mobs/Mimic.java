@@ -233,9 +233,12 @@ public class Mimic extends Mob {
 	}
 	
 	public void adjustStats( int level ) {
-		HP = HT = 20 + level* 6;
+		HP = HT = 40 + level* 6;
 		defenseSkill = 2 + level/2;
-		
+		pierceDmg = 2 + 2*level;
+		punchDmg = 2 + 2*level;
+		pierceArmor = level/3;
+		punchArmor = level/4;
 		enemySeen = true;
 	}
 	

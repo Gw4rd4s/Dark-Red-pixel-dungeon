@@ -82,10 +82,13 @@ public class DM300 extends Mob {
 	{
 		spriteClass = DM300Sprite.class;
 
-		HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 400 : 300;
+		HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 800 : 600;
 		EXP = 30;
 		defenseSkill = 15;
-
+		pierceDmg = 12;
+		punchDmg = 28;
+		pierceArmor = 7;
+		punchArmor = 2;
 		properties.add(Property.BOSS);
 		properties.add(Property.INORGANIC);
 		properties.add(Property.LARGE);

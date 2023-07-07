@@ -44,9 +44,12 @@ public class DM100 extends Mob implements Callback {
 	{
 		spriteClass = DM100Sprite.class;
 		
-		HP = HT = 20;
+		HP = HT = 40;
 		defenseSkill = 8;
-		
+		pierceDmg = 5;
+		punchDmg = 5;
+		pierceArmor = 4;
+
 		EXP = 6;
 		maxLvl = 13;
 		
@@ -94,8 +97,8 @@ public class DM100 extends Mob implements Callback {
 			spend( TIME_TO_ZAP );
 
 			Invisibility.dispel(this);
-			if (hit( this, enemy, true )) {
-				int dmg = Random.NormalIntRange(3, 10);
+			if (hit( this, enemy)) {
+				int dmg = Random.NormalIntRange(10, 16);
 				dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
 				enemy.damage( dmg, new LightningBolt() );
 

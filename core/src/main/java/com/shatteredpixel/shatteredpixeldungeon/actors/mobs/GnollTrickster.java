@@ -43,9 +43,10 @@ public class GnollTrickster extends Gnoll {
 	{
 		spriteClass = GnollTricksterSprite.class;
 
-		HP = HT = 20;
+		HP = HT = 40;
 		defenseSkill = 5;
-
+		pierceArmor = 0;
+		punchArmor = 0;
 		EXP = 5;
 
 		state = WANDERING;
@@ -75,19 +76,8 @@ public class GnollTrickster extends Gnoll {
 		damage = super.attackProc( enemy, damage );
 		//The gnoll's attacks get more severe the more the player lets it hit them
 		combo++;
-		int effect = Random.Int(4)+combo;
-
-		if (effect > 2) {
-
-			if (effect >=6 && enemy.buff(Burning.class) == null){
-
-				if (Dungeon.level.flamable[enemy.pos])
-					GameScene.add(Blob.seed(enemy.pos, 4, Fire.class));
-				Buff.affect(enemy, Burning.class).reignite( enemy );
-
-			} else
-				Buff.affect( enemy, Poison.class).set((effect-2) );
-
+		if (combo > 1) {
+			Buff.affect( enemy, Poison.class).set((2*combo-3) );
 		}
 		return damage;
 	}

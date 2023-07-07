@@ -41,10 +41,12 @@ public class Scorpio extends Mob {
 	{
 		spriteClass = ScorpioSprite.class;
 		
-		HP = HT = 110;
+		HP = HT = 220;
 		defenseSkill = 24;
 		viewDistance = Light.DISTANCE;
-		
+		pierceDmg = 50;
+		punchDmg = 10;
+		pierceArmor = 16;
 		EXP = 14;
 		maxLvl = 27;
 		

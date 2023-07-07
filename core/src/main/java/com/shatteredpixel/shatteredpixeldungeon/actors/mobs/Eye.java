@@ -50,10 +50,14 @@ public class Eye extends Mob {
 	{
 		spriteClass = EyeSprite.class;
 		
-		HP = HT = 100;
+		HP = HT = 180;
 		defenseSkill = 20;
 		viewDistance = Light.DISTANCE;
-		
+		punchDmg = 35;
+		pierceDmg = 10;
+		pierceArmor = 5;
+		punchArmor = 15;
+
 		EXP = 13;
 		maxLvl = 26;
 		
@@ -151,7 +155,9 @@ public class Eye extends Mob {
 
 	@Override
 	public void damage(int dmg, Object src) {
-		if (beamCharged) dmg /= 4;
+		//inverse to Shattered Pixel Dungeon
+		//eye takes more damage when charging
+		if (!beamCharged) dmg /= 3;
 		super.damage(dmg, src);
 	}
 	
@@ -163,7 +169,7 @@ public class Eye extends Mob {
 			return;
 
 		beamCharged = false;
-		beamCooldown = Random.IntRange(4, 6);
+		beamCooldown = 7;//longer cool down. Compensate damage reduction, when not charging
 
 		boolean terrainAffected = false;
 
@@ -183,8 +189,8 @@ public class Eye extends Mob {
 				continue;
 			}
 
-			if (hit( this, ch, true )) {
-				int dmg = Random.NormalIntRange( 30, 50 );
+			if (hit( this, ch)) {
+				int dmg = Random.NormalIntRange( 70, 90 );
 				dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
 				ch.damage( dmg, new DeathGaze() );
 

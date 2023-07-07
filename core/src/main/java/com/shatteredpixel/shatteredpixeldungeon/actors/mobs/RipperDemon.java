@@ -47,10 +47,13 @@ public class RipperDemon extends Mob {
 	{
 		spriteClass = RipperSprite.class;
 
-		HP = HT = 60;
+		HP = HT = 120;
 		defenseSkill = 22;
 		viewDistance = Light.DISTANCE;
-
+		pierceDmg = 25;
+		punchDmg = 15;
+		pierceArmor = 4;
+		punchArmor = 4;
 		EXP = 9; //for corrupting
 		maxLvl = -2;
 
@@ -176,7 +179,7 @@ public class RipperDemon extends Mob {
 					public void call() {
 
 						if (leapVictim != null && alignment != leapVictim.alignment){
-							if (hit(RipperDemon.this, leapVictim, Char.INFINITE_ACCURACY, false)) {
+							if (hit(RipperDemon.this, leapVictim, Char.INFINITE_ACCURACY)) {
 								Buff.affect(leapVictim, Bleeding.class).set(0.75f * damageRoll());
 								leapVictim.sprite.flash();
 								Sample.INSTANCE.play(Assets.Sounds.HIT);

@@ -41,9 +41,12 @@ public class Brute extends Mob {
 	{
 		spriteClass = BruteSprite.class;
 		
-		HP = HT = 40;
+		HP = HT = 80;
 		defenseSkill = 15;
-		
+		pierceArmor = 3;
+		punchArmor = 7;
+		pierceDmg = 10;
+		punchDmg = 17;
 		EXP = 8;
 		maxLvl = 16;
 		
@@ -59,7 +62,20 @@ public class Brute extends Mob {
 			Random.NormalIntRange( 15, 40 ) :
 			Random.NormalIntRange( 5, 25 );
 	}
-	
+
+	@Override
+	public int[] damageRoll2(){
+		int[] dmg = new int[2];
+		dmg[0] = pierceDmg;
+		dmg[1] = punchDmg;
+		//rage activated
+		if(buff(BruteRage.class) != null){
+			dmg[0] *= 3;
+			dmg[0] /= 2;//piercing * 1.5
+			dmg[1] *= 2;//punchgin * 2
+		}
+		return dmg;
+	}
 	@Override
 	public int attackSkill( Char target ) {
 		return 20;

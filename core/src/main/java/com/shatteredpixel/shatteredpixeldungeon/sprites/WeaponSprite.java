@@ -16,7 +16,6 @@ import java.util.LinkedHashSet;
 public class WeaponSprite extends ItemSprite implements Tweener.Listener {
 
     private Callback callback;
-    private static final float OFFSET_ANGLE = 25.0f;
 
     /**
      * Hardcoded angle offsets for melee weapon animation
@@ -51,7 +50,7 @@ public class WeaponSprite extends ItemSprite implements Tweener.Listener {
         point( rotAround );          //lower left corner of weapon sprite must
         rotAround.y += this.height;  //match center of the one who swings
 
-        float aniTime = 1.5f;//swing time
+        float aniTime = 0.5f;//swing time
         PointF start = PointF.diff(slashFirst, rotAround);
         //set initial angle
         angle = (float)(Math.atan2( start.x, -start.y ) / 3.1415926 * 180);
@@ -65,7 +64,7 @@ public class WeaponSprite extends ItemSprite implements Tweener.Listener {
             }
         }
 
-        angularSpeed = -300;//not even one circle around
+        angularSpeed = -650;//not even one circle around
         RotTweener tweener = new RotTweener( this, caster, aniTime );
         tweener.listener = this;
         parent.add( tweener );

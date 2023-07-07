@@ -39,9 +39,12 @@ public class Monk extends Mob {
 	{
 		spriteClass = MonkSprite.class;
 		
-		HP = HT = 70;
+		HP = HT = 140;
 		defenseSkill = 30;
-		
+		pierceDmg = 7;
+		punchDmg = 18;
+		pierceArmor = 2;
+		punchArmor = 2;
 		EXP = 11;
 		maxLvl = 21;
 		

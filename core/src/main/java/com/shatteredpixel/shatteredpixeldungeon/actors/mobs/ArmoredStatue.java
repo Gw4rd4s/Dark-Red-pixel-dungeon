@@ -52,7 +52,7 @@ public class ArmoredStatue extends Statue {
 		armor.inscribe(Armor.Glyph.random());
 
 		//double HP
-		HP = HT = 30 + Dungeon.depth * 10;
+		HP = HT = 40 + Dungeon.depth * 5;
 	}
 
 	private static final String ARMOR	= "armor";
@@ -74,6 +74,14 @@ public class ArmoredStatue extends Statue {
 		return super.drRoll() + Random.NormalIntRange( armor.DRMin(), armor.DRMax());
 	}
 
+	@Override
+	public int[] defenseRoll2(){
+		int[] def = super.defenseRoll2();
+		int[] armorDef = armor().defenseRoll2();
+		def[0] += armorDef[0];
+		def[1] += armorDef[1];
+		return def;
+	}
 	//used in some glyph calculations
 	public Armor armor(){
 		return armor;

@@ -680,7 +680,18 @@ public class Hero extends Char {
 		
 		return dr;
 	}
-
+	@Override
+	public int[] defenseRoll2(){
+		int[] def = super.defenseRoll2();
+		//armor defense
+		if (belongings.armor() != null) {
+			int[] armorDef = belongings.armor.defenseRoll2();
+			def[0] += armorDef[0];
+			def[1] += armorDef[1];
+		}
+		//TODO add armor given by weapon
+		return def;
+	}
 	@Override
 	public int damageRoll() {
 		KindOfWeapon wep = belongings.attackingWeapon();
@@ -790,7 +801,7 @@ public class Hero extends Char {
 		if (!(w instanceof Weapon))             return true;
 		if (RingOfForce.fightingUnarmed(this))  return true;
 		if (lvl < ((Weapon)w).STRReq())       return false;
-		if (w instanceof Flail)                 return false;
+		//if (w instanceof Flail)                 return false;
 
 		return super.canSurpriseAttack();
 	}
@@ -1685,13 +1696,16 @@ public class Hero extends Char {
 			float delay = 1 / speed();
 			Char[] hitBySlash = slashRange( step );//targets in slash range
 			//Perform slash attack if Actor is able to
+			float prolongMove = 0;//slow moving anim IF slash is happening
 			if(hitBySlash != null && hitBySlash[0] != null && belongings.weapon.slashCoefs[0] > 0){
 				delay = attackDelay();//slash used melee speed, not movement speed!!!
+				prolongMove = 0.4f;
 				PointF destination = new PointF( (step % Dungeon.level.width())*16, (step / Dungeon.level.width())*16 );
 				((WeaponSprite) this.sprite.parent.recycle(WeaponSprite.class)).
-						reset(this.sprite,								//the one who swings weapon, rotate around
+						reset(this.sprite,								//the one who swings weapon, rotate weapon around it
 								hitBySlash[0].sprite,					//1st target
-								this.belongings.weapon);				//weapon to show
+								this.belongings.weapon
+							);				//weapon to show
 
 				for(int idt = 0; idt < hitBySlash.length; idt++){
 					attack( hitBySlash[idt], belongings.weapon.slashCoefs[idt], 0, 1);

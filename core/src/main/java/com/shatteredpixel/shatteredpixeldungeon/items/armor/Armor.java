@@ -77,7 +77,8 @@ import java.util.Arrays;
 public class Armor extends EquipableItem {
 
 	protected static final String AC_DETACH       = "DETACH";
-	
+	private int pierceArmor;
+	private int punchArmor;
 	public enum Augment {
 		EVASION (2f , -1f),
 		DEFENSE (-2f, 1f),
@@ -85,12 +86,11 @@ public class Armor extends EquipableItem {
 		
 		private final float evasionFactor;
 		private final float defenceFactor;
-		
+
 		Augment(float eva, float df){
 			evasionFactor = eva;
 			defenceFactor = df;
 		}
-		
 		public int evasionFactor(int level){
 			return Math.round((2 + level) * evasionFactor);
 		}
@@ -307,6 +307,7 @@ public class Armor extends EquipableItem {
 	 * Calculates lower defense bound of the armor
 	 * @return min possible damage reduction
 	 */
+
 	public int DRMin(){
 		int lvl = buffedLvl();
 		if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
@@ -320,7 +321,20 @@ public class Armor extends EquipableItem {
 			return lvl;
 		}
 	}
-	
+
+	/**
+	 * Defense roll of the armor
+	 * @return array. Index 0: piercing armor, index 1: punching armor
+	 */
+	public int[] defenseRoll2(){
+		int lvl = buffedLvl();
+		int[] dmg = new int[2];
+		int avg = pierceArmor * (lvl+2) /2;//only mean scales with levels, but no dispersion
+		dmg[0] = Random.NormalIntRange(avg - pierceArmor/2, avg + pierceArmor/2);
+		avg = punchArmor * (lvl+2) /2;
+		dmg[0] = Random.NormalIntRange(avg - punchArmor/2, avg + punchArmor/2);
+		return dmg;
+	}
 	public float evasionFactor( Char owner, float evasion ){
 		
 		if (hasGlyph(Stone.class, owner) && !((Stone)glyph).testingEvasion()){

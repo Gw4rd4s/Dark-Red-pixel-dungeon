@@ -85,10 +85,13 @@ public class Tengu extends Mob {
 	{
 		spriteClass = TenguSprite.class;
 		
-		HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 250 : 200;
+		HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 500 : 400;
 		EXP = 20;
 		defenseSkill = 15;
-		
+		pierceDmg = 8;
+		punchDmg = 4;
+		pierceArmor = 4;
+		punchArmor = 4;
 		HUNTING = new Hunting();
 		
 		flying = true; //doesn't literally fly, but he is fleet-of-foot enough to avoid hazards
