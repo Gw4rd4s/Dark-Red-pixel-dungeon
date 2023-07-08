@@ -122,7 +122,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Flail;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Quarterstaff;
@@ -147,7 +146,8 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.WeaponSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.SlashSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.StabSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
@@ -166,7 +166,6 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Point;
-import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
@@ -211,8 +210,7 @@ public class Hero extends Char {
 	public Belongings belongings;
 	
 	public int STR;
-	
-	public float awareness;
+
 	
 	public int lvl = 1;
 	public int exp = 0;
@@ -224,6 +222,17 @@ public class Hero extends Char {
 	//This list is maintained so that some logic checks can be skipped
 	// for enemies we know we aren't seeing normally, resulting in better performance
 	public ArrayList<Mob> mindVisionEnemies = new ArrayList<>();
+
+	public Hero() {
+		super();
+
+		HP = HT = 40;
+		STR = STARTING_STR;
+		
+		belongings = new Belongings( this );
+		
+		visibleEnemies = new ArrayList<>();
+	}
 
 	//Support for slash logic starts here
 	//===================================================================================================================
@@ -312,17 +321,6 @@ public class Hero extends Char {
 	}
 	//===================================================================================================================
 	//end of slash logic
-	public Hero() {
-		super();
-
-		HP = HT = 50;
-		STR = STARTING_STR;
-		
-		belongings = new Belongings( this );
-		
-		visibleEnemies = new ArrayList<>();
-	}
-	
 	public void updateHT( boolean boostHP ){
 		int curHT = HT;
 		
@@ -1394,7 +1392,11 @@ public class Hero extends Char {
 	public Char enemy(){
 		return enemy;
 	}
-	
+
+	/**
+	 * Waiting and sleeping logic
+	 * @param fullRest fall asleep IF TRUE. Wait 1 turn when FALSE
+	 */
 	public void rest( boolean fullRest ) {
 		spendAndNextConstant( TIME_TO_REST );
 		if (hasTalent(Talent.HOLD_FAST)){
@@ -1694,23 +1696,6 @@ public class Hero extends Char {
 		//moving
 		if (step != -1) {
 			float delay = 1 / speed();
-			Char[] hitBySlash = slashRange( step );//targets in slash range
-			//Perform slash attack if Actor is able to
-			float prolongMove = 0;//slow moving anim IF slash is happening
-			if(hitBySlash != null && hitBySlash[0] != null && belongings.weapon.slashCoefs[0] > 0){
-				delay = attackDelay();//slash used melee speed, not movement speed!!!
-				prolongMove = 0.4f;
-				PointF destination = new PointF( (step % Dungeon.level.width())*16, (step / Dungeon.level.width())*16 );
-				((WeaponSprite) this.sprite.parent.recycle(WeaponSprite.class)).
-						reset(this.sprite,								//the one who swings weapon, rotate weapon around it
-								hitBySlash[0].sprite,					//1st target
-								this.belongings.weapon
-							);				//weapon to show
-
-				for(int idt = 0; idt < hitBySlash.length; idt++){
-					attack( hitBySlash[idt], belongings.weapon.slashCoefs[idt], 0, 1);
-				}
-			}
 
 			//THIS could cause problems with slash, keep eye on it!
 			if (Dungeon.level.pit[step] && !Dungeon.level.solid[step]
@@ -1731,8 +1716,27 @@ public class Hero extends Char {
 				Buff.affect(this, Momentum.class).gainStack();
 			}
 
-			sprite.move(pos, step);
+			Char[] hitBySlash = slashRange( step );//targets in slash range
+			float prolongMove = 0;
+			//slow down moving anim IF slash is happening
+			if(hitBySlash != null && hitBySlash[0] != null && belongings.weapon.slashCoefs[0] > 0)prolongMove = 0.1f;//slow down moving anim IF slash is happening
+			sprite.move(pos, step, prolongMove);
 			move(step);
+
+			//Perform slash attack if Actor is able to
+			if(hitBySlash != null && hitBySlash[0] != null && belongings.weapon.slashCoefs[0] > 0){
+				delay = attackDelay();//slash uses melee speed, not movement speed!!!
+				prolongMove = 0.2f;//slow down moving anim IF slash is happening
+				((SlashSprite) this.sprite.parent.recycle(SlashSprite.class)).
+						playSlash(this.sprite,								//the one who swings weapon, rotate weapon around it
+								hitBySlash[0].sprite,					//1st target
+								this.belongings.weapon					//weapon to show
+						);
+
+				for(int idt = 0; idt < hitBySlash.length; idt++){
+					attack( hitBySlash[idt], belongings.weapon.slashCoefs[idt], 0, 1);
+				}
+			}
 
 			spend( delay );
 			justMoved = true;
@@ -2167,8 +2171,14 @@ public class Hero extends Char {
 				|| (enemy instanceof Mimic && enemy.alignment == Alignment.NEUTRAL);
 
 		boolean hit = attack( enemy, belongings.weapon.stabCoef);
-		
+
 		Invisibility.dispel();
+		//Stab visuals
+		((StabSprite) this.sprite.parent.recycle(StabSprite.class)).
+				playStab(this.sprite,					//the one who swings weapon, rotate weapon around it
+						enemy.sprite,					//target
+						this.belongings.weapon			//weapon to show
+				);
 		spend( attackDelay() );
 
 		if (hit && subClass == HeroSubClass.GLADIATOR && wasEnemy){

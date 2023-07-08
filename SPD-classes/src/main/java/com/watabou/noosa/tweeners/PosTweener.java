@@ -33,7 +33,6 @@ public class PosTweener extends Tweener {
 	
 	public PosTweener( Visual visual, PointF pos, float time ) {
 		super( visual, time );
-		
 		this.visual = visual;
 		start = visual.point();
 		end = pos;

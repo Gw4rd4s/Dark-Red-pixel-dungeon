@@ -526,7 +526,7 @@ public abstract class Char extends Actor {
 					GLog.i( Messages.capitalize(Messages.get(Char.class, "defeat", enemy.name())) );
 				}
 			}
-			
+
 			return true;
 			
 		}
@@ -1050,14 +1050,14 @@ public abstract class Char extends Actor {
 		if (travelling && Dungeon.level.adjacent( step, pos ) && buff( Vertigo.class ) != null) {
 			sprite.interruptMotion();
 			//int newPos = pos + PathFinder.NEIGHBOURS8[Random.Int(8)];
-			int newPos = -step;//TESTING this should send Char to opposite direction
+			int newPos = 2*pos - step;//TESTING this should send Char to opposite direction
 			//some checking
 			if (!(Dungeon.level.passable[newPos] || Dungeon.level.avoid[newPos])
 					|| (properties().contains(Property.LARGE) && !Dungeon.level.openSpace[newPos])
 					|| Actor.findChar(newPos) != null){
 				return; //abort if this is true
 			}
-				sprite.move(pos, newPos, 0.3f);//handling this here could cause issues for slash
+				sprite.move(pos, newPos, 0.1f);//handling this here could cause issues for slash
 				step = newPos;
 		}
 
