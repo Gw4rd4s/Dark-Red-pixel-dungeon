@@ -38,12 +38,6 @@ public class WarScythe extends MeleeWeapon {
 		ACC = 0.8f; //20% penalty to accuracy
 	}
 
-	@Override
-	public int max(int lvl) {
-		return  Math.round(6.67f*(tier+1)) +    //40 base, up from 30
-				lvl*(tier+1);                   //scaling unchanged
-	}
-
 	public float abilityChargeUse(Hero hero, Char target) {
 		return 2*super.abilityChargeUse(hero, target);
 	}
@@ -51,11 +45,6 @@ public class WarScythe extends MeleeWeapon {
 	@Override
 	public String targetingPrompt() {
 		return Messages.get(this, "prompt");
-	}
-
-	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
-		Sickle.harvestAbility(hero, target, 0.8f, this);
 	}
 
 }

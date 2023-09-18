@@ -52,7 +52,6 @@ public class Piranha extends Mob {
 		HUNTING = new Hunting();
 		
 		state = SLEEPING;
-
 	}
 	
 	public Piranha() {
@@ -60,7 +59,7 @@ public class Piranha extends Mob {
 		
 		HP = HT = 20 + Dungeon.depth * 6;
 		defenseSkill = 10 + Dungeon.depth * 2;
-		pierceDmg = 4;
+		pierceDmg = 4 + Dungeon.depth * 2;
 	}
 	
 	@Override
@@ -72,18 +71,6 @@ public class Piranha extends Mob {
 		} else {
 			return super.act();
 		}
-	}
-	
-	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( Dungeon.depth, 4 + Dungeon.depth * 2 );
-	}
-	@Override
-	public int[] damageRoll2(){
-		int[] dmg = super.damageRoll2();
-		dmg[0] += Dungeon.depth * 3;
-		dmg[0] = Random.NormalIntRange( dmg[0] - pierceDmg/2, dmg[0] + pierceDmg/2);
-		return dmg;
 	}
 	@Override
 	public int attackSkill( Char target ) {

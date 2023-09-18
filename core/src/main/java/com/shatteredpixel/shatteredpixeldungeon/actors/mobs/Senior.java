@@ -42,9 +42,4 @@ public class Senior extends Monk {
 		super.move( step, travelling);
 	}
 	
-	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( 16, 25 );
-	}
-	
 }

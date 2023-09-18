@@ -67,11 +67,6 @@ public class MagicImmune extends FlavourBuff {
 			((Hero) target).updateHT(false);
 		}
 	}
-
-	@Override
-	public int icon() {
-		return BuffIndicator.COMBO;
-	}
 	
 	@Override
 	public void tintIcon(Image icon) {

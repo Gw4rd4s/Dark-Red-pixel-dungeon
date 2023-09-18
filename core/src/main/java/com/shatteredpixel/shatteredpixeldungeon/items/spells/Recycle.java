@@ -74,10 +74,8 @@ public class Recycle extends InventorySpell {
 				}
 			} else if (item instanceof Plant.Seed) {
 				result = Generator.randomUsingDefaults(Generator.Category.SEED);
-			} else if (item instanceof Runestone) {
+			} else{
 				result = Generator.randomUsingDefaults(Generator.Category.STONE);
-			} else {
-				result = TippedDart.randomTipped(1);
 			}
 		} while (result.getClass() == item.getClass() || Challenges.isItemBlocked(result));
 		

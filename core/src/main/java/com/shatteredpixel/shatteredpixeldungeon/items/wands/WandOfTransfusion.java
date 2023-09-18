@@ -40,7 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
@@ -51,7 +51,7 @@ import com.watabou.utils.Random;
 public class WandOfTransfusion extends Wand {
 
 	{
-		image = ItemSpriteSheet.WAND_TRANSFUSION;
+		image = ItemSpriteSheet.SKULL_STAFF;
 
 		collisionProperties = Ballistica.PROJECTILE;
 	}

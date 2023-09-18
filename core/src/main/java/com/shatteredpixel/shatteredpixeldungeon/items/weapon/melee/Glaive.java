@@ -22,8 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class Glaive extends MeleeWeapon {
@@ -34,24 +32,9 @@ public class Glaive extends MeleeWeapon {
 		hitSoundPitch = 0.8f;
 
 		tier = 5;
-		DLY = 1.5f; //0.67x speed
 		RCH = 2;    //extra reach
-	}
 
-	@Override
-	public int max(int lvl) {
-		return  Math.round(6.67f*(tier+1)) +    //40 base, up from 30
-				lvl*Math.round(1.33f*(tier+1)); //+8 per level, up from +6
+		pierceDmg = 25;
+		punchDmg = 4;
 	}
-
-	@Override
-	public String targetingPrompt() {
-		return Messages.get(this, "prompt");
-	}
-
-	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
-		Spear.spikeAbility(hero, target, 1.30f, this);
-	}
-
 }

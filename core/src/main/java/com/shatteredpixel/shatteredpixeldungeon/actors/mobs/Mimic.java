@@ -200,11 +200,11 @@ public class Mimic extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll(float critBonus) {
 		if (alignment == Alignment.NEUTRAL){
-			return Random.NormalIntRange( 2 + 2*level, 2 + 2*level);
+			return super.damageRoll(1f);//full crit on surprise
 		} else {
-			return Random.NormalIntRange( 1 + level, 2 + 2*level);
+			return super.damageRoll(critBonus);
 		}
 	}
 

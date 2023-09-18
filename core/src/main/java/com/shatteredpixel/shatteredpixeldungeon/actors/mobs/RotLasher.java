@@ -91,11 +91,6 @@ public class RotLasher extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange(8, 15);
-	}
-
-	@Override
 	public int attackSkill( Char target ) {
 		return 15;
 	}

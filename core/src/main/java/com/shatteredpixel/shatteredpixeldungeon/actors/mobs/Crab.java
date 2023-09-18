@@ -45,12 +45,7 @@ public class Crab extends Mob {
 		loot = new MysteryMeat();
 		lootChance = 0.167f;
 	}
-	
-	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( 1, 7 );
-	}
-	
+
 	@Override
 	public int attackSkill( Char target ) {
 		return 12;

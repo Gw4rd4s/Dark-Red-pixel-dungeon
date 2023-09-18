@@ -52,7 +52,7 @@ import java.util.ArrayList;
 public class WandOfFireblast extends DamageWand {
 
 	{
-		image = ItemSpriteSheet.WAND_FIREBOLT;
+		image = ItemSpriteSheet.SKULL_STAFF;
 
 		//only used for targeting, actual projectile logic is Ballistica.STOP_SOLID | Ballistica.IGNORE_SOFT_SOLID
 		collisionProperties = Ballistica.WONT_STOP;

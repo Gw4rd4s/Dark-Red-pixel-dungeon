@@ -260,11 +260,23 @@ public class Ratmogrify extends ArmorAbility {
 		}
 
 		@Override
-		public int damageRoll() {
-			int damage = original.damageRoll();
+		public long damageRoll(float critBonus) {
+			//decode
+			long damage = original.damageRoll(critBonus);
+			long mask = 0b1111_1111_1111;
+			mask = mask << 48;//level of piercing
+			long pierceDMG = damage & mask;
+			mask = mask >> 12; //level of punching
+			long punchDMG = damage & mask;
 			if (!allied && Dungeon.hero.hasTalent(Talent.RATSISTANCE)){
-				damage *= Math.pow(0.9f, Dungeon.hero.pointsInTalent(Talent.RATSISTANCE));
+				pierceDMG *= Math.pow(0.9f, Dungeon.hero.pointsInTalent(Talent.RATSISTANCE));
+				punchDMG *= Math.pow(0.9f, Dungeon.hero.pointsInTalent(Talent.RATSISTANCE));
 			}
+			//encode
+			long temp = damage & 0xF_FFFF_FFFFL; //copy hot, cold and poison damage
+			damage = pierceDMG + //insert piercing }
+					 punchDMG +  //insert punching } replace with new values
+					 temp;		 //insert rest - keep original
 			return damage;
 		}
 

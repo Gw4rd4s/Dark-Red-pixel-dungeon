@@ -432,7 +432,7 @@ public class ElementalStrike extends ArmorAbility {
 		} else if (ench instanceof Projecting){
 			for (Char ch : affected){
 				if (ch != primaryTarget) {
-					ch.damage(Math.round(hero.damageRoll() * 0.3f * powerMulti), ench);
+					//ch.damage(Math.round(hero.damageRoll() * 0.3f * powerMulti), ench);
 				}
 			}
 
@@ -442,7 +442,7 @@ public class ElementalStrike extends ArmorAbility {
 			if (w instanceof Weapon) {
 				for (Char ch : affected){
 					if (ch != primaryTarget) {
-						ench.proc((Weapon) w, hero, ch, w.damageRoll(hero));
+						//ench.proc((Weapon) w, hero, ch, w.damageRoll(hero));
 					}
 				}
 			}

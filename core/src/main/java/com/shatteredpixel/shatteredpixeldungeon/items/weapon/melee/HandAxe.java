@@ -22,10 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class HandAxe extends MeleeWeapon {
@@ -35,39 +31,14 @@ public class HandAxe extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_SLASH;
 		hitSoundPitch = 1f;
 
-		tier = 1;
+		tier = 2;
 		//ACC = 1.32f; //32% boost to accuracy
-		pierceDMG = 3;
-		punchDMG = 3;
-		stabCoef = 0.2f;
+		pierceDmg = 7;
+		punchDmg = 7;
+		stabCoef = 0.4f;
 		slashCoefs[0] = 1;
 		slashCoefs[1] = 0.8f;
-		slashCoefs[2] = 0.5f;
-	}
-
-	@Override
-	public int max(int lvl) {
-		return  4*(tier+1) +    //12 base, down from 15
-				lvl*(tier+1);   //scaling unchanged
-	}
-
-	@Override
-	public String targetingPrompt() {
-		return Messages.get(this, "prompt");
-	}
-
-	@Override
-	public float abilityChargeUse(Hero hero, Char target) {
-		if (target == null || (target instanceof Mob && ((Mob) target).surprisedBy(hero))) {
-			return super.abilityChargeUse(hero, target);
-		} else {
-			return 2*super.abilityChargeUse(hero, target);
-		}
-	}
-
-	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
-		Mace.heavyBlowAbility(hero, target, 1.45f, this);
+		slashCoefs[2] = 0.2f;
 	}
 
 }

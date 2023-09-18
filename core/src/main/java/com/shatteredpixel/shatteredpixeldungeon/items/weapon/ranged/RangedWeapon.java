@@ -7,10 +7,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RevealedArea;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
-import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
@@ -35,11 +33,12 @@ public class RangedWeapon extends Weapon{
         bones = true;
         defaultAction = AC_SHOOT;
         usesTargeting = true;
+
+
     }
 
     public int tier;
     protected int targetPos;
-    public boolean sniperSpecial = false;
 
     @Override
     public String defaultAction() {
@@ -105,86 +104,8 @@ public class RangedWeapon extends Weapon{
         return shootProj().targetingPos(user, dst);
     }
 
-    /**
-     * Calculates minimal damage. This represents melee dmg of ranged weapon. It's quite weak.
-     * @param lvl weapon level
-     * @return min possible dmg
-     */
-    public int min(int lvl) {
-        return  tier+  //base
-                lvl;  //level scaling
-    }
-    /**
-     * Calculates maximal damage. This represents melee dmg of ranged weapon. It's quite weak.
-     * @param lvl weapon level
-     * @return max possible dmg
-     */
-    public int max(int lvl) {
-        return  2*(tier+1) + //base
-                lvl*tier;   //level scaling
-    }
-
     public int wepTier(){
         return tier;
-    }
-
-    private static boolean evaluatingTwinUpgrades = false;
-    @Override
-    public int buffedLvl() {
-        if (!evaluatingTwinUpgrades && isEquipped(Dungeon.hero) && Dungeon.hero.hasTalent(Talent.TWIN_UPGRADES)){
-            KindOfWeapon other = null;
-            if (Dungeon.hero.belongings.weapon() != this) other = Dungeon.hero.belongings.weapon();
-            if (Dungeon.hero.belongings.secondWep() != this) other = Dungeon.hero.belongings.secondWep();
-
-            if (other instanceof MeleeWeapon) {
-                evaluatingTwinUpgrades = true;
-                int otherLevel = other.buffedLvl();
-                evaluatingTwinUpgrades = false;
-
-                //weaker weapon needs to be 2/1/0 tiers lower, based on talent level
-                if ((tier + (3 - Dungeon.hero.pointsInTalent(Talent.TWIN_UPGRADES))) <= ((MeleeWeapon) other).tier
-                        && otherLevel > super.buffedLvl()) {
-                    return otherLevel;
-                }
-
-            }
-        }
-        return super.buffedLvl();
-    }
-
-    @Override
-    public float accuracyFactor(Char owner, Char target) {
-        float ACC = super.accuracyFactor(owner, target);
-
-        if (owner instanceof Hero
-                && ((Hero) owner).hasTalent(Talent.PRECISE_ASSAULT)
-                //does not trigger on ability attacks
-                && ((Hero) owner).belongings.abilityWeapon != this) {
-            if (((Hero) owner).heroClass != HeroClass.DUELIST) {
-                //persistent +10%/20%/30% ACC for other heroes
-                ACC *= 1f + 0.1f * ((Hero) owner).pointsInTalent(Talent.PRECISE_ASSAULT);
-            } else if (owner.buff(Talent.PreciseAssaultTracker.class) != null) {
-                // 2x/4x/8x ACC for duelist if she just used a weapon ability
-                ACC *= Math.pow(2, ((Hero) owner).pointsInTalent(Talent.PRECISE_ASSAULT));
-                owner.buff(Talent.PreciseAssaultTracker.class).detach();
-            }
-        }
-
-        return ACC;
-    }
-
-    @Override
-    public int damageRoll(Char owner) {
-        int damage = augment.damageFactor(super.damageRoll( owner ));
-
-        if (owner instanceof Hero) {
-            int exStr = ((Hero)owner).lvl - STRReq();
-            if (exStr > 0) {
-                damage += Random.IntRange( 0, exStr );
-            }
-        }
-
-        return damage;
     }
 
     @Override
@@ -193,14 +114,14 @@ public class RangedWeapon extends Weapon{
         String info = desc();
 
         if (levelKnown) {
-            info += "\n\n" + Messages.get(MeleeWeapon.class, "stats_known", tier, augment.damageFactor(min()), augment.damageFactor(max()), STRReq());
+            info += "\n\n" + Messages.get(MeleeWeapon.class, "stats_known", tier, 0, 10, STRReq());
             if (STRReq() > Dungeon.hero.lvl) {
                 info += " " + Messages.get(Weapon.class, "too_heavy");
             } else if (Dungeon.hero.lvl > STRReq()){
                 info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.lvl - STRReq());
             }
         } else {
-            info += "\n\n" + Messages.get(MeleeWeapon.class, "stats_unknown", tier, min(0), max(0), STRReq());
+            info += "\n\n" + Messages.get(MeleeWeapon.class, "stats_unknown", tier, 0, 10, STRReq());
             if (STRReq() > Dungeon.hero.lvl) {
                 info += " " + Messages.get(MeleeWeapon.class, "probably_too_heavy");
             }
@@ -281,37 +202,6 @@ public class RangedWeapon extends Weapon{
             hitSound = Assets.Sounds.HIT_ARROW;
         }
 
-        /**
-         * Calculates minimal damage. This represents ranged dmg of ranged weapon. It's strong.
-         * @param lvl weapon level
-         * @return min possible dmg
-         */
-
-        @Override
-        public int min(int lvl) {
-            Ammo ammunition = Dungeon.hero.belongings.getItem(Ammo.class);
-            int ammoPower = 0;
-            if(ammunition != null) ammoPower = ammunition.min(lvl);
-            return  ammoPower;
-        }
-        /**
-         * Calculates maximal damage. This represents ranged dmg of ranged weapon. It's strong.
-         * @param lvl weapon level
-         * @return max possible dmg
-         */
-        @Override
-        public int max(int lvl) {
-            Ammo ammunition = Dungeon.hero.belongings.getItem(Ammo.class);
-            int ammoPower = 0;
-            if(ammunition != null) ammoPower = ammunition.max(lvl);
-            return ammoPower;
-        }
-        //btw, this uses its own damage, not Ranged weapon's damage
-        @Override
-        public int damageRoll(Char owner) {
-            return Random.NormalIntRange(min(buffedLvl()), max(buffedLvl()));
-        }
-
         @Override//TODO enchanting weapon and ammo is going to be a thing. In the same time
         public boolean hasEnchant(Class<? extends Enchantment> type, Char owner) {
             return RangedWeapon.this.hasEnchant(type, owner);
@@ -325,15 +215,6 @@ public class RangedWeapon extends Weapon{
         @Override
         public float delayFactor(Char user) {
             return RangedWeapon.this.delayFactor(user);
-        }
-
-        @Override
-        public float accuracyFactor(Char owner, Char target) {
-            if (sniperSpecial && RangedWeapon.this.augment == Augment.DAMAGE){
-                return Float.POSITIVE_INFINITY;
-            } else {
-                return super.accuracyFactor(owner, target);
-            }
         }
 
         @Override
@@ -351,7 +232,6 @@ public class RangedWeapon extends Weapon{
                 if (!curUser.shoot( enemy, this )) {
                     Splash.at(cell, 0xCC99FFFF, 1);
                 }
-                if (sniperSpecial && RangedWeapon.this.augment != Augment.SPEED) sniperSpecial = false;
             }
         }
 
@@ -367,7 +247,7 @@ public class RangedWeapon extends Weapon{
         public void cast(final Hero user, final int dst) {
             final int cell = throwPos( user, dst );
             RangedWeapon.this.targetPos = cell;
-            if (sniperSpecial && RangedWeapon.this.augment == Augment.SPEED){
+            if (RangedWeapon.this.augment == Augment.SPEED){
                 if (flurryCount == -1) flurryCount = 3;
 
                 final Char enemy = Actor.findChar( cell );
@@ -379,7 +259,6 @@ public class RangedWeapon extends Weapon{
                     } else {
                         user.spendAndNext(castDelay(user, dst));
                     }
-                    sniperSpecial = false;
                     flurryCount = -1;
 
                     if (flurryActor != null){
@@ -434,7 +313,6 @@ public class RangedWeapon extends Weapon{
                                             } else {
                                                 user.spendAndNext(castDelay(user, dst));
                                             }
-                                            sniperSpecial = false;
                                             flurryCount = -1;
                                         }
 

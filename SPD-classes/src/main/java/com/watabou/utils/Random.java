@@ -110,9 +110,9 @@ public class Random {
 
 	//returns a normally distributed int in the range [min, max]
 	public static int NormalIntRange( int min, int max ) {
-		float almostNormal = Float() + Float() + Float() + Float() + Float() + Float();
-		almostNormal /= 6f;
-		return min + (int)Math.round( almostNormal * (max - min) );
+		float almostNormal = Float() + Float() + Float() + Float();
+		almostNormal /= 4f;
+		return min + Math.round( almostNormal * (max - min) );
 	}
 
 	//returns a uniformly distributed long in the range [-2^63, 2^63)

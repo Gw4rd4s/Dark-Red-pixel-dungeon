@@ -55,12 +55,6 @@ public class Crossbow extends MeleeWeapon {
 			return false;
 		}
 	}
-	
-	@Override
-	public int max(int lvl) {
-		return  4*(tier+1) +    //20 base, down from 25
-				lvl*(tier);     //+4 per level, down from +5
-	}
 
 	@Override
 	protected void duelistAbility(Hero hero, Integer target) {

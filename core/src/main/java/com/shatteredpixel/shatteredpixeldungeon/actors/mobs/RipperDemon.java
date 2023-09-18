@@ -71,11 +71,6 @@ public class RipperDemon extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( 15, 25 );
-	}
-
-	@Override
 	public int attackSkill( Char target ) {
 		return 30;
 	}
@@ -180,7 +175,7 @@ public class RipperDemon extends Mob {
 
 						if (leapVictim != null && alignment != leapVictim.alignment){
 							if (hit(RipperDemon.this, leapVictim, Char.INFINITE_ACCURACY)) {
-								Buff.affect(leapVictim, Bleeding.class).set(0.75f * damageRoll());
+								//Buff.affect(leapVictim, Bleeding.class).set(0.75f * damageRoll());
 								leapVictim.sprite.flash();
 								Sample.INSTANCE.play(Assets.Sounds.HIT);
 							} else {

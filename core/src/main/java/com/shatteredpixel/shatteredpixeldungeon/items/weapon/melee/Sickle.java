@@ -22,19 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.Callback;
 
 public class Sickle extends MeleeWeapon {
 
@@ -44,78 +32,11 @@ public class Sickle extends MeleeWeapon {
 		hitSoundPitch = 1f;
 
 		tier = 2;
-		ACC = 0.68f; //32% penalty to accuracy
+		pierceDmg = 11;
+		punchDmg = 1;
+		slashCoefs[0] = 1f;
+		slashCoefs[1] = 0.5f;
+		stabCoef = 0.4f;
 	}
-
-	@Override
-	public int max(int lvl) {
-		return  Math.round(6.67f*(tier+1)) +    //20 base, up from 15
-				lvl*(tier+1);                   //scaling unchanged
-	}
-
-	public float abilityChargeUse(Hero hero, Char target) {
-		return 2*super.abilityChargeUse(hero, target);
-	}
-
-	@Override
-	public String targetingPrompt() {
-		return Messages.get(this, "prompt");
-	}
-
-	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
-		harvestAbility(hero, target, 1f, this);
-	}
-
-	public static void harvestAbility(Hero hero, Integer target, float bleedFactor, MeleeWeapon wep){
-
-		if (target == null) {
-			return;
-		}
-
-		Char enemy = Actor.findChar(target);
-		if (enemy == null || enemy == hero || hero.isCharmedBy(enemy) || !Dungeon.level.heroFOV[target]) {
-			GLog.w(Messages.get(wep, "ability_no_target"));
-			return;
-		}
-
-		hero.belongings.abilityWeapon = wep;
-		if (!hero.canAttack(enemy)){
-			GLog.w(Messages.get(wep, "ability_bad_position"));
-			hero.belongings.abilityWeapon = null;
-			return;
-		}
-		hero.belongings.abilityWeapon = null;
-
-		hero.sprite.attack(enemy.pos, new Callback() {
-			@Override
-			public void call() {
-				wep.beforeAbilityUsed(hero, enemy);
-				AttackIndicator.target(enemy);
-
-				Buff.affect(enemy, HarvestBleedTracker.class, 0).bleedFactor = bleedFactor;
-				if (hero.attack(enemy, 1, 0, Char.INFINITE_ACCURACY)){
-					Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG);
-				}
-
-				Invisibility.dispel();
-				hero.spendAndNext(hero.attackDelay());
-				if (!enemy.isAlive()){
-					wep.onAbilityKill(hero, enemy);
-					Buff.prolong(hero, Sword.CleaveTracker.class, 5f);
-				} else {
-					if (hero.buff(Sword.CleaveTracker.class) != null) {
-						hero.buff(Sword.CleaveTracker.class).detach();
-					}
-				}
-				wep.afterAbilityUsed(hero);
-			}
-		});
-
-	}
-
-	public static class HarvestBleedTracker extends FlavourBuff{
-		public float bleedFactor;
-	};
 
 }

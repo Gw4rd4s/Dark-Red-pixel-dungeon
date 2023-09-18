@@ -98,28 +98,6 @@ abstract public class ClassArmor extends Armor {
 		
 		ClassArmor classArmor = null;
 		
-		switch (owner.heroClass) {
-			case WARRIOR:
-				classArmor = new WarriorArmor();
-				BrokenSeal seal = armor.checkSeal();
-				if (seal != null) {
-					classArmor.affixSeal(seal);
-				}
-				break;
-			case ROGUE:
-				classArmor = new RogueArmor();
-				break;
-			case MAGE:
-				classArmor = new MageArmor();
-				break;
-			case HUNTRESS:
-				classArmor = new HuntressArmor();
-				break;
-			case DUELIST:
-				classArmor = new DuelistArmor();
-				break;
-		}
-		
 		classArmor.level(armor.trueLevel());
 		classArmor.tier = armor.tier;
 		classArmor.augment = armor.augment;

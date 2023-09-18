@@ -186,7 +186,7 @@ public class ShopRoom extends SpecialRoom {
 		w.identify(false);
 		itemsToSpawn.add(w);
 		
-		itemsToSpawn.add( TippedDart.randomTipped(2) );
+		//itemsToSpawn.add( TippedDart.randomTipped(2) );
 
 		itemsToSpawn.add( new Alchemize().quantity(Random.IntRange(2, 3)));
 

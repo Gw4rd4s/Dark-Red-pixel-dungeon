@@ -380,7 +380,7 @@ public class v0_6_X_Changes {
 				"_-_ Boomerang str req reduced to 9 from 10\n" +
 				"_-_ Knuckleduster dmg reduced to 1-5 from 1-6"));
 		
-		changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.CHILLING_DART, null), "Expanded Alchemy",
+		changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.HEAVY_ARROW, null), "Expanded Alchemy",
 				"It is now possible to use alchemy to tip darts!\n\n" +
 				"_-_ Every seed (except blandfruit) can now be combined with two darts to make two tipped darts.\n\n" +
 				"_-_ Tipped dart effects are similar to their potion/seed counterparts.\n\n" +
@@ -456,7 +456,7 @@ public class v0_6_X_Changes {
 				"_-_ Increased soul mark chance scaling by 100%\n\n" +
 				"Soul mark chance reaches pre-adjustment levels at a +2 wand, and grows from there."));
 		
-		changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.WAND_MAGIC_MISSILE, null), "Minor Wand buffs",
+		changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.BLUE_STAFF, null), "Minor Wand buffs",
 				"Wand of Corruption:\n" +
 				"_-_ Reduced the corruption resistance of wraiths by ~40%\n" +
 				"_-_ Enemies now drop their loot (including ranged weapons) when corrupted.\n" +

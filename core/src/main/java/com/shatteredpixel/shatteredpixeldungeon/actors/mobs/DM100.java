@@ -61,11 +61,6 @@ public class DM100 extends Mob implements Callback {
 	}
 	
 	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( 2, 8 );
-	}
-	
-	@Override
 	public int attackSkill( Char target ) {
 		return 11;
 	}

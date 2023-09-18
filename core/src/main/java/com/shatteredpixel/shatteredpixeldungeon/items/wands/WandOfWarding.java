@@ -54,7 +54,7 @@ import com.watabou.utils.Random;
 public class WandOfWarding extends Wand {
 
 	{
-		image = ItemSpriteSheet.WAND_WARDING;
+		image = ItemSpriteSheet.SKULL_STAFF;
 	}
 
 	@Override

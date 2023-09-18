@@ -19,40 +19,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles;
+package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.utils.Random;
 
-public class Tomahawk extends MissileWeapon {
+public class ObsidianBlade extends MeleeWeapon {
 
 	{
-		image = ItemSpriteSheet.TOMAHAWK;
-		hitSound = Assets.Sounds.HIT_SLASH;
+		image = ItemSpriteSheet.OBSIDIAN_BLADE;
+		hitSound = Assets.Sounds.HIT_STAB;
 		hitSoundPitch = 0.9f;
 
 		tier = 4;
-		baseUses = 5;
-	}
 
-	@Override
-	public int min(int lvl) {
-		return  Math.round(1.5f * tier) +   //6 base, down from 8
-				2 * lvl;                    //scaling unchanged
-	}
-	
-	@Override
-	public int max(int lvl) {
-		return  Math.round(3.75f * tier) +  //15 base, down from 20
-				(tier)*lvl;                 //scaling unchanged
-	}
-	
-	@Override
-	public int proc( Char attacker, Char defender, int damage ) {
-		Buff.affect( defender, Bleeding.class ).set( Math.round(damage*0.6f) );
-		return super.proc( attacker, defender, damage );
+		pierceDmg = 18;
 	}
 }

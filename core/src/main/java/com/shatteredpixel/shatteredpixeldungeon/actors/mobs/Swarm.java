@@ -78,11 +78,6 @@ public class Swarm extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( 1, 4 );
-	}
-	
-	@Override
 	public int defenseProc( Char enemy, int damage ) {
 
 		if (HP >= damage + 2) {

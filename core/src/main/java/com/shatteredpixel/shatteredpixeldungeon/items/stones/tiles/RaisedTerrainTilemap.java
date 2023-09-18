@@ -19,28 +19,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts;
+package com.shatteredpixel.shatteredpixeldungeon.items.stones.tiles;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 
-
-public class BlindingDart extends TippedDart {
+public class RaisedTerrainTilemap extends DungeonTilemap {
 	
-	{
-		image = ItemSpriteSheet.BLINDING_DART;
+	public RaisedTerrainTilemap() {
+		super(Dungeon.level.tilesTex());
+		map( Dungeon.level.map, Dungeon.level.width() );
 	}
 	
 	@Override
-	public int proc(Char attacker, Char defender, int damage) {
-
-		//when processing charged shot, only blind enemies
-		if (!processingChargedShot || attacker.alignment != defender.alignment) {
-			Buff.affect(defender, Blindness.class, Blindness.DURATION);
+	protected int getTileVisual(int pos, int tile, boolean flat) {
+		
+		if (flat) return -1;
+		
+		if (tile == Terrain.HIGH_GRASS){
+			return DungeonTileSheet.getVisualWithAlts(
+					DungeonTileSheet.RAISED_HIGH_GRASS,
+					pos) + 2;
+		} else if (tile == Terrain.FURROWED_GRASS){
+			return DungeonTileSheet.getVisualWithAlts(
+					DungeonTileSheet.RAISED_FURROWED_GRASS,
+					pos) + 2;
 		}
 		
-		return super.proc(attacker, defender, damage);
+		
+		return -1;
 	}
 }

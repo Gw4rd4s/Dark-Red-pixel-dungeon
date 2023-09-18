@@ -55,11 +55,7 @@ public class Scorpio extends Mob {
 
 		properties.add(Property.DEMONIC);
 	}
-	
-	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( 30, 40 );
-	}
+
 	
 	@Override
 	public int attackSkill( Char target ) {

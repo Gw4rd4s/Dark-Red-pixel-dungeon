@@ -65,30 +65,16 @@ public class Goo extends Mob {
 	private int pumpedUp = 0;
 	private int healInc = 0;
 
+	/*
 	@Override
-	public int damageRoll() {
-		int min = 1;
-		int max = (HP*2 <= HT) ? 12 : 8;
-		if (pumpedUp > 0) {
-			pumpedUp = 0;
-			if (enemy == Dungeon.hero) {
-				Statistics.qualifiedForBossChallengeBadge = false;
-				Statistics.bossScores[0] -= 100;
-			}
-			return Random.NormalIntRange( min*3, max*3 );
-		} else {
-			return Random.NormalIntRange( min, max );
-		}
-	}
-	@Override
-	public int[] damageRoll2(){
-		int[] dmg = new int[2];
+	public int damageRoll2(){
 		int min = (HP*2 <= HT) ? pierceDmg*3/2 : pierceDmg/2;
 		int max = (HP*2 <= HT) ? pierceDmg*2 : pierceDmg*3/2;
-		dmg[0] = Random.NormalIntRange(min,max);
+		int dmg = Random.NormalIntRange(min,max);
+		dmg = dmg << 16;
 		min = (HP*2 <= HT) ? punchDmg*3/2 : punchDmg/2;
 		max = (HP*2 <= HT) ? punchDmg*2 : punchDmg*3/2;
-		dmg[1] = Random.NormalIntRange(min,max);
+		dmg = dmg + Random.NormalIntRange(min,max);
 
 		if(pumpedUp > 0){
 			pumpedUp = 0;
@@ -96,11 +82,10 @@ public class Goo extends Mob {
 				Statistics.qualifiedForBossChallengeBadge = false;
 				Statistics.bossScores[0] -= 100;
 			}
-			dmg[0] *= 3;
-			dmg[1] *= 3;
+			dmg *= 3;
 		}
 		return dmg;
-	}
+	}*/
 	@Override
 	public int attackSkill( Char target ) {
 		int attack = 10;

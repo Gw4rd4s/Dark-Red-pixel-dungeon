@@ -19,34 +19,46 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.tiles;
+package com.shatteredpixel.shatteredpixeldungeon.items.stones.tiles;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 
-public class RaisedTerrainTilemap extends DungeonTilemap {
-	
-	public RaisedTerrainTilemap() {
-		super(Dungeon.level.tilesTex());
+public class GridTileMap extends DungeonTilemap {
+
+	public GridTileMap() {
+		super( Assets.Environment.VISUAL_GRID );
+
 		map( Dungeon.level.map, Dungeon.level.width() );
 	}
-	
+
+	private int gridSetting = -1;
+
+	@Override
+	public synchronized void updateMap() {
+		gridSetting = SPDSettings.visualGrid();
+		super.updateMap();
+	}
+
 	@Override
 	protected int getTileVisual(int pos, int tile, boolean flat) {
-		
-		if (flat) return -1;
-		
-		if (tile == Terrain.HIGH_GRASS){
-			return DungeonTileSheet.getVisualWithAlts(
-					DungeonTileSheet.RAISED_HIGH_GRASS,
-					pos) + 2;
-		} else if (tile == Terrain.FURROWED_GRASS){
-			return DungeonTileSheet.getVisualWithAlts(
-					DungeonTileSheet.RAISED_FURROWED_GRASS,
-					pos) + 2;
+		if (gridSetting == -1 || (pos % mapWidth) % 2 != (pos / mapWidth) % 2){
+			return -1;
+		} else if (DungeonTileSheet.floorTile(tile) || tile == Terrain.HIGH_GRASS || tile == Terrain.FURROWED_GRASS) {
+			return gridSetting;
+		} else if (DungeonTileSheet.doorTile(tile)){
+			if (DungeonTileSheet.wallStitcheable(map[pos - mapWidth])){
+				return 12 + gridSetting;
+			} else if ( tile == Terrain.OPEN_DOOR){
+				return 8 + gridSetting;
+			} else {
+				return 4 + gridSetting;
+			}
+		} else {
+			return -1;
 		}
-		
-		
-		return -1;
 	}
+
 }

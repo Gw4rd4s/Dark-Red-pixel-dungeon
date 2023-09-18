@@ -100,7 +100,7 @@ public class MirrorImage extends NPC {
 		heroID = this.hero.id();
 		Buff.affect(this, MirrorInvis.class, Short.MAX_VALUE);
 	}
-	
+	/*
 	@Override
 	public int damageRoll() {
 		int damage;
@@ -111,7 +111,7 @@ public class MirrorImage extends NPC {
 		}
 		return (damage+1)/2; //half hero damage, rounded up
 	}
-	
+	*/
 	@Override
 	public int attackSkill( Char target ) {
 		//same base attack skill as hero, benefits from accuracy ring and weapon

@@ -55,8 +55,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Projec
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Unstable;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Vampiric;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RunicBlade;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scimitar;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -85,9 +83,9 @@ abstract public class Weapon extends KindOfWeapon {
 			damageFactor = dmg;
 			delayFactor = dly;
 		}
-
-		public int damageFactor(int dmg){
-			return Math.round(dmg * damageFactor);
+		//Todo: At this state this does nothing
+		public long damageFactor(long dmg){
+			return dmg;
 		}
 
 		public float delayFactor(float dly){
@@ -207,13 +205,7 @@ abstract public class Weapon extends KindOfWeapon {
 	}
 
 	protected float speedMultiplier(Char owner ){
-		float multi = RingOfFuror.attackSpeedMultiplier(owner);
-
-		if (owner.buff(Scimitar.SwordDance.class) != null){
-			multi += 0.6f;
-		}
-
-		return multi;
+		return  RingOfFuror.attackSpeedMultiplier(owner);
 	}
 
 	@Override
@@ -241,7 +233,6 @@ abstract public class Weapon extends KindOfWeapon {
 	}
 
 	public abstract int wepTier();
-
 
 	@Override
 	public int level() {
@@ -384,11 +375,6 @@ abstract public class Weapon extends KindOfWeapon {
 			Berserk rage = attacker.buff(Berserk.class);
 			if (rage != null) {
 				multi = rage.enchantFactor(multi);
-			}
-
-			if (attacker.buff(RunicBlade.RunicSlashTracker.class) != null){
-				multi += 3f;
-				attacker.buff(RunicBlade.RunicSlashTracker.class).detach();
 			}
 
 			if (attacker.buff(ElementalStrike.DirectedPowerTracker.class) != null){

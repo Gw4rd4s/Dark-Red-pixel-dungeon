@@ -143,7 +143,7 @@ public class PrismaticImage extends NPC {
 		this.HP = HP;
 		HT = PrismaticGuard.maxHP( hero );
 	}
-	
+	/*
 	@Override
 	public int damageRoll() {
 		if (hero != null) {
@@ -152,7 +152,8 @@ public class PrismaticImage extends NPC {
 			return Random.NormalIntRange( 2, 4 );
 		}
 	}
-	
+	*/
+
 	@Override
 	public int attackSkill( Char target ) {
 		if (hero != null) {

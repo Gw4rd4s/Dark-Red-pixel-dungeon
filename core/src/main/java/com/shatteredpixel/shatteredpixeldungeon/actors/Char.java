@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArcaneArmor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Berserk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -59,7 +58,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Preparation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ShieldBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Slow;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
@@ -74,7 +72,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Challenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.DeathMark;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Elemental;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Tengu;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
@@ -101,9 +98,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazin
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Kinetic;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sickle;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.ShockingDart;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Door;
@@ -118,6 +113,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -134,12 +130,27 @@ public abstract class Char extends Actor {
 	public int HT;
 	/**Current HP*/
 	public int HP;
-	/**Base damage*/
-	public int baseDmg;
+	/**piercing type of damage*/
+	protected int pierceDmg;
+	/**punching type of damage*/
+	protected int punchDmg;
+	/**fire, burning, hot type of damage*/
+	protected int hotDmg;
+	/**cold, chilling, freezing type of damage*/
+	protected int coldDmg;
+	/**toxic, poisonous type of damage*/
+	protected int poisonDmg;
 	/**armor against piercing*/
 	protected int pierceArmor;
 	/**armor against punching*/
 	protected int punchArmor;
+	/**response to hot dmg, from +100% to -100%*/
+	protected int hotLika;
+	/**response to cold dmg, from +100% to -100%*/
+	protected int coldLika;
+	/**response to poison dmg, from +100% to -100%*/
+	protected int poisonLika;
+
 	protected float baseSpeed	= 1;
 	protected PathFinder.Path path;
 
@@ -292,9 +303,17 @@ public abstract class Char extends Actor {
 	protected static final String TAG_HT    = "HT";
 	protected static final String TAG_SHLD  = "SHLD";
 	protected static final String BUFFS	    = "buffs";
+	protected static final String PIERCE_DMG = "pierceDmg";
+	protected static final String PUNCH_DMG = "punchDmg";
+	protected static final String HOT_DMG = "hotDmg";
+	protected static final String COLD_DMG = "coldDmg";
+	protected static final String POISON_DMG = "poisonDmg";
 	protected static final String PIERCE_ARMOR = "pierceArmor";
 	protected static final String PUNCH_ARMOR = "punchArmor";
-	protected static final String BASE_DMG = "baseDmg";
+	protected static final String HOT_LIKABILITY = "hotLika";
+	protected static final String COLD_LIKABILITY = "coldLika";
+	protected static final String POISON_LIKABILITY = "poisonLika";
+
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		
@@ -304,9 +323,16 @@ public abstract class Char extends Actor {
 		bundle.put( TAG_HP, HP );
 		bundle.put( TAG_HT, HT );
 		bundle.put( BUFFS, buffs );
-		bundle.put(PIERCE_ARMOR, pierceArmor);
-		bundle.put(PUNCH_ARMOR, punchArmor);
-		bundle.put(BASE_DMG, baseDmg);
+		bundle.put( PIERCE_DMG, pierceDmg);
+		bundle.put( PUNCH_DMG, punchDmg);
+		bundle.put( HOT_DMG, hotDmg);
+		bundle.put( COLD_DMG, coldDmg);
+		bundle.put( POISON_DMG, poisonDmg);
+		bundle.put( PIERCE_ARMOR, pierceArmor);
+		bundle.put( PUNCH_ARMOR, punchArmor);
+		bundle.put( HOT_LIKABILITY, hotLika);
+		bundle.put( COLD_LIKABILITY, coldLika);
+		bundle.put( POISON_LIKABILITY, poisonLika);
 	}
 	
 	@Override
@@ -317,10 +343,17 @@ public abstract class Char extends Actor {
 		pos = bundle.getInt( POS );
 		HP = bundle.getInt( TAG_HP );
 		HT = bundle.getInt( TAG_HT );
+		pierceDmg = bundle.getInt(PIERCE_DMG);
+		punchDmg = bundle.getInt(PUNCH_DMG);
+		hotDmg = bundle.getInt(HOT_DMG);
+		coldDmg = bundle.getInt(COLD_DMG);
+		poisonDmg = bundle.getInt(POISON_DMG);
 		pierceArmor = bundle.getInt(PIERCE_ARMOR);
 		punchArmor = bundle.getInt(PUNCH_ARMOR);
-		baseDmg = bundle.getInt(BASE_DMG);
-		
+		hotLika = bundle.getInt(HOT_LIKABILITY);
+		coldLika = bundle.getInt(COLD_LIKABILITY);
+		poisonLika = bundle.getInt(POISON_LIKABILITY);
+
 		for (Bundlable b : bundle.getCollection( BUFFS )) {
 			if (b != null) {
 				((Buff)b).attachTo( this );
@@ -350,8 +383,8 @@ public abstract class Char extends Actor {
 		if (hit( this, enemy, accMulti)) {
 
 			int[] def = enemy.defenseRoll2();
-			int defPierce = (int) Math.round(def[0] * AscensionChallenge.statModifier(enemy) );
-			int defPunch = (int) Math.round(def[1] * AscensionChallenge.statModifier(enemy) );
+			int defPierce = Math.round(def[0] * AscensionChallenge.statModifier(enemy) );
+			int defPunch = Math.round(def[1] * AscensionChallenge.statModifier(enemy) );
 			if (this instanceof Hero){
 				Hero h = (Hero)this;
 				if (h.belongings.attackingWeapon() instanceof MissileWeapon
@@ -361,91 +394,55 @@ public abstract class Char extends Actor {
 					defPunch = 0;
 				}
 
-				/*
-				if (h.buff(MonkEnergy.MonkAbility.UnarmedAbilityTracker.class) != null){
-					defPierce = 0;
-					defPunch = 0;
-				} else if (h.subClass == HeroSubClass.MONK) {
-					//3 turns with standard attack delay
-					Buff.prolong(h, MonkEnergy.MonkAbility.JustHitTracker.class, 4f);
-				}*/
 			}
 
 			//we use a float here briefly so that we don't have to constantly round while
 			// potentially applying various multiplier effects
-			float pierceDmg;
-			float punchDmg;
+			long tempDmg;
+			float tempMulti = 1;
+			tempDmg = damageRoll(0);
 
-			Preparation prep = buff(Preparation.class);
-			if (prep != null){
-				pierceDmg = prep.damageRoll(this);
-				punchDmg = prep.damageRoll(this);
-				if (this == Dungeon.hero && Dungeon.hero.hasTalent(Talent.BOUNTY_HUNTER)) {
-					Buff.affect(Dungeon.hero, Talent.BountyHunterTracker.class, 0.0f);
-				}
-			} else {
-				int[] temp = damageRoll2();
-				pierceDmg = temp[0];
-				punchDmg = temp[1];
-			}
-
-			pierceDmg = Math.round(pierceDmg*dmgMulti);
-			punchDmg = Math.round(punchDmg*dmgMulti);
-
-			Berserk berserk = buff(Berserk.class);
-			if (berserk != null) pierceDmg = berserk.damageFactor(pierceDmg);
-			if (berserk != null) punchDmg = berserk.damageFactor(punchDmg);
+			tempMulti *= dmgMulti;
 
 			if (buff( Fury.class ) != null) {
-				pierceDmg *= 1.5f;
-				punchDmg *= 1.5f;
+				tempMulti *= 1.5f;
 			}
 
 			for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
-				pierceDmg *= buff.meleeDamageFactor();
-				punchDmg *= buff.meleeDamageFactor();
+				tempMulti *= buff.meleeDamageFactor();
 			}
 
-			pierceDmg *= AscensionChallenge.statModifier(this);
-			punchDmg *= AscensionChallenge.statModifier(this);
-			//flat damage bonus is applied after positive multipliers, but before negative ones
-			//applied to greater dmg type
-			pierceDmg += dmgBonus;
-			if(punchDmg > pierceDmg){
-				punchDmg += dmgBonus;
-				pierceDmg -= dmgBonus;
-			}
-			//friendly endure
-			Endure.EndureTracker endure = buff(Endure.EndureTracker.class);
-			if (endure != null) punchDmg = endure.damageFactor(punchDmg);
-			if (endure != null) pierceDmg = endure.damageFactor(pierceDmg);
-			//enemy endure
-			endure = enemy.buff(Endure.EndureTracker.class);
-			if (endure != null){
-				punchDmg = endure.adjustDamageTaken(punchDmg);
-				pierceDmg = endure.adjustDamageTaken(pierceDmg);
-			}
+			tempMulti *= AscensionChallenge.statModifier(this);
 
 			if (enemy.buff(ScrollOfChallenge.ChallengeArena.class) != null){
-				pierceDmg *= 0.67f;
-				punchDmg *= 0.67f;
-			}
-
-			if (enemy.buff(MonkEnergy.MonkAbility.Meditate.MeditateResistance.class) != null){
-				pierceDmg *= 0.2f;
-				punchDmg *= 0.2f;
+				tempMulti *= 0.67f;
 			}
 
 			if ( buff(Weakness.class) != null ){
-				pierceDmg *= 0.67f;
-				punchDmg *= 0.67f;
+				tempMulti *= 0.67f;
 			}
 
-			int pierceDmgInt = enemy.defenseProc( this, Math.round(pierceDmg) );
-			int punchDmgInt = enemy.defenseProc( this, Math.round(punchDmg) );
-			pierceDmgInt = Math.max( pierceDmgInt - defPierce, 0 );
-			punchDmgInt = Math.max( punchDmgInt - defPunch, 0 );
-			int effectiveDamage = pierceDmgInt + punchDmgInt;
+			int poisonDMG = (int)(tempDmg & 0b1111_1111_1111); //read 12 bits from right
+			tempDmg = tempDmg >> 12;
+			int coldDMG = (int)(tempDmg & 0b1111_1111_1111); //read 12 bits from right
+			tempDmg = tempDmg >> 12;
+			int hotDMG = (int)(tempDmg & 0b1111_1111_1111); //read 12 bits from right
+			tempDmg = tempDmg >> 12;
+			int punchDMG = (int)(tempDmg & 0b1111_1111_1111); //read 12 bits from right
+			tempDmg = tempDmg >> 12;
+			int pierceDMG = (int)(tempDmg & 0b1111_1111_1111); //read 12 bits from right
+			poisonDMG *= tempMulti;
+			coldDMG *= tempMulti;
+			hotDMG *= tempMulti;
+			punchDMG *= tempMulti;
+			pierceDMG *= tempMulti;
+			//TODO: This works on both types, improve this
+			pierceDMG = enemy.defenseProc( this, pierceDMG );
+			punchDMG = enemy.defenseProc( this, punchDMG );
+			pierceDMG = Math.max( pierceDMG - defPierce, 0 );
+			punchDMG = Math.max( punchDMG - defPunch, 0 );
+			//TODO: add distinctive color, visual or something to distinguish damage types during gameplay
+			int effectiveDamage = pierceDMG + punchDMG + hotDMG + coldDMG + poisonDMG;
 			if (enemy.buff(Viscosity.ViscosityTracker.class) != null){
 				effectiveDamage = enemy.buff(Viscosity.ViscosityTracker.class).deferDamage(effectiveDamage);
 				enemy.buff(Viscosity.ViscosityTracker.class).detach();
@@ -453,7 +450,9 @@ public abstract class Char extends Actor {
 
 			//vulnerable specifically applies after armor reductions
 			if ( enemy.buff( Vulnerable.class ) != null){
-				effectiveDamage *= 1.33f;
+				// 1.333333333 coefficient but INT
+				effectiveDamage *= 4;
+				effectiveDamage /= 3;
 			}
 			
 			effectiveDamage = attackProc( enemy, effectiveDamage );
@@ -474,18 +473,6 @@ public abstract class Char extends Actor {
 
 			if (buff(FireImbue.class) != null)  buff(FireImbue.class).proc(enemy);
 			if (buff(FrostImbue.class) != null) buff(FrostImbue.class).proc(enemy);
-
-			if (enemy.isAlive() && enemy.alignment != alignment && prep != null && prep.canKO(enemy)){
-				enemy.HP = 0;
-				if (!enemy.isAlive()) {
-					enemy.die(this);
-				} else {
-					//helps with triggering any on-damage effects that need to activate
-					enemy.damage(-1, this);
-					DeathMark.processFearTheReaper(enemy);
-				}
-				enemy.sprite.showStatus(CharSprite.NEGATIVE, Messages.get(Preparation.class, "assassinated"));
-			}
 
 			Talent.CombinedLethalityTriggerTracker combinedLethality = buff(Talent.CombinedLethalityTriggerTracker.class);
 			if (combinedLethality != null){
@@ -624,20 +611,24 @@ public abstract class Char extends Actor {
 
 		return dr;
 	}
-	
-	public int damageRoll() {
-		return 1;
-	}
 
 	/**
 	 * This exists only to be overridden, I suppose
 	 * There no actual roll. Just const numbers
-	 * @return empty array of size 2
+	 * @return INT with encoded Piercing DMG (higher 16 bits) and Punching DMG (lower 16 bits)
 	 */
-	public int[] damageRoll2(){
-		int[] damage = new int[2];
-		damage[0] = baseDmg;
-		damage[1] = baseDmg;
+	public long damageRoll(float critBonus){
+		long damage = 0;
+		//assuming base dmg < 2^9 - 1 which is 511!
+		//							memory  avg damage  spread      crit roll
+		damage = GameMath.encodeDmg(damage, pierceDmg,  pierceDmg , critBonus);//12 bit shift
+		damage = GameMath.encodeDmg(damage, punchDmg,  	punchDmg,   critBonus);//12 bit shift
+		damage = GameMath.encodeDmg(damage, hotDmg,    	hotDmg, 	critBonus);//12 bit shift
+		damage = GameMath.encodeDmg(damage, coldDmg,   	coldDmg,    critBonus);//12 bit shift
+		damage += GameMath.damageRoll(		poisonDmg, 	poisonDmg,  critBonus);
+		//storing 5 numbers in one LONG,
+		//unused  | reserved for piercing | reserved for punching | reserved for hot | reser. for cold | reserv. for poison
+		//  0000  | 000 1111 0000         | 1111 0000 1111        | 0000 1111 0000   | 1111 0000 1111  | 0000 1111 0000
 		return damage;
 	}
 
@@ -769,25 +760,6 @@ public abstract class Char extends Actor {
 		if (AntiMagic.RESISTS.contains(src.getClass()) && buff(ArcaneArmor.class) != null){
 			dmg -= Random.NormalIntRange(0, buff(ArcaneArmor.class).level());
 			if (dmg < 0) dmg = 0;
-		}
-
-		if (buff(Sickle.HarvestBleedTracker.class) != null){
-			if (isImmune(Bleeding.class)){
-				sprite.showStatus(CharSprite.POSITIVE, Messages.titleCase(Messages.get(this, "immune")));
-				buff(Sickle.HarvestBleedTracker.class).detach();
-				return;
-			}
-			/*
-			Bleeding b = buff(Bleeding.class);
-			if (b == null){
-				b = new Bleeding();
-			}
-			b.announced = false;
-			b.set(dmg*buff(Sickle.HarvestBleedTracker.class).bleedFactor, Sickle.HarvestBleedTracker.class);
-			b.attachTo(this);
-			sprite.showStatus(CharSprite.WARNING, Messages.titleCase(b.name()) + " " + (int)b.level());
-			buff(Sickle.HarvestBleedTracker.class).detach();
-			return;*/
 		}
 		
 		if (buff( Paralysis.class ) != null) {
@@ -1166,7 +1138,7 @@ public abstract class Char extends Actor {
 				new HashSet<Class>( Arrays.asList(Frost.class, Chill.class))),
 		ACIDIC ( new HashSet<Class>( Arrays.asList(Corrosion.class)),
 				new HashSet<Class>( Arrays.asList(Ooze.class))),
-		ELECTRIC ( new HashSet<Class>( Arrays.asList(WandOfLightning.class, Shocking.class, Potential.class, Electricity.class, ShockingDart.class, Elemental.ShockElemental.class )),
+		ELECTRIC ( new HashSet<Class>( Arrays.asList(WandOfLightning.class, Shocking.class, Potential.class, Electricity.class, Elemental.ShockElemental.class )),
 				new HashSet<Class>()),
 		LARGE,
 		IMMOVABLE;

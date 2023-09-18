@@ -58,4 +58,32 @@ public class GameMath {
 		value = Math.min(value, max);
 		return value;
 	}
+
+	/**
+	 * Calculates and encodes damage to bits of LONG. Shifts data in Memory left by 12 bits. Use Max 4x on single Memory LONG, data LOSS!
+	 * @param memory stored damage data.
+	 * @param avg average damage dealt. Less than 2^9 -1 or 511!
+	 * @param range range of damage from lower to upper bound
+	 * @param bonus critical bonus to damage
+	 * @return @param memory shifted left by 12 bits and with added random damage
+	 */
+	public static long encodeDmg(long memory, int avg, int range, float bonus){
+		int rand = damageRoll( avg, range, bonus);
+		memory = memory << 12;
+		memory += rand;
+		return memory;
+	}
+
+	/**
+	 * Calculates normally distributed damage
+	 * @param avg average damage dealt. Less than 2^9 -1 or 511!
+	 * @param range range of damage from lower to upper bound
+	 * @param critBonus critical bonus to damage
+	 * @return INT normally distributed
+	 */
+	public static int damageRoll(int avg, int range, float critBonus){
+		float min = avg + range * (2 * critBonus - 0.5f);
+		float max = avg + range * 0.5f;
+		return Random.NormalIntRange( (int) min,(int) max);
+	}
 }

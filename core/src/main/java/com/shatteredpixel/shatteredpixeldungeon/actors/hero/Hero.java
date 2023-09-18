@@ -35,7 +35,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SacrificialFire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AdrenalineSurge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AnkhInvulnerability;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Awareness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
@@ -44,7 +43,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Berserk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Combo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Drowsy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Foresight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HoldFast;
@@ -57,7 +55,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PhysicalEmpower;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
@@ -66,7 +63,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Ch
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.ElementalStrike;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.NaturesPower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snake;
@@ -124,10 +120,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Quarterstaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RoundShield;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sai;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scimitar;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
@@ -536,24 +528,12 @@ public class Hero extends Char {
 	 */
 	public boolean shoot( Char enemy, MissileWeapon wep ) {
 
-		this.enemy = enemy;
-		boolean wasEnemy = enemy.alignment == Alignment.ENEMY
-				|| (enemy instanceof Mimic && enemy.alignment == Alignment.NEUTRAL);
-
 		//temporarily set the hero's weapon to the missile weapon being used
 		//TODO improve this!
 		belongings.thrownWeapon = wep;
 		boolean hit = attack( enemy, 1f );
 		Invisibility.dispel();
 		belongings.thrownWeapon = null;
-
-		if (hit && subClass == HeroSubClass.GLADIATOR && wasEnemy){
-			Buff.affect( this, Combo.class ).hit( enemy );
-		}
-
-		if (hit && heroClass == HeroClass.DUELIST && wasEnemy){
-			Buff.affect( this, Sai.ComboStrikeTracker.class).addHit();
-		}
 
 		return hit;
 	}
@@ -572,10 +552,6 @@ public class Hero extends Char {
 				accuracy *= 1.5f;
 			}
 		}
-
-		if (buff(Scimitar.SwordDance.class) != null){
-			accuracy *= 1.25f;
-		}
 		
 		if (!RingOfForce.fightingUnarmed(this)) {
 			return (int)(attackSkill * accuracy * wep.accuracyFactor( this, target ));
@@ -586,17 +562,6 @@ public class Hero extends Char {
 	
 	@Override
 	public int defenseSkill( Char enemy ) {
-
-		if (buff(Combo.ParryTracker.class) != null){
-			if (canAttack(enemy) && !isCharmedBy(enemy)){
-				Buff.affect(this, Combo.RiposteTracker.class).enemy = enemy;
-			}
-			return INFINITE_EVASION;
-		}
-
-		if (buff(RoundShield.GuardTracker.class) != null){
-			return INFINITE_EVASION;
-		}
 		
 		float evasion = defenseSkill;
 		
@@ -608,10 +573,6 @@ public class Hero extends Char {
 			} else if (pointsInTalent(Talent.RESTORED_AGILITY) == 2){
 				return INFINITE_EVASION;
 			}
-		}
-
-		if (buff(Quarterstaff.DefensiveStance.class) != null){
-			evasion *= 3;
 		}
 		
 		if (paralysed > 0) {
@@ -627,20 +588,6 @@ public class Hero extends Char {
 
 	@Override
 	public String defenseVerb() {
-		Combo.ParryTracker parry = buff(Combo.ParryTracker.class);
-		if (parry != null){
-			parry.parried = true;
-			if (buff(Combo.class).getComboCount() < 9 || pointsInTalent(Talent.ENHANCED_COMBO) < 2){
-				parry.detach();
-			}
-			return Messages.get(Monk.class, "parried");
-		}
-
-		if (buff(RoundShield.GuardTracker.class) != null){
-			buff(RoundShield.GuardTracker.class).detach();
-			Sample.INSTANCE.play(Assets.Sounds.HIT_PARRY, 1, Random.Float(0.96f, 1.05f));
-			return Messages.get(RoundShield.GuardTracker.class, "guarded");
-		}
 
 		if (buff(MonkEnergy.MonkAbility.Focus.FocusActivation.class) != null){
 			buff(MonkEnergy.MonkAbility.Focus.FocusActivation.class).detach();
@@ -690,41 +637,6 @@ public class Hero extends Char {
 		//TODO add armor given by weapon
 		return def;
 	}
-	@Override
-	public int damageRoll() {
-		KindOfWeapon wep = belongings.attackingWeapon();
-		int dmg;
-
-		if (!RingOfForce.fightingUnarmed(this)) {
-			dmg = wep.damageRoll( this );
-
-			if (!(wep instanceof MissileWeapon)) dmg += RingOfForce.armedDamageBonus(this);
-		} else {
-			dmg = RingOfForce.damageRoll(this);
-			if (RingOfForce.unarmedGetsWeaponAugment(this)){
-				dmg = ((Weapon)belongings.attackingWeapon()).augment.damageFactor(dmg);
-			}
-		}
-
-		PhysicalEmpower emp = buff(PhysicalEmpower.class);
-		if (emp != null){
-			dmg += emp.dmgBoost;
-			emp.left--;
-			if (emp.left <= 0) {
-				emp.detach();
-			}
-			Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG, 0.75f, 1.2f);
-		}
-
-		if (heroClass != HeroClass.DUELIST
-				&& hasTalent(Talent.WEAPON_RECHARGING)
-				&& (buff(Recharging.class) != null || buff(ArtifactRecharge.class) != null)){
-			dmg = Math.round(dmg * 1.025f + (.025f*pointsInTalent(Talent.WEAPON_RECHARGING)));
-		}
-
-		if (dmg < 0) dmg = 0;
-		return dmg;
-	}
 
 	/**
 	 * Damage roll off the Hero
@@ -732,22 +644,19 @@ public class Hero extends Char {
 	 * @return Array: piercing at 0, punching at 1
 	 */
 	@Override
-	public int[] damageRoll2() {
+	public long damageRoll(float critBonus) {
+		//base damage
+		long dmg = super.damageRoll(critBonus);
 		//damage added by weapon
 		KindOfWeapon wep = belongings.attackingWeapon();
-		int[] dmg2 = wep.damageRoll2(this);
-		int dmgPierce = dmg2[0]; //index 0 piercing
-		int dmgPunch = dmg2[1];//index 1 punching
-		//base damage
-		dmg2 = super.damageRoll2();
-		//when unarmed, player deals punching dmg only
-		//when armed, piercing weapon dmg is raised by base dmg
-		if(wep != null) dmgPierce += dmg2[0]; //index 0 piercing
-		dmgPunch += dmg2[1];//index 1 punching
+		if(wep != null) {
+			dmg += wep.damageRoll(critBonus);
+		}
+
 		PhysicalEmpower emp = buff(PhysicalEmpower.class);
 		if (emp != null){
-			dmgPierce += emp.dmgBoost;
-			dmgPunch += emp.dmgBoost;
+			dmg += ((long)emp.dmgBoost << 48); //piercing dmg
+			dmg += ((long)emp.dmgBoost << 36);// punching dmg
 			emp.left--;
 			if (emp.left <= 0) {
 				emp.detach();
@@ -755,12 +664,10 @@ public class Hero extends Char {
 			Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG, 0.75f, 1.2f);
 		}
 
-		dmgPierce = Math.max(0, dmgPierce);
-		dmgPunch = Math.max(0, dmgPunch);
-		//recycled array: used for output
-		dmg2[0] = dmgPierce;
-		dmg2[1] = dmgPunch;
-		return dmg2;
+		//dmgPierce = Math.max(0, dmgPierce);
+		//dmgPunch = Math.max(0, dmgPunch);
+
+		return dmg;
 	}
 
 	@Override
@@ -799,7 +706,6 @@ public class Hero extends Char {
 		if (!(w instanceof Weapon))             return true;
 		if (RingOfForce.fightingUnarmed(this))  return true;
 		if (lvl < ((Weapon)w).STRReq())       return false;
-		//if (w instanceof Flail)                 return false;
 
 		return super.canSurpriseAttack();
 	}
@@ -840,11 +746,6 @@ public class Hero extends Char {
 			//But there's going to be that one guy who gets a furor+force ring combo
 			//This is for that one guy, you shall get your fists of fury!
 			float speed = RingOfFuror.attackSpeedMultiplier(this);
-
-			//ditto for furor + sword dance!
-			if (buff(Scimitar.SwordDance.class) != null){
-				speed += 0.6f;
-			}
 
 			//and augments + brawler's stance! My goodness, so many options now compared to 2014!
 			if (RingOfForce.unarmedGetsWeaponAugment(this)){
@@ -1718,26 +1619,31 @@ public class Hero extends Char {
 
 			Char[] hitBySlash = slashRange( step );//targets in slash range
 			float prolongMove = 0;
+
 			//slow down moving anim IF slash is happening
-			if(hitBySlash != null && hitBySlash[0] != null && belongings.weapon.slashCoefs[0] > 0)prolongMove = 0.1f;//slow down moving anim IF slash is happening
-			sprite.move(pos, step, prolongMove);
+			if(belongings.weapon instanceof MeleeWeapon) {//only melee weapons have slash
+				MeleeWeapon wep = (MeleeWeapon) this.belongings.weapon;
+				if (hitBySlash != null && wep.slashCoefs[0] > 0) prolongMove = 0.1f;//slow down moving anim IF slash is happening
+			}
+				sprite.move(pos, step, prolongMove);
 			move(step);
 
 			//Perform slash attack if Actor is able to
-			if(hitBySlash != null && hitBySlash[0] != null && belongings.weapon.slashCoefs[0] > 0){
-				delay = attackDelay();//slash uses melee speed, not movement speed!!!
-				prolongMove = 0.2f;//slow down moving anim IF slash is happening
-				((SlashSprite) this.sprite.parent.recycle(SlashSprite.class)).
-						playSlash(this.sprite,								//the one who swings weapon, rotate weapon around it
-								hitBySlash[0].sprite,					//1st target
-								this.belongings.weapon					//weapon to show
-						);
+			if(belongings.weapon instanceof MeleeWeapon) {//only melee weapons have slash
+				MeleeWeapon wep = (MeleeWeapon) belongings.weapon;
+				if (hitBySlash != null && wep.slashCoefs[0] > 0) {
+					delay = attackDelay();//slash uses melee speed, not movement speed!!!
+					((SlashSprite) this.sprite.parent.recycle(SlashSprite.class)).
+							playSlash(this.sprite,                                //the one who swings weapon, rotate weapon around it
+									hitBySlash[0].sprite,                    //1st target
+									wep                   					//weapon to show
+							);
 
-				for(int idt = 0; idt < hitBySlash.length; idt++){
-					attack( hitBySlash[idt], belongings.weapon.slashCoefs[idt], 0, 1);
+					for (int idt = 0; idt < hitBySlash.length; idt++) {
+						attack(hitBySlash[idt], wep.slashCoefs[idt], 0, 1);
+					}
 				}
 			}
-
 			spend( delay );
 			justMoved = true;
 			//run FORESIGHT logic
@@ -2167,10 +2073,9 @@ public class Hero extends Char {
 		}
 		
 		AttackIndicator.target(enemy);
-		boolean wasEnemy = enemy.alignment == Alignment.ENEMY
-				|| (enemy instanceof Mimic && enemy.alignment == Alignment.NEUTRAL);
 
-		boolean hit = attack( enemy, belongings.weapon.stabCoef);
+		MeleeWeapon wep = (MeleeWeapon) belongings.weapon;
+		attack( enemy, wep.stabCoef);
 
 		Invisibility.dispel();
 		//Stab visuals
@@ -2180,26 +2085,6 @@ public class Hero extends Char {
 						this.belongings.weapon			//weapon to show
 				);
 		spend( attackDelay() );
-
-		if (hit && subClass == HeroSubClass.GLADIATOR && wasEnemy){
-			Buff.affect( this, Combo.class ).hit( enemy );
-		}
-
-		if (hit && heroClass == HeroClass.DUELIST && wasEnemy){
-			Buff.affect( this, Sai.ComboStrikeTracker.class).addHit();
-		}
-
-		RingOfForce.BrawlersStance brawlStance = buff(RingOfForce.BrawlersStance.class);
-		if (brawlStance != null && brawlStance.hitsLeft() > 0){
-			MeleeWeapon.Charger charger = Buff.affect(this, MeleeWeapon.Charger.class);
-			charger.partialCharge -= RingOfForce.BrawlersStance.HIT_CHARGE_USE;
-			while (charger.partialCharge < 0) {
-				charger.charges--;
-				charger.partialCharge++;
-			}
-			BuffIndicator.refreshHero();
-			Item.updateQuickslot();
-		}
 
 		curAction = null;
 

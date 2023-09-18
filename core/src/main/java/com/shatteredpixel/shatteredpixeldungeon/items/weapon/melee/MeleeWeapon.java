@@ -56,6 +56,18 @@ import com.watabou.utils.Random;
 import java.util.ArrayList;
 
 public class MeleeWeapon extends Weapon {
+	/**
+	 * <p>multiplier for SLASH ATTACK dmg</p>
+	 * <p>works in slash attack logic</p>
+	 * <p>Currently only player can use slash</p>
+	 */
+	public float[] slashCoefs = {0,0,0};//swing DMG multiplier
+	/**
+	 * <p>multiplier for STAB ATTACK dmg</p>
+	 * <p>works in standard attack logic</p>
+	 * <p>Everyone uses this but it affects only certain player's weapons</p>
+	 */
+	public float stabCoef;//stab DMG multiplier
 	public static String AC_ABILITY = "ABILITY";
 
 	@Override
@@ -271,25 +283,6 @@ public class MeleeWeapon extends Weapon {
 
 	public int tier;
 
-	@Override
-	public int min(int lvl) {
-		return  tier +  //base
-				lvl;    //level scaling
-	}
-
-	@Override
-	public int max(int lvl) {
-		return  5*(tier+1) +    //base
-				lvl*(tier+1);   //level scaling
-	}
-
-	public int dealPierce(){
-		return pierceDMG + pierceDMG * (1 + buffedLvl() )/2;
-	}
-
-	public int dealPunch(){
-		return punchDMG + punchDMG * ( 1+ buffedLvl() )/2;
-	}
 	public int wepTier(){
 		return tier;
 	}
@@ -329,8 +322,6 @@ public class MeleeWeapon extends Weapon {
 			if (((Hero) owner).heroClass != HeroClass.DUELIST) {
 				//persistent +10%/20%/30% ACC for other heroes
 				ACC *= 1f + 0.1f * ((Hero) owner).pointsInTalent(Talent.PRECISE_ASSAULT);
-			} else if (this instanceof Flail && owner.buff(Flail.SpinAbilityTracker.class) != null){
-				//do nothing, this is not a regular attack so don't consume preciase assault
 			} else if (owner.buff(Talent.PreciseAssaultTracker.class) != null) {
 				// 2x/4x/8x ACC for duelist if she just used a weapon ability
 				ACC *= Math.pow(2, ((Hero) owner).pointsInTalent(Talent.PRECISE_ASSAULT));
@@ -342,17 +333,8 @@ public class MeleeWeapon extends Weapon {
 	}
 
 	@Override
-	public int damageRoll(Char owner) {
-		int damage = augment.damageFactor(super.damageRoll( owner ));
-
-		if (owner instanceof Hero) {
-			int exStr = ((Hero)owner).lvl - STRReq();
-			if (exStr > 0) {
-				damage += Random.IntRange( 0, exStr );
-			}
-		}
-		
-		return damage;
+	public long damageRoll(float critBonus) {
+		return augment.damageFactor(super.damageRoll( critBonus));
 	}
 	
 	@Override
@@ -361,14 +343,14 @@ public class MeleeWeapon extends Weapon {
 		String info = desc();
 
 		if (levelKnown) {
-			info += "\n\n" + Messages.get(MeleeWeapon.class, "stats_known", tier, augment.damageFactor(min()), augment.damageFactor(max()), STRReq());
+			info += "\n\n" + Messages.get(MeleeWeapon.class, "stats_known", tier, pierceDmg, punchDmg, STRReq());
 			if (STRReq() > Dungeon.hero.lvl) {
 				info += " " + Messages.get(Weapon.class, "too_heavy");
 			} else if (Dungeon.hero.lvl > STRReq()){
 				info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.lvl - STRReq());
 			}
 		} else {
-			info += "\n\n" + Messages.get(MeleeWeapon.class, "stats_unknown", tier, min(0), max(0), STRReq());
+			info += "\n\n" + Messages.get(MeleeWeapon.class, "stats_unknown", tier, pierceDmg, punchDmg, STRReq());
 			if (STRReq() > Dungeon.hero.lvl) {
 				info += " " + Messages.get(MeleeWeapon.class, "probably_too_heavy");
 			}

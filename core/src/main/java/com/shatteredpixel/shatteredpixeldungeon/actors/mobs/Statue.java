@@ -87,12 +87,8 @@ public class Statue extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
-		return weapon.damageRoll(this);
-	}
-	@Override
-	public int[] damageRoll2(){
-		return weapon.damageRoll2(this);
+	public long damageRoll(float critBonus) {
+		return weapon.damageRoll(critBonus);
 	}
 	@Override
 	public int attackSkill( Char target ) {

@@ -189,9 +189,9 @@ public enum Document {
 				case "Levelling":
 					return Icons.get(Icons.TALENT);
 				case "Positioning":
-					return new ItemSprite( ItemSpriteSheet.SPIRIT_BOW );
+					return new ItemSprite( ItemSpriteSheet.RECURVE_BOW );
 				case "Magic":
-					return new ItemSprite( ItemSpriteSheet.WAND_FIREBOLT );
+					return new ItemSprite( ItemSpriteSheet.RED_STAFF );
 			}
 		}
 	}

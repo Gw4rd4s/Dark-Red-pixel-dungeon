@@ -170,11 +170,6 @@ public abstract class YogFist extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( 18, 36 );
-	}
-
-	@Override
 	public int drRoll() {
 		return super.drRoll() + Random.NormalIntRange(0, 15);
 	}
@@ -394,8 +389,7 @@ public abstract class YogFist extends Mob {
 		@Override
 		public void damage(int dmg, Object src) {
 			if (!isInvulnerable(src.getClass())
-					&& !(src instanceof Bleeding)
-					&& buff(Sickle.HarvestBleedTracker.class) == null){
+					&& !(src instanceof Bleeding)){
 				dmg = Math.round( dmg * resist( src.getClass() ));
 				if (dmg < 0){
 					return;
@@ -444,11 +438,6 @@ public abstract class YogFist extends Mob {
 
 			properties.add(Property.LARGE);
 			properties.add(Property.INORGANIC);
-		}
-
-		@Override
-		public int damageRoll() {
-			return Random.NormalIntRange( 22, 44 );
 		}
 
 		@Override

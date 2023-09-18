@@ -87,11 +87,6 @@ public class DwarfKing extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( 15, 25 );
-	}
-
-	@Override
 	public int attackSkill( Char target ) {
 		return 26;
 	}

@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.WraithSprite;
 import com.watabou.noosa.tweeners.AlphaTweener;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -67,19 +68,13 @@ public class Wraith extends Mob {
 		level = bundle.getInt( LEVEL );
 		adjustStats( level );
 	}
-	
-	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( 1 + level/2, 2 + level );
-	}
 
 	@Override
-	public int[] damageRoll2(){
-		int[] dmg = super.damageRoll2();
-		dmg[0] += level*3/2;
-		dmg[1] += level*3/2;
-		dmg[0] = Random.NormalIntRange(dmg[0] - pierceDmg/2, dmg[0] + pierceDmg/2);
-		dmg[1] = Random.NormalIntRange(dmg[1] - punchDmg/2, dmg[1] + punchDmg/2);
+	public long damageRoll(float critBonus){
+		long dmg = super.damageRoll(critBonus);
+		//add extra damage
+		dmg += ((long)GameMath.damageRoll(2*level/3, 2*level/3, critBonus) << 48);//piercing
+		dmg += ((long)GameMath.damageRoll(2*level/3, 2*level/3, critBonus) << 36);//punching
 		return  dmg;
 	}
 	@Override

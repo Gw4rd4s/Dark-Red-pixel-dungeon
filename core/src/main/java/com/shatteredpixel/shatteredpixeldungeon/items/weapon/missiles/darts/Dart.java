@@ -48,7 +48,7 @@ import java.util.ArrayList;
 public class Dart extends MissileWeapon {
 
 	{
-		image = ItemSpriteSheet.DART;
+		image = ItemSpriteSheet.HEAVY_ARROW;
 		hitSound = Assets.Sounds.HIT_ARROW;
 		hitSoundPitch = 1.3f;
 		
@@ -56,16 +56,6 @@ public class Dart extends MissileWeapon {
 		
 		//infinite, even with penalties
 		baseUses = 1000;
-	}
-	//TODO teporary
-	@Override
-	public int dealPierce() {
-		return 0;
-	}
-	//TODO teporary
-	@Override
-	public int dealPunch() {
-		return 0;
 	}
 
 	protected static final String AC_TIP = "TIP";
@@ -82,28 +72,6 @@ public class Dart extends MissileWeapon {
 		super.execute(hero, action);
 		if (action.equals(AC_TIP)){
 			GameScene.selectItem(itemSelector);
-		}
-	}
-	
-	@Override
-	public int min(int lvl) {
-		if (bow != null){
-			return  4 +                    //4 base
-					bow.buffedLvl() + lvl; //+1 per level or bow level
-		} else {
-			return  1 +     //1 base, down from 2
-					lvl;    //scaling unchanged
-		}
-	}
-
-	@Override
-	public int max(int lvl) {
-		if (bow != null){
-			return  12 +                       //12 base
-					3*bow.buffedLvl() + 2*lvl; //+3 per bow level, +2 per level (default scaling +2)
-		} else {
-			return  2 +     //2 base, down from 5
-					2*lvl;  //scaling unchanged
 		}
 	}
 	
@@ -294,11 +262,9 @@ public class Dart extends MissileWeapon {
 				}
 			}
 			
-			TippedDart tipResult = TippedDart.getTipped((Plant.Seed) item, 1);
-			
 			GameScene.show(new WndOptions( new ItemSprite(item),
-					Messages.titleCase(item.name()),
-					Messages.get(Dart.class, "tip_desc", tipResult.name()) + "\n\n" + tipResult.desc(),
+					Messages.titleCase(item.name()),"",
+					//Messages.get(Dart.class, "tip_desc", tipResult.name()) + "\n\n" + tipResult.desc(),
 					options){
 				
 				@Override
@@ -317,10 +283,10 @@ public class Dart extends MissileWeapon {
 						} else {
 							curItem.detachAll(curUser.belongings.backpack);
 						}
-						
+						/*
 						TippedDart newDart = TippedDart.getTipped((Plant.Seed) item, maxToTip);
 						if (!newDart.collect()) Dungeon.level.drop(newDart, curUser.pos).sprite.drop();
-						
+						*/
 						curUser.spend( 1f );
 						curUser.busy();
 						curUser.sprite.operate(curUser.pos);
@@ -333,10 +299,10 @@ public class Dart extends MissileWeapon {
 						} else {
 							curItem.quantity(curItem.quantity() - singleSeedDarts);
 						}
-						
+						/*
 						TippedDart newDart = TippedDart.getTipped((Plant.Seed) item, singleSeedDarts);
 						if (!newDart.collect()) Dungeon.level.drop(newDart, curUser.pos).sprite.drop();
-						
+						*/
 						curUser.spend( 1f );
 						curUser.busy();
 						curUser.sprite.operate(curUser.pos);

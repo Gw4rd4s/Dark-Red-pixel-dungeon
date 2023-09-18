@@ -22,12 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 
 public class Scimitar extends MeleeWeapon {
 
@@ -36,50 +31,10 @@ public class Scimitar extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_SLASH;
 		hitSoundPitch = 1.2f;
 
-		tier = 1;
-		//DLY = 0.8f; //1.25x speed
-		stabCoef = 0.5f;
+		pierceDmg = 14;
+		punchDmg = 2;
 		slashCoefs[0] = 1f;
-		slashCoefs[1] = 0.6f;
-		slashCoefs[2] = 0.1f;
+		slashCoefs[1] = 0.8f;
+		stabCoef = 0.4f;
 	}
-
-	@Override
-	public int max(int lvl) {
-		return  4*(tier+1) +    //16 base, down from 20
-				lvl*(tier+1);   //scaling unchanged
-	}
-
-	@Override
-	public float abilityChargeUse(Hero hero, Char target) {
-		return 2*super.abilityChargeUse(hero, target);
-	}
-
-	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
-		beforeAbilityUsed(hero, null);
-		Buff.prolong(hero, SwordDance.class, 4f); //4 turns as using the ability is instant
-		hero.sprite.operate(hero.pos);
-		hero.next();
-		afterAbilityUsed(hero);
-	}
-
-	public static class SwordDance extends FlavourBuff {
-
-		{
-			announced = true;
-			type = buffType.POSITIVE;
-		}
-
-		@Override
-		public int icon() {
-			return BuffIndicator.DUEL_DANCE;
-		}
-
-		@Override
-		public float iconFadePercent() {
-			return Math.max(0, (5 - visualcooldown()) / 5);
-		}
-	}
-
 }

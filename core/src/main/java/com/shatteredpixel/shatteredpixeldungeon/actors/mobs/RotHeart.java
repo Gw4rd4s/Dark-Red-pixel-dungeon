@@ -111,11 +111,6 @@ public class RotHeart extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
-		return 0;
-	}
-
-	@Override
 	public int attackSkill( Char target ) {
 		return 0;
 	}

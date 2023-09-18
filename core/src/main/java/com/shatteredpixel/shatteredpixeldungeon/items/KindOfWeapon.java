@@ -38,31 +38,25 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
-
+//FIXME this class is probably not necessary and can be merged with Weapon class
 abstract public class KindOfWeapon extends EquipableItem {
 	
 	protected static final float TIME_TO_EQUIP = 1f;
 
 	protected String hitSound = Assets.Sounds.HIT;
 	protected float hitSoundPitch = 1f;
-	/**
-	 * <p>multiplier for SLASH ATTACK dmg</p>
-	 * <p>works in slash attack logic</p>
-	 * <p>Currently only player can use slash</p>
-	 */
-	public float[] slashCoefs = {0,0,0};//swing DMG multiplier
-	/**
-	 * <p>multiplier for STAB ATTACK dmg</p>
-	 * <p>works in standard attack logic</p>
-	 * <p>Everyone uses this but it affects only certain player's weapons</p>
-	 */
-	public float stabCoef;//stab DMG multiplier
-	//base Damage of 2 types
-	protected int 	pierceDMG;  //sharp cutting piercing damage  // BOTH these DMGs are meant
-																 // are meant
-	protected int 	punchDMG;  //blunt smashing crushing damage  //as average damage
+
+	//base Damage of 5 types
+
+	protected int 	pierceDmg;  //sharp cutting piercing damage
+	protected int 	punchDmg;  //blunt smashing crushing damage
+	//these 3 bellow will be - probably - not used on weapons
+	protected int 	hotDmg;		//burning damage
+	protected int	coldDmg;	//cold damage
+	protected int	poisonDmg;	//poison damage
 	/**
 	 * Extends execute( ) in EquipableItem.java. Inventory actions DROP, THROW and EQUIP.
 	 * This implementation adds second weapon slot for CHAMPION, then runs parent execute( ).
@@ -118,7 +112,11 @@ abstract public class KindOfWeapon extends EquipableItem {
 	public boolean isEquipped( Hero hero ) {
 		return hero.belongings.weapon() == this || hero.belongings.secondWep() == this;
 	}
-	
+
+	public int buffedDmg(int baseDmg) {
+		return baseDmg + baseDmg * buffedLvl() / 2;
+	}
+
 	@Override
 	public boolean doEquip( Hero hero ) {
 		boolean wasInInv = hero.belongings.contains(this);
@@ -233,49 +231,23 @@ abstract public class KindOfWeapon extends EquipableItem {
 		}
 	}
 
-	public int min(){
-		return min(buffedLvl());
-	}
-
-	public int max(){
-		return max(buffedLvl());
-	}
-
-	abstract public int min(int lvl);
-	abstract public int max(int lvl);
-
-	/**
-	 * calculating piercing damage of the weapon
-	 * @return piercing damage
-	 */
-	public int dealPierce() {
-	 return pierceDMG;
-	}
-
-	/**calculating punching damage of the weapon
-	 *
-	 * @return punching damage
-	 */
-	public int dealPunch(){
-		return punchDMG;
-	}
-
 	/**
 	 * Calculates roll DMG both for Piercing and Punching damage.
 	 * Uses normal distribution: mean = base DMG, min, max = -+base DMG /2
-	 * @param owner it may be used is child classes
-	 * @return array: index 0 is Piercing DMG, index 1 is Punching DMG
+	 * @return LONG encoded Piercing, Punching, Hot, Cold, Poison DMG. 12 bits each.
 	 */
-	public int[] damageRoll2(Char owner){
-		int[] outDMG = new int[2];
-		outDMG[0] = Random.NormalIntRange( dealPierce()-pierceDMG/2, dealPierce()+pierceDMG/2 );
-		outDMG[1] = Random.NormalIntRange( dealPunch()-punchDMG/2, dealPunch()+punchDMG/2 );
-		return outDMG;
+	public long damageRoll(float critBonus){
+		long damage = 0;
+		//assuming base dmg < 2^9 - 1 which is 511!
+		//							memory  damage with upgrades  spread      crit roll
+		damage = GameMath.encodeDmg(damage, buffedDmg(pierceDmg), pierceDmg , critBonus);//12 bit shift
+		damage = GameMath.encodeDmg(damage, buffedDmg(punchDmg),  punchDmg,   critBonus);//12 bit shift
+		damage = GameMath.encodeDmg(damage, buffedDmg(hotDmg), 	  hotDmg, 	  critBonus);//12 bit shift
+		damage = GameMath.encodeDmg(damage, buffedDmg(coldDmg),	  coldDmg,    critBonus);//12 bit shift
+		damage += GameMath.damageRoll(		buffedDmg(poisonDmg), poisonDmg,  critBonus);
+		return damage;
 	}
-	public int damageRoll( Char owner ) {
-		return Random.NormalIntRange( min(), max() );
-	}
-	
+
 	public float accuracyFactor( Char owner, Char target ) {
 		return 1f;
 	}

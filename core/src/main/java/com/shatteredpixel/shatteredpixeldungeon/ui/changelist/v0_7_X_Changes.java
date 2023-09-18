@@ -40,9 +40,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfTransfusion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.CrossShield;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gauntlet;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Shuriken;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Tomahawk;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Halberd;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
@@ -145,7 +145,7 @@ public class v0_7_X_Changes {
 		changes.hardlight( CharSprite.POSITIVE );
 		changeInfos.add(changes);
 		
-		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.WAND_BLAST_WAVE, null), "Wand Buffs",
+		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.SKULL_STAFF, null), "Wand Buffs",
 				"Blast wave is an excellent sidearm wand, but not as good when invested in. I'm making the wand a bit stronger and less risky to hopefully make it more worthy of upgrades.\n" +
 				"_-_ Increased AOE damage from 67% to 100%, AOE knockback force is unchanged\n" +
 				"_-_ AOE no longer damages hero/allies, but still knocks them back\n\n" +
@@ -336,7 +336,7 @@ public class v0_7_X_Changes {
 				"_-_ Kinetic is a new common enchantment! This enchantment preserves excess damage when an enemy is killed and applies it to your next hit.\n\n" +
 				"_-_ Corrupting is a new rare enchantment! When killing an enemy, there is a chance you will corrupt it instead."));
 		
-		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.KUNAI, null), "New Thrown Weapons",
+		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.HEAVY_ARROW, null), "New Thrown Weapons",
 				"Four new thrown weapons have been added!\n\n" +
 				"_-_ Throwing clubs are a tier-2 weapon with extra durability\n\n" +
 				"_-_ Kunai are a tier-3 weapon with bonus damage on sneak attacks\n\n" +
@@ -418,7 +418,7 @@ public class v0_7_X_Changes {
 		changes.hardlight( CharSprite.NEGATIVE );
 		changeInfos.add(changes);
 		
-		changes.addButton( new ChangeButton(new Tomahawk(),
+		changes.addButton( new ChangeButton(new Halberd(),
 				"The Tomahawk has been adjusted to make its damage more upfront, but also to reduce its extreme damage scaling with upgrades.\n\n" +
 				"_-_ Tomahawk damage scaling increased to 2-4 per level, up from 2-2\n" +
 				"_-_ Tomahawk bleed damage now starts at 60% of damage, down from 100%"));
@@ -727,7 +727,7 @@ public class v0_7_X_Changes {
 				"_-_ Sai blocking down to 0-2 from 0-3\n" +
 				"_-_ Gauntlet blocking down to 0-4 from 0-5"));
 		
-		changes.addButton( new ChangeButton( new Shuriken(),
+		changes.addButton( new ChangeButton( new CrossShield(),
 				"Shuriken have been adjusted due to the new upgrade system:\n\n" +
 				"_-_ Base damage increased to 4-8 from 4-6\n" +
 				"_-_ Durability reduced to 5 from 10"));

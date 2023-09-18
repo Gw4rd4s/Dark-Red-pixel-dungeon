@@ -86,11 +86,6 @@ public class Thief extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( 1, 10 );
-	}
-
-	@Override
 	public float attackDelay() {
 		return super.attackDelay()*0.5f;
 	}

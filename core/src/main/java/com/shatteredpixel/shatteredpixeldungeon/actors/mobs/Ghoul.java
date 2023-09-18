@@ -63,12 +63,6 @@ public class Ghoul extends Mob {
 		
 		properties.add(Property.UNDEAD);
 	}
-
-	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( 16, 22 );
-	}
-
 	@Override
 	public int attackSkill( Char target ) {
 		return 24;

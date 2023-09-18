@@ -22,10 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class BattleAxe extends MeleeWeapon {
@@ -36,34 +32,13 @@ public class BattleAxe extends MeleeWeapon {
 		hitSoundPitch = 0.9f;
 
 		tier = 4;
-		//ACC = 1.24f; //24% boost to accuracy
-		pierceDMG = 10;
-		punchDMG = 10;
-	}
 
-	@Override
-	public int max(int lvl) {
-		return  4*(tier+1) +    //20 base, down from 25
-				lvl*(tier+1);   //scaling unchanged
-	}
+		pierceDmg = 14;
+		punchDmg = 14;
 
-	@Override
-	public String targetingPrompt() {
-		return Messages.get(this, "prompt");
-	}
-
-	@Override
-	public float abilityChargeUse(Hero hero, Char target) {
-		if (target == null || (target instanceof Mob && ((Mob) target).surprisedBy(hero))) {
-			return super.abilityChargeUse(hero, target);
-		} else {
-			return 2*super.abilityChargeUse(hero, target);
-		}
-	}
-
-	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
-		Mace.heavyBlowAbility(hero, target, 1.35f, this);
+		slashCoefs[0] = 1f;
+		slashCoefs[1] = 0.8f;
+		stabCoef = 0.4f;
 	}
 
 }

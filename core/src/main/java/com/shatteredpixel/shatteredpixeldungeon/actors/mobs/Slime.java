@@ -45,12 +45,7 @@ public class Slime extends Mob {
 		
 		lootChance = 0.2f; //by default, see lootChance()
 	}
-	
-	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( 2, 5 );
-	}
-	
+
 	@Override
 	public int attackSkill( Char target ) {
 		return 12;

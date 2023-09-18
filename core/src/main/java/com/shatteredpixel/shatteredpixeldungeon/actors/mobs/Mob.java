@@ -42,7 +42,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Preparation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Sleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
@@ -55,7 +54,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.DirectableAlly;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Surprise;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Wound;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -249,13 +247,6 @@ public abstract class Mob extends Char {
 		return state.act( enemyInFOV, justAlerted );
 	}
 
-	@Override
-	public int[] damageRoll2(){
-		int[] dmg = super.damageRoll2();
-		dmg[0] += Random.NormalIntRange(pierceDmg/2, pierceDmg*3/2);
-		dmg[1] += Random.NormalIntRange(punchDmg/2, punchDmg*3/2);
-		return dmg;
-	}
 	//FIXME this is sort of a band-aid correction for allies needing more intelligent behaviour
 	protected boolean intelligentAlly = false;
 	
@@ -686,11 +677,8 @@ public abstract class Mob extends Char {
 			} else {
 				Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG);
 			}
-			if (enemy.buff(Preparation.class) != null) {
-				Wound.hit(this);
-			} else {
-				Surprise.hit(this);
-			}
+
+			Surprise.hit(this);
 		}
 
 		//if attacked by something else than current target, and that thing is closer, switch targets
@@ -859,17 +847,6 @@ public abstract class Mob extends Char {
 		float lootChance = this.lootChance;
 
 		float dropBonus = RingOfWealth.dropChanceMultiplier( Dungeon.hero );
-
-		Talent.BountyHunterTracker bhTracker = Dungeon.hero.buff(Talent.BountyHunterTracker.class);
-		if (bhTracker != null){
-			Preparation prep = Dungeon.hero.buff(Preparation.class);
-			if (prep != null){
-				// 2/4/8/16% per prep level, multiplied by talent points
-				float bhBonus = 0.02f * (float)Math.pow(2, prep.attackLevel()-1);
-				bhBonus *= Dungeon.hero.pointsInTalent(Talent.BOUNTY_HUNTER);
-				dropBonus += bhBonus;
-			}
-		}
 
 		return lootChance * dropBonus;
 	}

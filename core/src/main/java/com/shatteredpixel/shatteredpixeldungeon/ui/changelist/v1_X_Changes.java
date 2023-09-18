@@ -425,7 +425,7 @@ public class v1_X_Changes {
 		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.CRYSTAL_KEY), "Crystal Path Rooms",
 				"Loot from crystal path rooms (the rooms with a sequence of 3 crystal doors) has been buffed to make their value closer to other crystal key rooms."));
 
-		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.CLEANSING_DART), "Alchemy Item Buffs",
+		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.HEAVY_ARROW), "Alchemy Item Buffs",
 				"I'm giving woolly bomb's a big buff to help make them more distinct from other sheep-spawning items:\n\n" +
 				"_- Woolly Bombs_ now summon sheep for 200 turns, or 20 turns during boss fights, up from 12-16 turns. However, sheep no longer totally prevent bosses from summoning minions.\n\n" +
 				"I've given some alternative functions to three darts that would previously only help allies:\n\n" +
@@ -595,7 +595,7 @@ public class v1_X_Changes {
 				"_- Curse Infusion_ now boosts highly levelled gear by more than +1, quantity up to 4 from 3.\n" +
 				"_- Recycle_ quantity up to 12 from 8, cost up to 8 from 6"));
 
-		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.ROT_DART), "Dart Buffs",
+		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.HEAVY_ARROW), "Dart Buffs",
 				"While they don't tie into v1.1.0's energy changes in particular, I am also handing out several buffs to tipped darts:\n\n" +
 				"_- Rot Dart_ uses increased to 5 from 1\n" +
 				"_- Adrenaline Dart_ duration up to 30 from 10\n" +

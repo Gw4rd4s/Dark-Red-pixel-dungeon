@@ -43,21 +43,6 @@ public class TormentedSpirit extends Wraith {
 		pierceDmg = 4;
 		punchDmg = 4;
 	}
-
-	//50% more damage scaling than regular wraiths
-	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( 1 + Math.round(1.5f*level)/2, 2 + Math.round(1.5f*level) );
-	}
-	@Override
-	public int[] damageRoll2(){
-		int[] dmg = super.damageRoll2();
-		dmg[0] += level*4;
-		dmg[1] += level*4;
-		dmg[0] = Random.NormalIntRange(dmg[0] - pierceDmg/2, dmg[0] + pierceDmg/2);
-		dmg[1] = Random.NormalIntRange(dmg[1] - punchDmg/2, dmg[1] + punchDmg/2);
-		return  dmg;
-	}
 	//50% more accuracy (and by extension evasion) scaling than regular wraiths
 	@Override
 	public int attackSkill( Char target ) {

@@ -59,7 +59,7 @@ public class SpiritBow extends Weapon {
 	public static final String AC_SHOOT		= "SHOOT";
 	
 	{
-		image = ItemSpriteSheet.SPIRIT_BOW;
+		image = ItemSpriteSheet.YUMI_BOW;
 		
 		defaultAction = AC_SHOOT;
 		usesTargeting = true;
@@ -143,8 +143,8 @@ public class SpiritBow extends Weapon {
 		String info = desc();
 		
 		info += "\n\n" + Messages.get( SpiritBow.class, "stats",
-				Math.round(augment.damageFactor(min())),
-				Math.round(augment.damageFactor(max())),
+				Math.round(augment.damageFactor(10)),
+				Math.round(augment.damageFactor(655)),
 				STRReq());
 		
 		if (STRReq() > Dungeon.hero.lvl) {
@@ -185,22 +185,6 @@ public class SpiritBow extends Weapon {
 	public int wepTier() {
 		return 1; //tier 1
 	}
-	
-	@Override
-	public int min(int lvl) {
-		int dmg = 1 + Dungeon.hero.lvl/5
-				+ RingOfSharpshooting.levelDamageBonus(Dungeon.hero)
-				+ (curseInfusionBonus ? 1 + Dungeon.hero.lvl/30 : 0);
-		return Math.max(0, dmg);
-	}
-	
-	@Override
-	public int max(int lvl) {
-		int dmg = 6 + (int)(Dungeon.hero.lvl/2.5f)
-				+ 2*RingOfSharpshooting.levelDamageBonus(Dungeon.hero)
-				+ (curseInfusionBonus ? 2 + Dungeon.hero.lvl/15 : 0);
-		return Math.max(0, dmg);
-	}
 
 	@Override
 	public int targetingPos(Hero user, int dst) {
@@ -208,40 +192,7 @@ public class SpiritBow extends Weapon {
 	}
 	
 	private int targetPos;
-	
-	@Override
-	public int damageRoll(Char owner) {
-		int damage = augment.damageFactor(super.damageRoll(owner));
-		
-		if (owner instanceof Hero) {
-			int exStr = ((Hero)owner).lvl - STRReq();
-			if (exStr > 0) {
-				damage += Random.IntRange( 0, exStr );
-			}
-		}
 
-		if (sniperSpecial){
-			damage = Math.round(damage * (1f + sniperSpecialBonusDamage));
-
-			switch (augment){
-				case NONE:
-					damage = Math.round(damage * 0.667f);
-					break;
-				case SPEED:
-					damage = Math.round(damage * 0.5f);
-					break;
-				case DAMAGE:
-					//as distance increases so does damage, capping at 3x:
-					//1.20x|1.35x|1.52x|1.71x|1.92x|2.16x|2.43x|2.74x|3.00x
-					int distance = Dungeon.level.distance(owner.pos, targetPos) - 1;
-					float multiplier = Math.min(3f, 1.2f * (float)Math.pow(1.125f, distance));
-					damage = Math.round(damage * multiplier);
-					break;
-			}
-		}
-		
-		return damage;
-	}
 	
 	@Override
 	protected float baseDelay(Char owner) {
@@ -310,11 +261,6 @@ public class SpiritBow extends Weapon {
 			} else {
 				return super.emitter();
 			}
-		}
-
-		@Override
-		public int damageRoll(Char owner) {
-			return SpiritBow.this.damageRoll(owner);
 		}
 		
 		@Override

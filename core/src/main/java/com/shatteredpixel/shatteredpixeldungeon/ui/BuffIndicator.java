@@ -65,7 +65,6 @@ public class BuffIndicator extends Component {
 	public static final int WEAKNESS    = 14;
 	public static final int FROST       = 15;
 	public static final int BLINDNESS   = 16;
-	public static final int COMBO       = 17;
 	public static final int FURY        = 18;
 	public static final int HERB_HEALING= 19;
 	public static final int ARMOR       = 20;
@@ -90,7 +89,6 @@ public class BuffIndicator extends Component {
 	public static final int SACRIFICE   = 39;
 	public static final int BERSERK     = 40;
 	public static final int HASTE       = 41;
-	public static final int PREPARATION = 42;
 	public static final int WELL_FED    = 43;
 	public static final int HEALING     = 44;
 	public static final int WEAPON      = 45;
@@ -117,7 +115,6 @@ public class BuffIndicator extends Component {
 	public static final int DUEL_XBOW   = 66;
 	public static final int CHALLENGE   = 67;
 	public static final int MONK_ENERGY = 68;
-	public static final int DUEL_COMBO  = 69;
 	public static final int DAZE        = 70;
 
 	public static final int SIZE_SMALL  = 7;

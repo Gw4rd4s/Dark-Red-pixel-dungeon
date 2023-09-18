@@ -221,7 +221,7 @@ public class v0_8_X_Changes {
 				"_-_ Fireblast now bursts open doors and goes through them\n" +
 				"_-_ Increased Fireblast's range to 5/7/9 from 4/6/8"));
 
-		changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.WAND_WARDING), "Various Wand Buffs",
+		changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.YELLOW_WAND), "Various Wand Buffs",
 				"I'm buffing a few wands as a followup to the changes made in v0.8.1:\n\n" +
 				"The _Wand of Warding_ is in a much better spot, but could still use a slight boost, so I'm increasing the efficiency of its sentries:\n" +
 				"_-_ Sentry HP up to 35/54/84, from 30/48/70\n" +
@@ -418,7 +418,7 @@ public class v0_8_X_Changes {
 				"_-_ Wards can now be summoned out of FOV if nothing is in the way\n" +
 				"_-_ Wards now spawn adjacent to an enemy/wall if shot at one"));
 
-		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.WAND_DISINTEGRATION), "Various Item Buffs",
+		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.OBSIDIAN_WAND), "Various Item Buffs",
 				"I'm buffing items that are performing poorly after v0.8.0:\n\n" +
 				"Several wands need a boost as raw damage is now less effective:\n" +
 				"_- Disintegration_ base range up to 6 from 4.\n" +
@@ -439,7 +439,7 @@ public class v0_8_X_Changes {
 		changes.hardlight( CharSprite.NEGATIVE );
 		changeInfos.add(changes);
 
-		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.WAND_CORRUPTION), "Various Item Nerfs",
+		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.SKULL_STAFF), "Various Item Nerfs",
 				"I'm nerfing items that are overperforming due to v0.8.0:\n\n" +
 				"The _Wand of Corruption_ is once again overpowered, so I'm trying out making it more dependant on enemy health:\n" +
 				"_-_ Enemies now have 5x resistance at full HP, up from 3x.\n\n" +
@@ -564,7 +564,7 @@ public class v0_8_X_Changes {
 				"_-_ Pitfall traps are now more common, affect a 3x3 area, and give you one turn to react\n" +
 				"_-_ Distortion traps are now more common, can appear in the city, and have a reworked effect. They now act as more chaotic summoning traps, instead of resetting the current floor."));
 
-		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.ARMOR_WARRIOR), "Weapon and Armor Changes",
+		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.ARMOR_PLATE), "Weapon and Armor Changes",
 				"While I intend to make larger changes in a future update, I've decided to do some targeted improvements to class armors now to make the abilities more usable:\n" +
 				"_-_ Class armor now has a charge percentage which builds at a rate of 50% per level, each ability uses 35% charge.\n" +
 				"_-_ Stun from heroic leap increased to 5 turns from 3.\n" +

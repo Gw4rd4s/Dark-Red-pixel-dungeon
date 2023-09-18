@@ -121,7 +121,6 @@ public class Badges {
 		BAG_BOUGHT_POTION_BANDOLIER,
 		BAG_BOUGHT_MAGICAL_HOLSTER,
 		ALL_BAGS_BOUGHT             ( 66 ),
-		MASTERY_COMBO               ( 67 ),
 		MONSTERS_SLAIN_5            ( 68 ),
 		GOLD_COLLECTED_5            ( 69 ),
 		ITEM_LEVEL_4                ( 70 ),
@@ -885,14 +884,6 @@ public class Badges {
 					((MeleeWeapon) Dungeon.hero.belongings.weapon).STRReq() <= Dungeon.hero.lvl){
 				displayBadge(Badge.UNLOCK_DUELIST);
 			}
-		}
-	}
-	
-	public static void validateMasteryCombo( int n ) {
-		if (!local.contains( Badge.MASTERY_COMBO ) && n == 10) {
-			Badge badge = Badge.MASTERY_COMBO;
-			local.add( badge );
-			displayBadge( badge );
 		}
 	}
 	

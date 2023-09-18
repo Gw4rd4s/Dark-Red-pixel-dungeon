@@ -63,13 +63,13 @@ public class WndHeroInfo extends WndTabbed {
 				tabIcon = new ItemSprite(ItemSpriteSheet.SEAL, null);
 				break;
 			case MAGE:
-				tabIcon = new ItemSprite(ItemSpriteSheet.MAGES_STAFF, null);
+				tabIcon = new ItemSprite(ItemSpriteSheet.METAL_STAFF, null);
 				break;
 			case ROGUE:
 				tabIcon = new ItemSprite(ItemSpriteSheet.ARTIFACT_CLOAK, null);
 				break;
 			case HUNTRESS:
-				tabIcon = new ItemSprite(ItemSpriteSheet.SPIRIT_BOW, null);
+				tabIcon = new ItemSprite(ItemSpriteSheet.COMPOSITE_BOW, null);
 				break;
 			case DUELIST:
 				tabIcon = new ItemSprite(ItemSpriteSheet.RAPIER, null);
@@ -177,8 +177,8 @@ public class WndHeroInfo extends WndTabbed {
 							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
 					break;
 				case MAGE:
-					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.MAGES_STAFF),
-							new ItemSprite(ItemSpriteSheet.WAND_MAGIC_MISSILE),
+					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.METAL_STAFF),
+							new ItemSprite(ItemSpriteSheet.BLUE_STAFF),
 							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
 					break;
 				case ROGUE:
@@ -188,7 +188,7 @@ public class WndHeroInfo extends WndTabbed {
 							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
 					break;
 				case HUNTRESS:
-					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.SPIRIT_BOW),
+					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.COMPOSITE_BOW),
 							new Image(Assets.Environment.TILES_SEWERS, 112, 96, 16, 16),
 							new ItemSprite(ItemSpriteSheet.GLOVES),
 							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
@@ -196,7 +196,7 @@ public class WndHeroInfo extends WndTabbed {
 				case DUELIST:
 					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.RAPIER),
 							new ItemSprite(ItemSpriteSheet.WAR_HAMMER),
-							new ItemSprite(ItemSpriteSheet.THROWING_SPIKE),
+							new ItemSprite(ItemSpriteSheet.TRIDENT),
 							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
 					break;
 			}

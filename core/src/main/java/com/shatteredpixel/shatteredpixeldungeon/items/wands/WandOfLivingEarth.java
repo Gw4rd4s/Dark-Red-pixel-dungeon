@@ -51,7 +51,7 @@ import com.watabou.utils.Random;
 public class WandOfLivingEarth extends DamageWand {
 	
 	{
-		image = ItemSpriteSheet.WAND_LIVING_EARTH;
+		image = ItemSpriteSheet.SKULL_STAFF;
 	}
 	
 	@Override
@@ -336,11 +336,6 @@ public class WandOfLivingEarth extends DamageWand {
 		public int attackProc(Char enemy, int damage) {
 			if (enemy instanceof Mob) ((Mob)enemy).aggro(this);
 			return super.attackProc(enemy, damage);
-		}
-
-		@Override
-		public int damageRoll() {
-			return Random.NormalIntRange(2, 4 + Dungeon.scalingDepth()/2);
 		}
 
 		@Override

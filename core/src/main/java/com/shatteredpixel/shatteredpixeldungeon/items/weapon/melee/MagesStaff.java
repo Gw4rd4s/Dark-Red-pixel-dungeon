@@ -70,7 +70,7 @@ public class MagesStaff extends MeleeWeapon {
 	private static final float STAFF_SCALE_FACTOR = 0.75f;
 
 	{
-		image = ItemSpriteSheet.MAGES_STAFF;
+		image = ItemSpriteSheet.HAMMER;
 		hitSound = Assets.Sounds.HIT;
 		hitSoundPitch = 1.1f;
 
@@ -87,11 +87,6 @@ public class MagesStaff extends MeleeWeapon {
 		wand = null;
 	}
 
-	@Override
-	public int max(int lvl) {
-		return  Math.round(3f*(tier+1)) +   //6 base damage, down from 10
-				lvl*(tier+1);               //scaling unaffected
-	}
 
 	public MagesStaff(Wand wand){
 		this();

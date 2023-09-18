@@ -68,8 +68,6 @@ public class HeroIcon extends Image {
 
 	//action indicator visuals
 	public static final int BERSERK         = 32;
-	public static final int COMBO           = 33;
-	public static final int PREPARATION     = 34;
 	public static final int MOMENTUM        = 35;
 	public static final int SNIPERS_MARK    = 36;
 	public static final int WEAPON_SWAP     = 37;

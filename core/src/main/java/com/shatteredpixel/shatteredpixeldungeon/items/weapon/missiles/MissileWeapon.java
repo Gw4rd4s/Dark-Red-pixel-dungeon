@@ -73,28 +73,6 @@ abstract public class MissileWeapon extends Weapon {
 	
 	public int tier;
 	
-	@Override
-	public int min() {
-		return Math.max(0, min( buffedLvl() + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) ));
-	}
-	
-	@Override
-	public int min(int lvl) {
-		return  2 * tier +                      //base
-				(tier == 1 ? lvl : 2*lvl);      //level scaling
-	}
-	
-	@Override
-	public int max() {
-		return Math.max(0, max( buffedLvl() + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) ));
-	}
-	
-	@Override
-	public int max(int lvl) {
-		return  5 * tier +                      //base
-				(tier == 1 ? 2*lvl : tier*lvl); //level scaling
-	}
-	
 	public int wepTier(){
 		return tier;
 	}
@@ -349,23 +327,7 @@ abstract public class MissileWeapon extends Weapon {
 			}
 		}
 	}
-	
-	@Override
-	public int damageRoll(Char owner) {
-		int damage = augment.damageFactor(super.damageRoll( owner ));
-		
-		if (owner instanceof Hero) {
-			int exStr = ((Hero)owner).lvl - STRReq();
-			if (exStr > 0) {
-				damage += Random.IntRange( 0, exStr );
-			}
-			if (owner.buff(Momentum.class) != null && owner.buff(Momentum.class).freerunning()) {
-				damage = Math.round(damage * (1f + 0.15f * ((Hero) owner).pointsInTalent(Talent.PROJECTILE_MOMENTUM)));
-			}
-		}
-		
-		return damage;
-	}
+
 	
 	@Override
 	public void reset() {
@@ -422,8 +384,8 @@ abstract public class MissileWeapon extends Weapon {
 		
 		info += "\n\n" + Messages.get( MissileWeapon.class, "stats",
 				tier,
-				Math.round(augment.damageFactor(min())),
-				Math.round(augment.damageFactor(max())),
+				Math.round(augment.damageFactor(1)),
+				Math.round(augment.damageFactor(10)),
 				STRReq());
 
 		if (STRReq() > Dungeon.hero.lvl) {
@@ -488,16 +450,6 @@ abstract public class MissileWeapon extends Weapon {
 
 		{
 			image = ItemSpriteSheet.MISSILE_HOLDER;
-		}
-		//TODO teporary
-		@Override
-		public int dealPunch() {
-			return 0;
-		}
-		//TODO teporary
-		@Override
-		public int dealPierce() {
-			return 0;
 		}
 
 		@Override

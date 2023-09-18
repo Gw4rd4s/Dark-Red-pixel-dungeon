@@ -22,9 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class Katana extends MeleeWeapon {
@@ -34,27 +31,12 @@ public class Katana extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_SLASH;
 		hitSoundPitch = 1.1f;
 
-		tier = 4;
-	}
+		tier = 5;
 
-	@Override
-	public int max(int lvl) {
-		return  4*(tier+1) +    //20 base, down from 25
-				lvl*(tier+1);   //scaling unchanged
-	}
-
-	@Override
-	public int defenseFactor( Char owner ) {
-		return 4;	//4 extra defence
-	}
-
-	@Override
-	public String targetingPrompt() {
-		return Messages.get(this, "prompt");
-	}
-
-	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
-		Rapier.lungeAbility(hero, target, 1.35f, 0, this);
+		pierceDmg = 23;
+		punchDmg = 3;
+		slashCoefs[0] = 1f;
+		slashCoefs[1] = 0.8f;
+		stabCoef = 0.4f;
 	}
 }

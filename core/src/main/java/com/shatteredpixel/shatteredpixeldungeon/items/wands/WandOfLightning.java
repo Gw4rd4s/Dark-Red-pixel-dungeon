@@ -36,7 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Camera;
@@ -50,7 +50,7 @@ import java.util.ArrayList;
 public class WandOfLightning extends DamageWand {
 
 	{
-		image = ItemSpriteSheet.WAND_LIGHTNING;
+		image = ItemSpriteSheet.SKULL_STAFF;
 	}
 	
 	private ArrayList<Char> affected = new ArrayList<>();

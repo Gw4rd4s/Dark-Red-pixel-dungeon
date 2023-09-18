@@ -22,10 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class WarHammer extends MeleeWeapon {
@@ -35,33 +31,13 @@ public class WarHammer extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_CRUSH;
 		hitSoundPitch = 1f;
 
-		tier = 5;
-		ACC = 1.20f; //20% boost to accuracy
-	}
+		tier = 4;
 
-	@Override
-	public int max(int lvl) {
-		return  4*(tier+1) +    //24 base, down from 30
-				lvl*(tier+1);   //scaling unchanged
-	}
-
-	@Override
-	public String targetingPrompt() {
-		return Messages.get(this, "prompt");
-	}
-
-	@Override
-	public float abilityChargeUse(Hero hero, Char target) {
-		if (target == null || (target instanceof Mob && ((Mob) target).surprisedBy(hero))) {
-			return super.abilityChargeUse(hero, target);
-		} else {
-			return 2*super.abilityChargeUse(hero, target);
-		}
-	}
-
-	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
-		Mace.heavyBlowAbility(hero, target, 1.30f, this);
+		pierceDmg = 3;
+		punchDmg = 20;
+		slashCoefs[0] = 1f;
+		slashCoefs[1] = 0.8f;
+		stabCoef = 0.4f;
 	}
 
 }

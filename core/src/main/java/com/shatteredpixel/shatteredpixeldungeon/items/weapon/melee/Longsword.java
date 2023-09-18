@@ -22,9 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class Longsword extends MeleeWeapon {
@@ -36,27 +33,9 @@ public class Longsword extends MeleeWeapon {
 
 		tier = 4;
 
-		pierceDMG = 14;
-		punchDMG = 4;
+		pierceDmg = 20;
+		punchDmg = 5;
+		slashCoefs[0] = 0.8f;
+		slashCoefs[1] = 0.4f;
 	}
-
-	@Override
-	public float abilityChargeUse(Hero hero, Char target) {
-		if (hero.buff(Sword.CleaveTracker.class) != null){
-			return 0;
-		} else {
-			return super.abilityChargeUse( hero, target);
-		}
-	}
-
-	@Override
-	public String targetingPrompt() {
-		return Messages.get(this, "prompt");
-	}
-
-	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
-		Sword.cleaveAbility(hero, target, 1.23f, this);
-	}
-
 }

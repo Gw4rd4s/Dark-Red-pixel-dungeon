@@ -94,27 +94,17 @@ public class CrystalMimic extends Mimic {
 
 	//does not deal bonus damage, steals instead. See attackProc
 	@Override
-	public int damageRoll() {
+	public long damageRoll(float critBonus) {
 		if (alignment == Alignment.NEUTRAL) {
 			alignment = Alignment.ENEMY;
-			int dmg = super.damageRoll();
+			long dmg = super.damageRoll(critBonus);
 			alignment = Alignment.NEUTRAL;
 			return dmg;
 		} else {
-			return super.damageRoll();
+			return super.damageRoll(critBonus);
 		}
 	}
-	//does not deal bonus damage, steals instead. See attackProc
-	@Override
-	public int[] damageRoll2(){
-		if (alignment == Alignment.NEUTRAL) {
-			alignment = Alignment.ENEMY;
-			int[] dmg = super.damageRoll2();
-			alignment = Alignment.NEUTRAL;
-			return dmg;
-		}
-		return super.damageRoll2();
-	}
+
 	public void stopHiding(){
 		state = FLEEING;
 		if (sprite != null) sprite.idle();

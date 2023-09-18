@@ -613,7 +613,7 @@ public class DriedRose extends Artifact {
 		protected boolean canAttack(Char enemy) {
 			return super.canAttack(enemy) || (rose != null && rose.weapon != null && rose.weapon.canReach(this, enemy.pos));
 		}
-		
+		/*
 		@Override
 		public int damageRoll() {
 			int dmg = 0;
@@ -625,7 +625,7 @@ public class DriedRose extends Artifact {
 			
 			return dmg;
 		}
-		
+		*/
 		@Override
 		public int attackProc(Char enemy, int damage) {
 			damage = super.attackProc(enemy, damage);

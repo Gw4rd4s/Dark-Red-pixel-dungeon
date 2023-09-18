@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Blindweed;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
@@ -97,7 +98,7 @@ public abstract class TippedDart extends Dart {
 						if (!new Dart().collect()) Dungeon.level.drop(new Dart(), hero.pos).sprite.drop();
 
 						//reset durability if there are darts left in the stack
-						durability = MAX_DURABILITY;
+						durability = MissileWeapon.MAX_DURABILITY;
 						
 						hero.spend( 1f );
 						hero.busy();
@@ -168,7 +169,7 @@ public abstract class TippedDart extends Dart {
 			}
 			targetPos = -1;
 		}
-		int p = curUser == null ? Dungeon.hero.pos : curUser.pos;
+		int p = Item.curUser == null ? Dungeon.hero.pos : Item.curUser.pos;
 		for (Char ch : Actor.chars()){
 			if (ch instanceof WandOfRegrowth.Lotus){
 				WandOfRegrowth.Lotus l = (WandOfRegrowth.Lotus) ch;
@@ -192,7 +193,7 @@ public abstract class TippedDart extends Dart {
 		//value of regular dart plus half of the seed
 		return 8 * quantity;
 	}
-	
+	/*
 	private static HashMap<Class<?extends Plant.Seed>, Class<?extends TippedDart>> types = new HashMap<>();
 	static {
 		types.put(Blindweed.Seed.class,     BlindingDart.class);
@@ -218,9 +219,9 @@ public abstract class TippedDart extends Dart {
 		do{
 			s = (Plant.Seed) Generator.randomUsingDefaults(Generator.Category.SEED);
 		} while (!types.containsKey(s.getClass()));
-		
+
 		return getTipped(s, quantity );
-		
+
 	}
-	
+	*/
 }
