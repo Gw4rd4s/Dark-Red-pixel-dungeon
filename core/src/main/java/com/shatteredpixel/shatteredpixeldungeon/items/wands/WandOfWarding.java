@@ -35,7 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -297,7 +297,7 @@ public class WandOfWarding extends Wand {
 			}
 			return super.defenseSkill(enemy);
 		}
-
+/*
 		@Override
 		public int drRoll() {
 			int dr = super.drRoll();
@@ -307,7 +307,7 @@ public class WandOfWarding extends Wand {
 				return dr;
 			}
 		}
-
+*/
 		@Override
 		protected boolean canAttack( Char enemy ) {
 			return new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos == enemy.pos;

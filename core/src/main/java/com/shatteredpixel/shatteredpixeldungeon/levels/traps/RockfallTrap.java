@@ -95,7 +95,7 @@ public class RockfallTrap extends Trap {
 
 			if (ch != null && ch.isAlive()){
 				int damage = Random.NormalIntRange(5+Dungeon.depth, 10+Dungeon.depth*2);
-				damage -= ch.drRoll();
+				damage -= ch.punchDefRoll();
 				ch.damage( Math.max(damage, 0) , this);
 
 				Buff.prolong( ch, Paralysis.class, Paralysis.DURATION );

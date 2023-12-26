@@ -23,10 +23,10 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.ranged.RangedWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.SpiritBow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.ranged.Crossbow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.missiles.darts.Dart;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.ranged.RangedWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.tiles.DungeonTilemap;
 import com.watabou.noosa.Visual;
 import com.watabou.noosa.tweeners.PosTweener;

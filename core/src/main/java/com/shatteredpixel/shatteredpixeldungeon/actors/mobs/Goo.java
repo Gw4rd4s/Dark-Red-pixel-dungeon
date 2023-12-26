@@ -100,11 +100,6 @@ public class Goo extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 2);
-	}
-
-	@Override
 	public boolean act() {
 
 		if (state != HUNTING && pumpedUp > 0){

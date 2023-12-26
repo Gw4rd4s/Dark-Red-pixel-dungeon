@@ -64,11 +64,6 @@ public class DM200 extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 8);
-	}
-
-	@Override
 	public float lootChance(){
 		//each drop makes future drops 1/2 as likely
 		// so loot chance looks like: 1/8, 1/16, 1/32, 1/64, etc.

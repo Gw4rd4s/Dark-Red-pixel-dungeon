@@ -45,11 +45,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorrosion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Wayward;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Lucky;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Flail;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greataxe;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.curses.Wayward;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Lucky;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier1.Dagger;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier5.tier4.Flail;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier5.Greataxe;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;

@@ -77,7 +77,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap.Type;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
@@ -116,11 +116,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMappi
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.SpiritBow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -245,7 +244,7 @@ public class Hero extends Char {
 			dx = -1;
 			dy = 1;
 		}
-		if(targetPos==1-width){//also for this
+		if(targetPos == 1-width){//also for this
 			dx = 1;
 			dy = -1;
 		}
@@ -258,7 +257,7 @@ public class Hero extends Char {
 		 *   V
 		 *   dy
 		 * numbers in map are indices in target array, used bellow
-		 * middle pos [dx=1,dy=1] is starting pos, THIS SHOULD NEVER HAPPEN!
+		 * middle pos [dx=1,dy=1] is starting pos, THIS SHOULD NEVER BE THE TARGET DESTINATION!
 		 */
 		int moveDir;//final index
 		if(dx >= dy){
@@ -540,7 +539,7 @@ public class Hero extends Char {
 
 	@Override
 	public int attackSkill( Char target ) {
-		KindOfWeapon wep = belongings.attackingWeapon();
+		Weapon wep = belongings.attackingWeapon();
 		
 		float accuracy = 1;
 		accuracy *= RingOfAccuracy.accuracyMultiplier( this );
@@ -601,62 +600,54 @@ public class Hero extends Char {
 	}
 
 	@Override
-	public int drRoll() {
-		int dr = super.drRoll();
-
-		if (belongings.armor() != null) {
-			int armDr = Random.NormalIntRange( belongings.armor().DRMin(), belongings.armor().DRMax());
-			if (STR() < belongings.armor().STRReq()){
-				armDr -= (belongings.armor().STRReq() - lvl);
-			}
-			if (armDr > 0) dr += armDr;
+	public int pierceDefRoll(){
+		int def = super.pierceDefRoll();
+		if(belongings.armor != null){
+			def += belongings.armor.pierceDefRoll();
 		}
-		if (belongings.weapon() != null && !RingOfForce.fightingUnarmed(this))  {
-			int wepDr = Random.NormalIntRange( 0 , belongings.weapon().defenseFactor( this ) );
-			if (STR() < ((Weapon)belongings.weapon()).STRReq()){
-				wepDr -= 2*(((Weapon)belongings.weapon()).STRReq() - lvl);
-			}
-			if (wepDr > 0) dr += wepDr;
-		}
-
-		if (buff(HoldFast.class) != null){
-			dr += buff(HoldFast.class).armorBonus();
-		}
-		
-		return dr;
-	}
-	@Override
-	public int[] defenseRoll2(){
-		int[] def = super.defenseRoll2();
-		//armor defense
-		if (belongings.armor() != null) {
-			int[] armorDef = belongings.armor.defenseRoll2();
-			def[0] += armorDef[0];
-			def[1] += armorDef[1];
-		}
-		//TODO add armor given by weapon
 		return def;
 	}
 
-	/**
-	 * Damage roll off the Hero
-	 * Adds some power up bonuses
-	 * @return Array: piercing at 0, punching at 1
-	 */
 	@Override
-	public long damageRoll(float critBonus) {
-		//base damage
-		long dmg = super.damageRoll(critBonus);
+	public int punchDefRoll(){
+		int def = super.punchDefRoll();
+		if(belongings.armor != null){
+			def += belongings.armor.pierceDefRoll();
+		}
+		return def;
+	}
+	@Override
+	public int pierceRoll(float critBonus){
+		int dmg = super.pierceRoll(critBonus);
 		//damage added by weapon
-		KindOfWeapon wep = belongings.attackingWeapon();
+		Weapon wep = belongings.attackingWeapon();
 		if(wep != null) {
-			dmg += wep.damageRoll(critBonus);
+			dmg += wep.pierceRoll(critBonus);
 		}
 
 		PhysicalEmpower emp = buff(PhysicalEmpower.class);
 		if (emp != null){
-			dmg += ((long)emp.dmgBoost << 48); //piercing dmg
-			dmg += ((long)emp.dmgBoost << 36);// punching dmg
+			dmg += emp.dmgBoost;
+			//This does not decrement empower duration!
+			//punchRoll() does! It should be - always-  used after this method!
+			Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG, 0.75f, 1.2f);
+		}
+
+		return Math.max(0, dmg);
+	}
+
+	@Override
+	public int punchRoll(float critBonus){
+		int dmg = super.punchRoll(critBonus);
+		//damage added by weapon
+		Weapon wep = belongings.attackingWeapon();
+		if(wep != null) {
+			dmg += wep.punchRoll(critBonus);
+		}
+
+		PhysicalEmpower emp = buff(PhysicalEmpower.class);
+		if (emp != null){
+			dmg += emp.dmgBoost;
 			emp.left--;
 			if (emp.left <= 0) {
 				emp.detach();
@@ -664,12 +655,8 @@ public class Hero extends Char {
 			Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG, 0.75f, 1.2f);
 		}
 
-		//dmgPierce = Math.max(0, dmgPierce);
-		//dmgPunch = Math.max(0, dmgPunch);
-
-		return dmg;
+		return Math.max(0, dmg);
 	}
-
 	@Override
 	public float speed() {
 
@@ -702,8 +689,7 @@ public class Hero extends Char {
 
 	@Override
 	public boolean canSurpriseAttack(){
-		KindOfWeapon w = belongings.attackingWeapon();
-		if (!(w instanceof Weapon))             return true;
+		Weapon w = belongings.attackingWeapon();
 		if (RingOfForce.fightingUnarmed(this))  return true;
 		if (lvl < ((Weapon)w).STRReq())       return false;
 
@@ -720,7 +706,7 @@ public class Hero extends Char {
 			return true;
 		}
 
-		KindOfWeapon wep = Dungeon.hero.belongings.attackingWeapon();
+		Weapon wep = Dungeon.hero.belongings.attackingWeapon();
 
 		if (wep != null){
 			return wep.canReach(this, enemy.pos);
@@ -749,7 +735,7 @@ public class Hero extends Char {
 
 			//and augments + brawler's stance! My goodness, so many options now compared to 2014!
 			if (RingOfForce.unarmedGetsWeaponAugment(this)){
-				delay = ((Weapon)belongings.weapon).augment.delayFactor(delay);
+				delay = ((Weapon)belongings.weapon).augment.delayFactor() * delay;
 			}
 
 			return delay/speed;
@@ -1318,7 +1304,7 @@ public class Hero extends Char {
 	public int attackProc( final Char enemy, int damage ) {
 		damage = super.attackProc( enemy, damage );
 
-		KindOfWeapon wep;
+		Weapon wep;
 		if (RingOfForce.fightingUnarmed(this) && !RingOfForce.unarmedGetsWeaponEnchantment(this)){
 			wep = null;
 		} else {
@@ -1621,27 +1607,22 @@ public class Hero extends Char {
 			float prolongMove = 0;
 
 			//slow down moving anim IF slash is happening
-			if(belongings.weapon instanceof MeleeWeapon) {//only melee weapons have slash
-				MeleeWeapon wep = (MeleeWeapon) this.belongings.weapon;
-				if (hitBySlash != null && wep.slashCoefs[0] > 0) prolongMove = 0.1f;//slow down moving anim IF slash is happening
-			}
-				sprite.move(pos, step, prolongMove);
+			Weapon wep = this.belongings.weapon;
+			//  target exists			weapon can slash
+			if (hitBySlash != null && wep.slashCoefs[0] > 0) prolongMove = 0.1f;//slow down moving anim IF slash is happening
+			sprite.move(pos, step, prolongMove);
 			move(step);
 
 			//Perform slash attack if Actor is able to
-			if(belongings.weapon instanceof MeleeWeapon) {//only melee weapons have slash
-				MeleeWeapon wep = (MeleeWeapon) belongings.weapon;
-				if (hitBySlash != null && wep.slashCoefs[0] > 0) {
-					delay = attackDelay();//slash uses melee speed, not movement speed!!!
-					((SlashSprite) this.sprite.parent.recycle(SlashSprite.class)).
-							playSlash(this.sprite,                                //the one who swings weapon, rotate weapon around it
-									hitBySlash[0].sprite,                    //1st target
-									wep                   					//weapon to show
-							);
-
-					for (int idt = 0; idt < hitBySlash.length; idt++) {
-						attack(hitBySlash[idt], wep.slashCoefs[idt], 0, 1);
-					}
+			if (hitBySlash != null && wep.slashCoefs[0] > 0) {
+				delay = attackDelay();//slash uses melee speed, not movement speed!!!
+				((SlashSprite) this.sprite.parent.recycle(SlashSprite.class)).
+					playSlash(this.sprite,                                //the one who swings weapon, rotate weapon around it
+							hitBySlash[0].sprite,                    //1st target
+							wep                   					//weapon to show
+						);
+				for (int idt = 0; idt < hitBySlash.length; idt++) {
+					attack(hitBySlash[idt], wep.slashCoefs[idt], 0, 1);
 				}
 			}
 			spend( delay );

@@ -196,13 +196,18 @@ public class ItemSpriteSheet {
 	private static final int WEP_TIER1      =                               xy(1, 7);   //8 slots
 	public static final int WORN_SHORTSWORD = WEP_TIER1+0;
 	public static final int HAMMER          = WEP_TIER1+1;
+	public static final int CRATE_LID		= WEP_TIER1+3;
 	public static final int DAGGER          = WEP_TIER1+4;
-	public static final int GLOVES          = WEP_TIER1+8;
+	public static final int WOODEN_STICK	= WEP_TIER1+5;
+	public static final int CLEAVER			= WEP_TIER1+6;
+	public static final int GLOVES          = WEP_TIER1+7;
 	static{
 		assignItemRect(WORN_SHORTSWORD, 13, 13);
 		assignItemRect(GLOVES,          12, 16);
 		assignItemRect(HAMMER,		    15, 15);
 		assignItemRect(DAGGER,          12, 13);
+		assignItemRect(CRATE_LID,		15, 15);
+		assignItemRect(WOODEN_STICK, 	16, 16);
 	}
 
 	private static final int WEP_TIER2      =                               xy(9, 7);   //8 slots
@@ -394,7 +399,12 @@ public class ItemSpriteSheet {
 		assignItemRect(ARMOR_PLATE,     12, 12);
 	}
 
-
+	//There is only 1 tier 1 magic weapon
+	//And there won't be any more!
+	public static final int RUSTY_RING				=							  xy(9, 13);
+		static{
+			assignItemRect(RUSTY_RING, 8,9);
+		}
 	private static final int WANDS_TIER2              =                           xy(1, 14);  //16 slots
 	public static final int SILVER_KNUCKELS  		= WANDS_TIER2+0;
 	public static final int GOLDEN_KNUCKELS       	= WANDS_TIER2+1;
@@ -461,7 +471,7 @@ public class ItemSpriteSheet {
 	public static final int TOMAHAWK     		= WANDS_TIER5+4;
 	public static final int PITCHFORK     		= WANDS_TIER5+5;
 	public static final int SHINING_STAFF     	= WANDS_TIER5+6;
-	public static final int EYE     			= WANDS_TIER5+7;
+	public static final int EYE_PYRAMID     	= WANDS_TIER5+7;
 	static {
 		assignItemRect(RUNE_BLADE,  	16, 16);
 		assignItemRect(CRUSADE_SHIELD, 	12, 16);
@@ -470,7 +480,7 @@ public class ItemSpriteSheet {
 		assignItemRect(TOMAHAWK,		13, 15);
 		assignItemRect(PITCHFORK, 		16, 16);
 		assignItemRect(SHINING_STAFF,	16, 16);
-		assignItemRect(EYE,	 			16, 16);
+		assignItemRect(EYE_PYRAMID,		16, 16);
 	}
 	private static final int RINGS          =                               xy(1, 15);  //16 slots
 	public static final int RING_GARNET     = RINGS+0;

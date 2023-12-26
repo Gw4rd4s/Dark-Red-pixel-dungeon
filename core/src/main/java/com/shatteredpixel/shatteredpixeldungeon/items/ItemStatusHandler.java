@@ -49,14 +49,12 @@ public class ItemStatusHandler<T extends Item> {
 
 		ArrayList<String> labelsLeft = new ArrayList<>(labelImages.keySet());
 
-		for (int i=0; i < items.length; i++) {
+		for (Class<? extends T> item : items) {
 
-			Class<? extends T> item = items[i];
+			int index = Random.Int(labelsLeft.size());
 
-			int index = Random.Int( labelsLeft.size() );
-
-			itemLabels.put( item, labelsLeft.get( index ) );
-			labelsLeft.remove( index );
+			itemLabels.put(item, labelsLeft.get(index));
+			labelsLeft.remove(index);
 
 		}
 	}

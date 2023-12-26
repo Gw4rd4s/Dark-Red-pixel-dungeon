@@ -67,11 +67,6 @@ public class DemonSpawner extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 12);
-	}
-
-	@Override
 	public void beckon(int cell) {
 		//do nothing
 	}

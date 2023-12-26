@@ -99,11 +99,6 @@ public class DM300 extends Mob {
 		return 20;
 	}
 
-	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 10);
-	}
-
 	public int pylonsActivated = 0;
 	public boolean supercharged = false;
 	public boolean chargeAnnounced = false;

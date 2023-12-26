@@ -70,18 +70,14 @@ public class ArmoredStatue extends Statue {
 	}
 
 	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange( armor.DRMin(), armor.DRMax());
+	public int pierceDefRoll() {
+		return super.pierceDefRoll() + armor.pierceDefRoll();
+	}
+	@Override
+	public int punchDefRoll() {
+		return super.punchDefRoll() + armor.punchDefRoll();
 	}
 
-	@Override
-	public int[] defenseRoll2(){
-		int[] def = super.defenseRoll2();
-		int[] armorDef = armor().defenseRoll2();
-		def[0] += armorDef[0];
-		def[1] += armorDef[1];
-		return def;
-	}
 	//used in some glyph calculations
 	public Armor armor(){
 		return armor;

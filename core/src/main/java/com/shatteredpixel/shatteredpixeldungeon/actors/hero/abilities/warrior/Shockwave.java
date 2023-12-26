@@ -115,7 +115,7 @@ public class Shockwave extends ArmorAbility {
 								int scalingStr = hero.STR()-10;
 								int damage = Random.NormalIntRange(5 + scalingStr, 10 + 2*scalingStr);
 								damage = Math.round(damage * (1f + 0.2f*hero.pointsInTalent(Talent.SHOCK_FORCE)));
-								damage -= ch.drRoll();
+								//damage -= ch.drRoll();
 
 								if (hero.pointsInTalent(Talent.STRIKING_WAVE) == 4){
 									Buff.affect(hero, Talent.StrikingWaveTracker.class, 0f);

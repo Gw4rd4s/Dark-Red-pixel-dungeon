@@ -186,7 +186,7 @@ public class Bomb extends Item {
 					dmg = Math.round(dmg*0.67f);
 				}
 
-				dmg -= ch.drRoll();
+				dmg -= ch.punchDefRoll();
 
 				if (dmg > 0) {
 					ch.damage(dmg, this);

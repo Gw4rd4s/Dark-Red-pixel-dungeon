@@ -80,11 +80,6 @@ public class RipperDemon extends Mob {
 		return super.attackDelay()*0.5f;
 	}
 
-	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 4);
-	}
-
 	private static final String LAST_ENEMY_POS = "last_enemy_pos";
 	private static final String LEAP_POS = "leap_pos";
 	private static final String LEAP_CD = "leap_cd";

@@ -91,11 +91,6 @@ public class DwarfKing extends Mob {
 		return 26;
 	}
 
-	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 10);
-	}
-
 	private int phase = 1;
 	private int summonsMade = 0;
 

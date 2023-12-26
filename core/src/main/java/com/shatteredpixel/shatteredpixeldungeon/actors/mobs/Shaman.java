@@ -61,11 +61,6 @@ public abstract class Shaman extends Mob {
 	public int attackSkill( Char target ) {
 		return 18;
 	}
-	
-	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 6);
-	}
 
 	@Override
 	protected boolean canAttack( Char enemy ) {

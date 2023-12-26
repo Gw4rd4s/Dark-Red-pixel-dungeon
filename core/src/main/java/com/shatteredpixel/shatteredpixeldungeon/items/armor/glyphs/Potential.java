@@ -45,9 +45,9 @@ public class Potential extends Glyph {
 		float procChance = (level+1f)/(level+6f) * procChanceMultiplier(defender);
 		if (Random.Float() < procChance && defender instanceof Hero) {
 
-			float powerMulti = Math.max(1f, procChance);
+			int charging = Math.max(100, Math.round(20*procChance));
 
-			int wands = ((Hero) defender).belongings.charge( powerMulti );
+			int wands = ((Hero) defender).belongings.charge( charging );
 			if (wands > 0) {
 				defender.sprite.centerEmitter().burst(EnergyParticle.FACTORY, 10);
 			}

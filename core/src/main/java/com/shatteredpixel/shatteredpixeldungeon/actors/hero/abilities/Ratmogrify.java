@@ -255,31 +255,32 @@ public class Ratmogrify extends ArmorAbility {
 			return original.attackSkill(target);
 		}
 
-		public int drRoll() {
-			return original.drRoll();
+		public int pierceDefRoll(){
+			return original.pierceDefRoll();
+		}
+
+		public int punchDefRoll(){
+			return original.punchDefRoll();
+		}
+		@Override
+		public int pierceRoll(float critBonus) {
+			//decode
+			int def = original.pierceRoll(critBonus);
+			if (!allied && Dungeon.hero.hasTalent(Talent.RATSISTANCE)){
+				def *= Math.pow(0.9f, Dungeon.hero.pointsInTalent(Talent.RATSISTANCE));
+			}
+			return def;
 		}
 
 		@Override
-		public long damageRoll(float critBonus) {
+		public int punchRoll(float critBonus) {
 			//decode
-			long damage = original.damageRoll(critBonus);
-			long mask = 0b1111_1111_1111;
-			mask = mask << 48;//level of piercing
-			long pierceDMG = damage & mask;
-			mask = mask >> 12; //level of punching
-			long punchDMG = damage & mask;
+			int def = original.punchRoll(critBonus);
 			if (!allied && Dungeon.hero.hasTalent(Talent.RATSISTANCE)){
-				pierceDMG *= Math.pow(0.9f, Dungeon.hero.pointsInTalent(Talent.RATSISTANCE));
-				punchDMG *= Math.pow(0.9f, Dungeon.hero.pointsInTalent(Talent.RATSISTANCE));
+				def *= Math.pow(0.9f, Dungeon.hero.pointsInTalent(Talent.RATSISTANCE));
 			}
-			//encode
-			long temp = damage & 0xF_FFFF_FFFFL; //copy hot, cold and poison damage
-			damage = pierceDMG + //insert piercing }
-					 punchDMG +  //insert punching } replace with new values
-					 temp;		 //insert rest - keep original
-			return damage;
+			return def;
 		}
-
 		@Override
 		public float attackDelay() {
 			return original.attackDelay();

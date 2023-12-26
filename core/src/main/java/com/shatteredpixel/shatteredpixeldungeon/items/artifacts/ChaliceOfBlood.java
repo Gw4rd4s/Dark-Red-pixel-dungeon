@@ -97,18 +97,6 @@ public class ChaliceOfBlood extends Artifact {
 	private void prick(Hero hero){
 		int damage = 5 + 3*(level()*level());
 
-		Earthroot.Armor armor = hero.buff(Earthroot.Armor.class);
-		if (armor != null) {
-			damage = armor.absorb(damage);
-		}
-
-		WandOfLivingEarth.RockArmor rockArmor = hero.buff(WandOfLivingEarth.RockArmor.class);
-		if (rockArmor != null) {
-			damage = rockArmor.absorb(damage);
-		}
-
-		damage -= hero.drRoll();
-
 		hero.sprite.operate( hero.pos );
 		hero.busy();
 		hero.spend(3f);

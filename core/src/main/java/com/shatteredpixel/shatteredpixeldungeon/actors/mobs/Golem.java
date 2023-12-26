@@ -65,11 +65,6 @@ public class Golem extends Mob {
 	public int attackSkill( Char target ) {
 		return 28;
 	}
-	
-	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 12);
-	}
 
 	@Override
 	public float lootChance() {

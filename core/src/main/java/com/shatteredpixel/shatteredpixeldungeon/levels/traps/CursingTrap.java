@@ -29,11 +29,10 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
@@ -74,7 +73,7 @@ public class CursingTrap extends Trap {
 		//items the trap can curse if nothing else is available.
 		ArrayList<Item> canCurse = new ArrayList<>();
 
-		KindOfWeapon weapon = hero.belongings.weapon();
+		Weapon weapon = hero.belongings.weapon();
 		if (weapon instanceof Weapon && !(weapon instanceof MagesStaff)){
 			if (((Weapon) weapon).enchantment == null)
 				priorityCurse.add(weapon);

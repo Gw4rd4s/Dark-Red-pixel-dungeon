@@ -61,12 +61,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImag
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Rapier;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.SpiritBow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier1.Dagger;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier1.Gloves;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier2.Rapier;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier1.WornShortsword;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.watabou.utils.DeviceCompat;
 

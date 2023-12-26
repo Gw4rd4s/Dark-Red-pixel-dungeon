@@ -67,6 +67,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
@@ -286,55 +287,23 @@ public class Armor extends EquipableItem {
 	}
 
 	/**
-	 *Calculates upper defense bound of the armor
-	 * @return max possible damage reduction
+	 * Roll of piercing protection
+	 * @return INT actual damage roll
 	 */
-	public int DRMax(){
-		int lvl = buffedLvl();
-		if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
-			return 1 + tier + lvl + augment.defenseFactor(lvl);
-		}
-
-		int max = tier * (2 + lvl) + augment.defenseFactor(lvl);
-		if (lvl > max){
-			return ((lvl - max)+1)/2;
-		} else {
-			return max;
-		}
+	public int pierceDefRoll(){
+		return GameMath.damageRoll(buffedArmor(pierceArmor), pierceArmor, 0);
 	}
-
 	/**
-	 * Calculates lower defense bound of the armor
-	 * @return min possible damage reduction
+	 * Roll of punching protection
+	 * @return INT actual damage roll
 	 */
-
-	public int DRMin(){
-		int lvl = buffedLvl();
-		if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
-			return 0;
-		}
-
-		int max = DRMax();
-		if (lvl >= max){
-			return (lvl - max);
-		} else {
-			return lvl;
-		}
+	public int punchDefRoll(){
+		return GameMath.damageRoll(buffedArmor(punchArmor), punchArmor, 0);
+	}
+	public int buffedArmor(int armor) {
+		return armor + ( armor * buffedLvl() ) / 2;
 	}
 
-	/**
-	 * Defense roll of the armor
-	 * @return array. Index 0: piercing armor, index 1: punching armor
-	 */
-	public int[] defenseRoll2(){
-		int lvl = buffedLvl();
-		int[] dmg = new int[2];
-		int avg = pierceArmor * (lvl+2) /2;//only mean scales with levels, but no dispersion
-		dmg[0] = Random.NormalIntRange(avg - pierceArmor/2, avg + pierceArmor/2);
-		avg = punchArmor * (lvl+2) /2;
-		dmg[0] = Random.NormalIntRange(avg - punchArmor/2, avg + punchArmor/2);
-		return dmg;
-	}
 	public float evasionFactor( Char owner, float evasion ){
 		
 		if (hasGlyph(Stone.class, owner) && !((Stone)glyph).testingEvasion()){
@@ -487,18 +456,15 @@ public class Armor extends EquipableItem {
 		String info = desc();
 		
 		if (levelKnown) {
-			info += "\n\n" + Messages.get(Armor.class, "curr_absorb", DRMin(), DRMax(), STRReq());
-			
-			if (STRReq() > Dungeon.hero.lvl) {
-				info += " " + Messages.get(Armor.class, "too_heavy");
-			}
+			info += "\n\n" + Messages.get(Armor.class, "curr_absorb", buffedArmor(pierceArmor), buffedArmor(punchArmor));
+
 		} else {
 			//testing DRMin() and DRMax() without params. This should work though.
-			info += "\n\n" + Messages.get(Armor.class, "avg_absorb", DRMin(), DRMax(), STRReq());
+			info += "\n\n" + Messages.get(Armor.class, "base_absorb", pierceArmor, punchArmor);
 
-			if (STRReq() > Dungeon.hero.lvl) {
-				info += " " + Messages.get(Armor.class, "probably_too_heavy");
-			}
+		}
+		if (STRReq() > Dungeon.hero.lvl) {
+			info += " " + Messages.get(Armor.class, "too_heavy");
 		}
 
 		switch (augment) {

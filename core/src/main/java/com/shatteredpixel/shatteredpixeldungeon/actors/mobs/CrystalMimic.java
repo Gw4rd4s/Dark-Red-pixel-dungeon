@@ -94,14 +94,14 @@ public class CrystalMimic extends Mimic {
 
 	//does not deal bonus damage, steals instead. See attackProc
 	@Override
-	public long damageRoll(float critBonus) {
+	public int pierceRoll(float critBonus) {
 		if (alignment == Alignment.NEUTRAL) {
 			alignment = Alignment.ENEMY;
-			long dmg = super.damageRoll(critBonus);
+			int dmg = super.pierceRoll(critBonus);
 			alignment = Alignment.NEUTRAL;
 			return dmg;
 		} else {
-			return super.damageRoll(critBonus);
+			return super.pierceRoll(critBonus);
 		}
 	}
 

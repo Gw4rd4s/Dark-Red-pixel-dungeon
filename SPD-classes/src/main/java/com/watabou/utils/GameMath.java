@@ -60,21 +60,6 @@ public class GameMath {
 	}
 
 	/**
-	 * Calculates and encodes damage to bits of LONG. Shifts data in Memory left by 12 bits. Use Max 4x on single Memory LONG, data LOSS!
-	 * @param memory stored damage data.
-	 * @param avg average damage dealt. Less than 2^9 -1 or 511!
-	 * @param range range of damage from lower to upper bound
-	 * @param bonus critical bonus to damage
-	 * @return @param memory shifted left by 12 bits and with added random damage
-	 */
-	public static long encodeDmg(long memory, int avg, int range, float bonus){
-		int rand = damageRoll( avg, range, bonus);
-		memory = memory << 12;
-		memory += rand;
-		return memory;
-	}
-
-	/**
 	 * Calculates normally distributed damage
 	 * @param avg average damage dealt. Less than 2^9 -1 or 511!
 	 * @param range range of damage from lower to upper bound

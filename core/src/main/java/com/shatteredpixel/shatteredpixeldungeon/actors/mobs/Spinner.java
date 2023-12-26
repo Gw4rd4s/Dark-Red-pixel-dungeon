@@ -65,11 +65,6 @@ public class Spinner extends Mob {
 		return 22;
 	}
 
-	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 6);
-	}
-
 	private int webCoolDown = 0;
 	private int lastEnemyPos = -1;
 

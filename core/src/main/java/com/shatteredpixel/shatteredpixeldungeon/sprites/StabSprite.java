@@ -1,16 +1,11 @@
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scimitar;
 import com.watabou.noosa.Visual;
-import com.watabou.noosa.tweeners.RotTweener;
 import com.watabou.noosa.tweeners.ThrustTweener;
 import com.watabou.noosa.tweeners.Tweener;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PointF;
-
-import java.util.HashMap;
-import java.util.LinkedHashSet;
 
 
 public class StabSprite extends ItemSprite implements Tweener.Listener {

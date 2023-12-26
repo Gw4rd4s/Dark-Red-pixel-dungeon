@@ -33,7 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -336,16 +336,6 @@ public class WandOfLivingEarth extends DamageWand {
 		public int attackProc(Char enemy, int damage) {
 			if (enemy instanceof Mob) ((Mob)enemy).aggro(this);
 			return super.attackProc(enemy, damage);
-		}
-
-		@Override
-		public int drRoll() {
-			int dr = super.drRoll();
-			if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
-				return dr + Random.NormalIntRange(wandLevel, 2 + wandLevel);
-			} else {
-				return dr + Random.NormalIntRange(wandLevel, 3 + 3 * wandLevel);
-			}
 		}
 
 		@Override

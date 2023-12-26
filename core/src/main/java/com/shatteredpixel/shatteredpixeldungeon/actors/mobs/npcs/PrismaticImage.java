@@ -182,15 +182,24 @@ public class PrismaticImage extends NPC {
 	}
 	
 	@Override
-	public int drRoll() {
-		int dr = super.drRoll();
+	public int pierceDefRoll() {
+		int dr = super.pierceDefRoll();
 		if (hero != null){
-			return dr + hero.drRoll();
+			return dr + hero.pierceDefRoll();
 		} else {
 			return dr;
 		}
 	}
-	
+
+	@Override
+	public int punchDefRoll() {
+		int dr = super.punchDefRoll();
+		if (hero != null){
+			return dr + hero.punchDefRoll();
+		} else {
+			return dr;
+		}
+	}
 	@Override
 	public int defenseProc(Char enemy, int damage) {
 		if (hero != null && hero.belongings.armor() != null){

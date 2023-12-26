@@ -69,11 +69,6 @@ public class Ghoul extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 4);
-	}
-
-	@Override
 	public float spawningWeight() {
 		return 0.5f;
 	}

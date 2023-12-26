@@ -95,10 +95,6 @@ public class RotLasher extends Mob {
 		return 15;
 	}
 
-	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 8);
-	}
 	
 	{
 		immunities.add( ToxicGas.class );

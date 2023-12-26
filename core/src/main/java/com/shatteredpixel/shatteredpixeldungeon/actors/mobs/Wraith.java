@@ -45,8 +45,6 @@ public class Wraith extends Mob {
 		
 		HP = HT = level;
 		EXP = 0;
-		pierceDmg = 3;
-		punchDmg = 3;
 		maxLvl = -2;
 		
 		flying = true;
@@ -68,15 +66,6 @@ public class Wraith extends Mob {
 		level = bundle.getInt( LEVEL );
 		adjustStats( level );
 	}
-
-	@Override
-	public long damageRoll(float critBonus){
-		long dmg = super.damageRoll(critBonus);
-		//add extra damage
-		dmg += ((long)GameMath.damageRoll(2*level/3, 2*level/3, critBonus) << 48);//piercing
-		dmg += ((long)GameMath.damageRoll(2*level/3, 2*level/3, critBonus) << 36);//punching
-		return  dmg;
-	}
 	@Override
 	public int attackSkill( Char target ) {
 		return 10 + level;
@@ -85,6 +74,8 @@ public class Wraith extends Mob {
 	public void adjustStats( int level ) {
 		this.level = level;
 		defenseSkill = attackSkill( null ) * 5;
+		pierceDmg = 2*level/3;
+		punchDmg = 2*level/3;
 		enemySeen = true;
 	}
 

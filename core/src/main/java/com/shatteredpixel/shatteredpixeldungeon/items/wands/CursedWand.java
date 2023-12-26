@@ -80,10 +80,10 @@ import java.util.ArrayList;
 //helper class to contain all the cursed wand zapping logic, so the main wand class doesn't get huge.
 public class CursedWand {
 
-	private static float COMMON_CHANCE = 0.6f;
-	private static float UNCOMMON_CHANCE = 0.3f;
-	private static float RARE_CHANCE = 0.09f;
-	private static float VERY_RARE_CHANCE = 0.01f;
+	private static final float COMMON_CHANCE = 0.6f;
+	private static final float UNCOMMON_CHANCE = 0.3f;
+	private static final float RARE_CHANCE = 0.09f;
+	private static final float VERY_RARE_CHANCE = 0.01f;
 
 	public static void cursedZap(final Item origin, final Char user, final Ballistica bolt, final Callback afterZap){
 

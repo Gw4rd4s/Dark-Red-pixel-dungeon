@@ -54,37 +54,6 @@ public class Skeleton extends Mob {
 		properties.add(Property.UNDEAD);
 		properties.add(Property.INORGANIC);
 	}
-	
-	@Override
-	public void die( Object cause ) {
-		
-		super.die( cause );
-		
-		if (cause == Chasm.class) return;
-		
-		boolean heroKilled = false;
-		for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
-			Char ch = findChar( pos + PathFinder.NEIGHBOURS8[i] );
-			if (ch != null && ch.isAlive()) {
-				int damage = Math.round(Random.NormalIntRange(6, 12));
-				damage = Math.round( damage * AscensionChallenge.statModifier(this));
-				damage = Math.max( 0,  damage - (ch.drRoll() + ch.drRoll()) );
-				ch.damage( damage, this );
-				if (ch == Dungeon.hero && !ch.isAlive()) {
-					heroKilled = true;
-				}
-			}
-		}
-		
-		if (Dungeon.level.heroFOV[pos]) {
-			Sample.INSTANCE.play( Assets.Sounds.BONES );
-		}
-		
-		if (heroKilled) {
-			Dungeon.fail( this );
-			GLog.n( Messages.get(this, "explo_kill") );
-		}
-	}
 
 	@Override
 	public float lootChance() {
@@ -102,11 +71,6 @@ public class Skeleton extends Mob {
 	@Override
 	public int attackSkill( Char target ) {
 		return 12;
-	}
-	
-	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 5);
 	}
 
 }

@@ -213,16 +213,26 @@ public class ShadowClone extends ArmorAbility {
 		}
 
 		@Override
-		public int drRoll() {
-			int dr = super.drRoll();
-			int heroRoll = Dungeon.hero.drRoll();
+		public int pierceDefRoll() {
+			int def = super.pierceDefRoll();
+			int heroRoll = Dungeon.hero.pierceDefRoll();
 			heroRoll = Math.round(0.12f * Dungeon.hero.pointsInTalent(Talent.CLONED_ARMOR) * heroRoll);
 			if (heroRoll > 0){
-				dr += heroRoll;
+				def += heroRoll;
 			}
-			return dr;
+			return def;
 		}
 
+		@Override
+		public int punchDefRoll() {
+			int def = super.punchDefRoll();
+			int heroRoll = Dungeon.hero.punchDefRoll();
+			heroRoll = Math.round(0.12f * Dungeon.hero.pointsInTalent(Talent.CLONED_ARMOR) * heroRoll);
+			if (heroRoll > 0){
+				def += heroRoll;
+			}
+			return def;
+		}
 		@Override
 		public boolean isImmune(Class effect) {
 			if (effect == Burning.class

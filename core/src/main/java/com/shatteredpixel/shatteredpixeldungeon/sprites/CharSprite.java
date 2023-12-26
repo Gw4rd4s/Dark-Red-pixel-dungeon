@@ -351,7 +351,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		if (visible) {
 			PointF c = center();
 			int n = (int)Math.min( 9 * Math.sqrt( (double)damage / ch.HT ), 9 );
-			Splash.at( c, PointF.angle( from, c ), 3.1415926f / 2, blood(), n );
+			Splash.at( c, PointF.angle( c, from ), 3.1415926f / 2, blood(), n );
 		}
 	}
 

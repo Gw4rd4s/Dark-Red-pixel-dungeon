@@ -175,13 +175,23 @@ public class SmokeBomb extends ArmorAbility {
 		}
 
 		@Override
-		public int drRoll() {
-			int dr = super.drRoll();
+		public int pierceDefRoll() {
+			int def = super.pierceDefRoll();
 
-			dr += Random.NormalIntRange(Dungeon.hero.pointsInTalent(Talent.BODY_REPLACEMENT),
+			def += Random.NormalIntRange(Dungeon.hero.pointsInTalent(Talent.BODY_REPLACEMENT),
 					3*Dungeon.hero.pointsInTalent(Talent.BODY_REPLACEMENT));
 
-			return dr;
+			return def;
+		}
+
+		@Override
+		public int punchDefRoll() {
+			int def = super.punchDefRoll();
+
+			def += Random.NormalIntRange(Dungeon.hero.pointsInTalent(Talent.BODY_REPLACEMENT),
+					3*Dungeon.hero.pointsInTalent(Talent.BODY_REPLACEMENT));
+
+			return def;
 		}
 
 		{

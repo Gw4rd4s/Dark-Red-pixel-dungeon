@@ -28,7 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Transmuting;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
@@ -40,12 +40,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.missiles.MissileWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.missiles.darts.Dart;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.missiles.darts.TippedDart;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
@@ -94,9 +93,9 @@ public class ScrollOfTransmutation extends InventoryScroll {
 						if (!result.collect()){
 							Dungeon.level.drop(result, curUser.pos).sprite.drop();
 						}
-					} else if (item instanceof KindOfWeapon && Dungeon.hero.belongings.secondWep() == item){
+					} else if (item instanceof Weapon && Dungeon.hero.belongings.secondWep() == item){
 						((EquipableItem) item).doUnequip(Dungeon.hero, false);
-						((KindOfWeapon) result).equipSecondary(Dungeon.hero);
+						((Weapon) result).equipSecondary(Dungeon.hero);
 					} else {
 						((EquipableItem) item).doUnequip(Dungeon.hero, false);
 						((EquipableItem) result).doEquip(Dungeon.hero);

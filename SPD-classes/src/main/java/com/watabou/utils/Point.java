@@ -72,7 +72,36 @@ public class Point {
 		y += d.y;
 		return this;
 	}
-	
+
+	/**
+	 * Calculates cell distance, it is square not circle
+	 * <p>2 2 2 2 2</p>
+	 * <p>2 1 1 1 2</p>
+	 * <p>2 1 0 1 2</p>
+	 * <p>2 1 1 1 2</p>
+	 * 2 2 2 2 2 ......and so on
+	 * @param p1 point 1
+	 * @param p2 point 2, start or end, does not matter
+	 * @return INT distance in cells
+	 */
+	public static int distance1(Point p1, Point p2){
+		return Math.max( Math.abs( p1.x - p2.x ), Math.abs( p1.y - p2.y ) );
+	}
+
+	/**Retruns angle between line given by input points and horizontal line
+	 * <p>X</p>
+	 * <p>&#032 \</p>
+	 * <p>&#032&#032 \___</p>
+	 * <p>&#032&#032&#032 \ &#032&#032 ) angle here</p>
+	 * <p>&#032&#032&#032&#032 X-------------------------</p>
+	 * @param end line ends there
+	 * @param start line starts here
+	 * @return FLOAT angle in radians
+	 */
+	public static float angle( Point end, Point start ) {
+		return (float)Math.atan2( end.y - start.y, end.x - start.x );
+	}
+
 	@Override
 	public boolean equals( Object obj ) {
 		if (obj instanceof Point) {

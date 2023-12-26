@@ -62,6 +62,7 @@ public class Mimic extends Mob {
 		//mimics are neutral when hidden
 		alignment = Alignment.NEUTRAL;
 		state = PASSIVE;
+
 	}
 	
 	public ArrayList<Item> items;
@@ -200,17 +201,21 @@ public class Mimic extends Mob {
 	}
 
 	@Override
-	public long damageRoll(float critBonus) {
+	public int pierceRoll(float critBonus) {
 		if (alignment == Alignment.NEUTRAL){
-			return super.damageRoll(1f);//full crit on surprise
+			return super.pierceRoll(1f);//max roll on surprise
 		} else {
-			return super.damageRoll(critBonus);
+			return super.pierceRoll(critBonus);
 		}
 	}
 
 	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 1 + level/2);
+	public int punchRoll(float critBonus) {
+		if (alignment == Alignment.NEUTRAL){
+			return super.punchRoll(1f);//max roll on surprise
+		} else {
+			return super.punchRoll(critBonus);
+		}
 	}
 
 	@Override

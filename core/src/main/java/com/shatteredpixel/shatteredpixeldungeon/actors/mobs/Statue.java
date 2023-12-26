@@ -25,15 +25,16 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon.Enchantment;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.Weapon.Enchantment;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Grim;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.StatueSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
 
 public class Statue extends Mob {
@@ -87,9 +88,18 @@ public class Statue extends Mob {
 	}
 	
 	@Override
-	public long damageRoll(float critBonus) {
-		return weapon.damageRoll(critBonus);
+	public int pierceRoll(float critBonus) {
+		return weapon.pierceRoll(critBonus);
 	}
+	@Override
+	public int punchRoll(float critBonus) {return weapon.punchRoll(critBonus);	}
+
+	@Override
+	public int burnRoll(float critBonus){ return weapon.burnRoll(critBonus);}
+	@Override
+	public int frostRoll(float critBonus){ return weapon.frostRoll(critBonus);}
+	@Override
+	public int poisonRoll(float critBonus){ return weapon.poisonRoll(critBonus);}
 	@Override
 	public int attackSkill( Char target ) {
 		return (int)((9 + Dungeon.depth) * weapon.accuracyFactor( this, target ));
@@ -106,8 +116,8 @@ public class Statue extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, Dungeon.depth + weapon.defenseFactor(this));
+	public int pierceDefRoll() {
+		return super.pierceDefRoll() + GameMath.damageRoll(Dungeon.depth + weapon.defenseFactor(this),Dungeon.depth, 0);
 	}
 	
 	@Override

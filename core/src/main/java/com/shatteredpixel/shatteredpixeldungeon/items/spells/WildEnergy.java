@@ -57,7 +57,7 @@ public class WildEnergy extends TargetedSpell {
 		ScrollOfRecharging.charge(hero);
 		SpellSprite.show(hero, SpellSprite.CHARGE);
 
-		hero.belongings.charge(1f);
+		hero.belongings.charge(10);
 		for (Buff b : hero.buffs()){
 			if (b instanceof Artifact.ArtifactBuff){
 				if (!((Artifact.ArtifactBuff) b).isCursed()) ((Artifact.ArtifactBuff) b).charge(hero, 4);

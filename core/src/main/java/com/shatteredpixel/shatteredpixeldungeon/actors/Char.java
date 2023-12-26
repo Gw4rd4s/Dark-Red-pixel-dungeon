@@ -93,12 +93,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireblast;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLightning;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazing;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Kinetic;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Blazing;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Grim;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Kinetic;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Shocking;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Door;
@@ -135,21 +135,21 @@ public abstract class Char extends Actor {
 	/**punching type of damage*/
 	protected int punchDmg;
 	/**fire, burning, hot type of damage*/
-	protected int hotDmg;
+	protected int burnDmg;
 	/**cold, chilling, freezing type of damage*/
-	protected int coldDmg;
+	protected int frostDmg;
 	/**toxic, poisonous type of damage*/
 	protected int poisonDmg;
 	/**armor against piercing*/
 	protected int pierceArmor;
 	/**armor against punching*/
 	protected int punchArmor;
-	/**response to hot dmg, from +100% to -100%*/
-	protected int hotLika;
-	/**response to cold dmg, from +100% to -100%*/
-	protected int coldLika;
-	/**response to poison dmg, from +100% to -100%*/
-	protected int poisonLika;
+	/**response to hot dmg, +100% healing, -100% damaging, -200% twice damaging*/
+	protected float burnLika = -1f;
+	/**response to cold dmg, +100% healing, -100% damaging, -200% twice damaging*/
+	protected float frostLika = -1f;
+	/**response to poison dmg, +100% healing, -100% damaging, -200% twice damaging*/
+	protected float poisonLika = -0.5f;
 
 	protected float baseSpeed	= 1;
 	protected PathFinder.Path path;
@@ -305,13 +305,13 @@ public abstract class Char extends Actor {
 	protected static final String BUFFS	    = "buffs";
 	protected static final String PIERCE_DMG = "pierceDmg";
 	protected static final String PUNCH_DMG = "punchDmg";
-	protected static final String HOT_DMG = "hotDmg";
-	protected static final String COLD_DMG = "coldDmg";
+	protected static final String BURN_DMG = "burnDmg";
+	protected static final String FROST_DMG = "frostDmg";
 	protected static final String POISON_DMG = "poisonDmg";
 	protected static final String PIERCE_ARMOR = "pierceArmor";
 	protected static final String PUNCH_ARMOR = "punchArmor";
-	protected static final String HOT_LIKABILITY = "hotLika";
-	protected static final String COLD_LIKABILITY = "coldLika";
+	protected static final String BURN_LIKABILITY = "burnLika";
+	protected static final String FROST_LIKABILITY = "frostLika";
 	protected static final String POISON_LIKABILITY = "poisonLika";
 
 	@Override
@@ -325,13 +325,13 @@ public abstract class Char extends Actor {
 		bundle.put( BUFFS, buffs );
 		bundle.put( PIERCE_DMG, pierceDmg);
 		bundle.put( PUNCH_DMG, punchDmg);
-		bundle.put( HOT_DMG, hotDmg);
-		bundle.put( COLD_DMG, coldDmg);
+		bundle.put( FROST_DMG, burnDmg);
+		bundle.put( BURN_DMG, frostDmg);
 		bundle.put( POISON_DMG, poisonDmg);
 		bundle.put( PIERCE_ARMOR, pierceArmor);
 		bundle.put( PUNCH_ARMOR, punchArmor);
-		bundle.put( HOT_LIKABILITY, hotLika);
-		bundle.put( COLD_LIKABILITY, coldLika);
+		bundle.put( BURN_LIKABILITY, burnLika);
+		bundle.put( FROST_LIKABILITY, frostLika);
 		bundle.put( POISON_LIKABILITY, poisonLika);
 	}
 	
@@ -345,13 +345,13 @@ public abstract class Char extends Actor {
 		HT = bundle.getInt( TAG_HT );
 		pierceDmg = bundle.getInt(PIERCE_DMG);
 		punchDmg = bundle.getInt(PUNCH_DMG);
-		hotDmg = bundle.getInt(HOT_DMG);
-		coldDmg = bundle.getInt(COLD_DMG);
+		burnDmg = bundle.getInt(BURN_DMG);
+		frostDmg = bundle.getInt(FROST_DMG);
 		poisonDmg = bundle.getInt(POISON_DMG);
 		pierceArmor = bundle.getInt(PIERCE_ARMOR);
 		punchArmor = bundle.getInt(PUNCH_ARMOR);
-		hotLika = bundle.getInt(HOT_LIKABILITY);
-		coldLika = bundle.getInt(COLD_LIKABILITY);
+		burnLika = bundle.getInt(BURN_LIKABILITY);
+		frostLika = bundle.getInt(FROST_LIKABILITY);
 		poisonLika = bundle.getInt(POISON_LIKABILITY);
 
 		for (Bundlable b : bundle.getCollection( BUFFS )) {
@@ -362,10 +362,10 @@ public abstract class Char extends Actor {
 	}
 
 	final public boolean attack( Char enemy, float dmgMulti ){
-		return attack(enemy, dmgMulti, 0f, 1f);
+		return attack(enemy, dmgMulti, 1f, 1f);
 	}
 	
-	public boolean attack( Char enemy, float dmgMulti, float dmgBonus, float accMulti ) {
+	public boolean attack( Char enemy, float dmgMulti, float accMulti, float critBonus ) {
 
 		if (enemy == null) return false;
 		
@@ -382,27 +382,7 @@ public abstract class Char extends Actor {
 
 		if (hit( this, enemy, accMulti)) {
 
-			int[] def = enemy.defenseRoll2();
-			int defPierce = Math.round(def[0] * AscensionChallenge.statModifier(enemy) );
-			int defPunch = Math.round(def[1] * AscensionChallenge.statModifier(enemy) );
-			if (this instanceof Hero){
-				Hero h = (Hero)this;
-				if (h.belongings.attackingWeapon() instanceof MissileWeapon
-						&& h.subClass == HeroSubClass.SNIPER
-						&& !Dungeon.level.adjacent(h.pos, enemy.pos)){
-					defPierce = 0;
-					defPunch = 0;
-				}
-
-			}
-
-			//we use a float here briefly so that we don't have to constantly round while
-			// potentially applying various multiplier effects
-			long tempDmg;
-			float tempMulti = 1;
-			tempDmg = damageRoll(0);
-
-			tempMulti *= dmgMulti;
+			float tempMulti = 1f;
 
 			if (buff( Fury.class ) != null) {
 				tempMulti *= 1.5f;
@@ -422,27 +402,29 @@ public abstract class Char extends Actor {
 				tempMulti *= 0.67f;
 			}
 
-			int poisonDMG = (int)(tempDmg & 0b1111_1111_1111); //read 12 bits from right
-			tempDmg = tempDmg >> 12;
-			int coldDMG = (int)(tempDmg & 0b1111_1111_1111); //read 12 bits from right
-			tempDmg = tempDmg >> 12;
-			int hotDMG = (int)(tempDmg & 0b1111_1111_1111); //read 12 bits from right
-			tempDmg = tempDmg >> 12;
-			int punchDMG = (int)(tempDmg & 0b1111_1111_1111); //read 12 bits from right
-			tempDmg = tempDmg >> 12;
-			int pierceDMG = (int)(tempDmg & 0b1111_1111_1111); //read 12 bits from right
-			poisonDMG *= tempMulti;
-			coldDMG *= tempMulti;
-			hotDMG *= tempMulti;
-			punchDMG *= tempMulti;
-			pierceDMG *= tempMulti;
+			int pierceDamage = Math.round(tempMulti * (critBonus) );
+			int punchDamage = Math.round(tempMulti * punchRoll(critBonus) );
+			int burnDamage = Math.round(tempMulti * burnRoll(critBonus) );
+			int frostDamage = Math.round(tempMulti * frostRoll(critBonus) );
+			int poisonDamage = Math.round(tempMulti * poisonRoll(critBonus) );
+			
 			//TODO: This works on both types, improve this
-			pierceDMG = enemy.defenseProc( this, pierceDMG );
-			punchDMG = enemy.defenseProc( this, punchDMG );
-			pierceDMG = Math.max( pierceDMG - defPierce, 0 );
-			punchDMG = Math.max( punchDMG - defPunch, 0 );
+			pierceDamage = enemy.defenseProc( this, pierceDamage );
+			punchDamage = enemy.defenseProc( this, punchDamage );
+			//armor: subtracting
+			pierceDamage -= Math.round(pierceDefRoll() * AscensionChallenge.statModifier(enemy) );
+			punchDamage -= Math.round(punchDefRoll() * AscensionChallenge.statModifier(enemy) );
+			//likabilities: multiplicative
+			//minus because this is damage not health
+			burnDamage = -Math.round( burnLika * burnDamage );
+			frostDamage = -	Math.round( frostLika * frostDamage );
+			poisonDamage = - Math.round( poisonLika * poisonDamage );
+			//limits
+			pierceDamage = Math.max( pierceDamage, 0 );
+			punchDamage = Math.max( punchDamage, 0 );
+
 			//TODO: add distinctive color, visual or something to distinguish damage types during gameplay
-			int effectiveDamage = pierceDMG + punchDMG + hotDMG + coldDMG + poisonDMG;
+			int effectiveDamage = pierceDamage + punchDamage + burnDamage + frostDamage + poisonDamage;
 			if (enemy.buff(Viscosity.ViscosityTracker.class) != null){
 				effectiveDamage = enemy.buff(Viscosity.ViscosityTracker.class).deferDamage(effectiveDamage);
 				enemy.buff(Viscosity.ViscosityTracker.class).detach();
@@ -595,41 +577,59 @@ public abstract class Char extends Actor {
 	}
 
 	/**
-	 * Defense roll
-	 * @return array. Index: 0 piercing armor, index 1: punching armor
+	 * Roll of piercing damage
+	 * @param critBonus critical bonus to this type of damage
+	 * @return INT actual damage roll
 	 */
-	public int[] defenseRoll2(){
-		int[] def = new int[2];
-		def[0] = pierceArmor + Random.NormalIntRange( 0 , Barkskin.currentLevel(this) );
-		def[1] = punchArmor + Random.NormalIntRange( 0 , Barkskin.currentLevel(this) );
-		return def;
+	public int pierceRoll(float critBonus){
+		return GameMath.damageRoll(pierceDmg, pierceDmg, critBonus);
 	}
-	public int drRoll() {
-		int dr = 0;
-
-		dr += Random.NormalIntRange( 0 , Barkskin.currentLevel(this) );
-
-		return dr;
-	}
-
 	/**
-	 * This exists only to be overridden, I suppose
-	 * There no actual roll. Just const numbers
-	 * @return INT with encoded Piercing DMG (higher 16 bits) and Punching DMG (lower 16 bits)
+	 * Roll of punching damage
+	 * @param critBonus critical bonus to this type of damage
+	 * @return INT actual damage roll
 	 */
-	public long damageRoll(float critBonus){
-		long damage = 0;
-		//assuming base dmg < 2^9 - 1 which is 511!
-		//							memory  avg damage  spread      crit roll
-		damage = GameMath.encodeDmg(damage, pierceDmg,  pierceDmg , critBonus);//12 bit shift
-		damage = GameMath.encodeDmg(damage, punchDmg,  	punchDmg,   critBonus);//12 bit shift
-		damage = GameMath.encodeDmg(damage, hotDmg,    	hotDmg, 	critBonus);//12 bit shift
-		damage = GameMath.encodeDmg(damage, coldDmg,   	coldDmg,    critBonus);//12 bit shift
-		damage += GameMath.damageRoll(		poisonDmg, 	poisonDmg,  critBonus);
-		//storing 5 numbers in one LONG,
-		//unused  | reserved for piercing | reserved for punching | reserved for hot | reser. for cold | reserv. for poison
-		//  0000  | 000 1111 0000         | 1111 0000 1111        | 0000 1111 0000   | 1111 0000 1111  | 0000 1111 0000
-		return damage;
+	public int punchRoll(float critBonus){
+		return GameMath.damageRoll(punchDmg, punchDmg, critBonus);
+	}
+	/**
+	 * Roll of burn damage
+	 * @param critBonus critical bonus to this type of damage
+	 * @return INT actual damage roll
+	 */
+	public int burnRoll(float critBonus){
+		return GameMath.damageRoll(burnDmg, burnDmg, critBonus);
+	}
+	/**
+	 * Roll of frost damage
+	 * @param critBonus critical bonus to this type of damage
+	 * @return INT actual damage roll
+	 */
+	public int frostRoll(float critBonus){
+		return GameMath.damageRoll(frostDmg, frostDmg, critBonus);
+	}
+	/**
+	 * Roll of poison damage
+	 * @param critBonus critical bonus to this type of damage
+	 * @return INT actual damage roll
+	 */
+	public int poisonRoll(float critBonus){
+		return GameMath.damageRoll(poisonDmg, poisonDmg, critBonus);
+	}
+	//TODO: bark skin buff is not used. Add this here!
+	/**
+	 * Roll of piercing protection
+	 * @return INT actual damage roll
+	 */
+	public int pierceDefRoll(){
+		return GameMath.damageRoll(pierceArmor, pierceArmor, 0);
+	}
+	/**
+	 * Roll of punching protection
+	 * @return INT actual damage roll
+	 */
+	public int punchDefRoll(){
+		return GameMath.damageRoll(punchArmor, punchArmor, 0);
 	}
 
 	//TODO it would be nice to have a pre-armor and post-armor proc.

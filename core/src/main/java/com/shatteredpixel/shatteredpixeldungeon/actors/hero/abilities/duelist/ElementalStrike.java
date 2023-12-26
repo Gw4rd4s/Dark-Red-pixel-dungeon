@@ -51,34 +51,33 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Annoying;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Dazzling;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Displacing;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Explosive;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Friendly;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Polarized;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Sacrificial;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Wayward;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazing;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blocking;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blooming;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Chilling;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Corrupting;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Elastic;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Kinetic;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Lucky;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Projecting;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Unstable;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Vampiric;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.curses.Annoying;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.curses.Dazzling;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.curses.Displacing;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.curses.Explosive;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.curses.Friendly;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.curses.Polarized;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.curses.Sacrificial;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.curses.Wayward;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Blazing;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Blocking;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Blooming;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Chilling;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Corrupting;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Elastic;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Grim;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Kinetic;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Lucky;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Projecting;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Shocking;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Unstable;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Vampiric;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -162,7 +161,7 @@ public class ElementalStrike extends ArmorAbility {
 				65 + 10*hero.pointsInTalent(Talent.ELEMENTAL_REACH),
 				Ballistica.STOP_SOLID | Ballistica.STOP_TARGET);
 
-		KindOfWeapon w = hero.belongings.weapon();
+		Weapon w = hero.belongings.weapon();
 		Weapon.Enchantment enchantment = null;
 		if (w instanceof MeleeWeapon) {
 			enchantment = ((MeleeWeapon) w).enchantment;
@@ -438,7 +437,7 @@ public class ElementalStrike extends ArmorAbility {
 
 		//*** Unstable ***
 		} else if (ench instanceof Unstable){
-			KindOfWeapon w = hero.belongings.weapon();
+			Weapon w = hero.belongings.weapon();
 			if (w instanceof Weapon) {
 				for (Char ch : affected){
 					if (ch != primaryTarget) {
@@ -555,7 +554,7 @@ public class ElementalStrike extends ArmorAbility {
 	public String desc() {
 		String desc = Messages.get(this, "desc");
 		if (Game.scene() instanceof GameScene){
-			KindOfWeapon w = Dungeon.hero.belongings.weapon();
+			Weapon w = Dungeon.hero.belongings.weapon();
 			if (w instanceof MeleeWeapon && ((MeleeWeapon) w).enchantment != null){
 				desc += "\n\n" + Messages.get(((MeleeWeapon) w).enchantment, "elestrike_desc");
 			} else {

@@ -50,9 +50,4 @@ public class Crab extends Mob {
 	public int attackSkill( Char target ) {
 		return 12;
 	}
-	
-	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 4);
-	}
 }

@@ -22,6 +22,9 @@
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherArmor;
@@ -95,6 +98,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfFear;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfFlock;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfIntuition;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfShock;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.AirWand;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.EarthWand;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.FireWand;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.ProtoWand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorrosion;
@@ -109,38 +116,39 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfPrismaticLight
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfTransfusion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ObsidianBlade;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.BattleAxe;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dirk;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Flail;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gauntlet;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Glaive;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greataxe;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.PlateShield;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greatsword;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.HandAxe;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Katana;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Longsword;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Mace;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Quarterstaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Rapier;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RoundShield;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sai;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scimitar;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Shortsword;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sickle;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Spear;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sword;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WarHammer;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WarScythe;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Whip;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WaterWand;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier5.tier4.ObsidianBlade;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier5.tier4.BattleAxe;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.ranged.Crossbow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier1.Dagger;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier2.Dirk;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier5.tier4.Flail;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier2.Gauntlet;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier5.Glaive;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier1.Gloves;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier5.Greataxe;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier5.PlateShield;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier5.Greatsword;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier2.HandAxe;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier5.Katana;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier5.tier4.Longsword;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier3.Mace;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier2.Quarterstaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier2.Rapier;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier3.RoundShield;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier3.Sai;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier3.Scimitar;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier2.Shortsword;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier2.Sickle;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier3.Spear;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier3.Sword;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier5.tier4.WarHammer;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.WarScythe;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier3.Whip;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.tier1.WornShortsword;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Blindweed;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Fadeleaf;
@@ -182,6 +190,9 @@ public class Generator {
 		MIS_T5  ( 0, 0, MissileWeapon.class ),
 		
 		WAND	( 1, 1, Wand.class ),
+		//Fixme this is prototype made just for testing
+					PROTOWAND (1, 1, ProtoWand.class),
+
 		RING	( 1, 0, Ring.class ),
 		ARTIFACT( 0, 1, Artifact.class),
 		
@@ -319,11 +330,25 @@ public class Generator {
 					WandOfRegrowth.class };
 			WAND.defaultProbs = new float[]{ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 };
 			WAND.probs = WAND.defaultProbs.clone();
-			
+
+			//Fixme just for testing
+			PROTOWAND.classes = new Class<?>[]{
+					FireWand.class,
+					WaterWand.class,
+					AirWand.class,
+					EarthWand.class,
+					Lightning.class,
+					Light.class,
+					Poison.class
+			};
+
+			PROTOWAND.defaultProbs = new float[]{1, 1 , 1,  1, 1, 1, 1};
+			PROTOWAND.probs = PROTOWAND.defaultProbs.clone();
+
 			//see generator.randomWeapon
 			WEAPON.classes = new Class<?>[]{};
 			WEAPON.probs = new float[]{};
-			
+
 			WEP_T1.classes = new Class<?>[]{
 					WornShortsword.class,
 					MagesStaff.class,

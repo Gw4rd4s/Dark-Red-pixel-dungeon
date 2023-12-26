@@ -57,8 +57,19 @@ public class Brute extends Mob {
 	protected boolean hasRaged = false;
 
 	@Override
-	public long damageRoll(float critBonus){
-		long dmg = super.damageRoll(critBonus);
+	public int pierceRoll(float critBonus){
+		int dmg = super.pierceRoll(critBonus);
+		//rage activated
+		if(buff(BruteRage.class) != null){
+			dmg *= 3;
+			dmg /= 2;
+		}
+		return dmg;
+	}
+
+	@Override
+	public int punchRoll(float critBonus){
+		int dmg = super.punchRoll(critBonus);
 		//rage activated
 		if(buff(BruteRage.class) != null){
 			dmg *= 3;
@@ -69,11 +80,6 @@ public class Brute extends Mob {
 	@Override
 	public int attackSkill( Char target ) {
 		return 20;
-	}
-	
-	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 8);
 	}
 
 	@Override

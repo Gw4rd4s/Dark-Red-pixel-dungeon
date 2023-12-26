@@ -31,7 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.PathFinder;
@@ -86,9 +86,9 @@ public class Electricity extends Blob {
 					if (h != null){
 						Item toShock = h.peek();
 						if (toShock instanceof Wand){
-							((Wand) toShock).gainCharge(0.333f);
+							((Wand) toShock).gainCharge(1);
 						} else if (toShock instanceof MagesStaff){
-							((MagesStaff) toShock).gainCharge(0.333f);
+							((MagesStaff) toShock).gainCharge(1);
 						}
 					}
 					

@@ -46,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesi
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.ProtoWand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
@@ -230,6 +231,8 @@ public class Dungeon {
 			Scroll.initLabels();
 			Potion.initColors();
 			Ring.initGems();
+			//FixMe: this is just testing
+				ProtoWand.initElements();
 
 			SpecialRoom.initForRun();
 			SecretRoom.initForRun();

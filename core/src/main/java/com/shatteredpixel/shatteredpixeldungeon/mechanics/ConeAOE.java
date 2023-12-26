@@ -70,7 +70,7 @@ public class ConeAOE {
 		//Now we find every unique cell along the outer arc of our cone.
 		PointF scan = new PointF();
 		Point scanInt = new Point();
-		float initalAngle = PointF.angle(fromP, toP)/PointF.G2R;
+		float initalAngle = PointF.angle(toP, fromP)/PointF.G2R;
 		//want to preserve order so that our collection of rays is going clockwise
 		LinkedHashSet<Integer> targetCells = new LinkedHashSet<>();
 		LinkedHashSet<Integer> outerCells = new LinkedHashSet<>();

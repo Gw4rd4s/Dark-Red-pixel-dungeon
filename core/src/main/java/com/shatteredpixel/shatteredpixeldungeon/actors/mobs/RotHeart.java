@@ -114,11 +114,6 @@ public class RotHeart extends Mob {
 	public int attackSkill( Char target ) {
 		return 0;
 	}
-
-	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 5);
-	}
 	
 	{
 		immunities.add( Paralysis.class );

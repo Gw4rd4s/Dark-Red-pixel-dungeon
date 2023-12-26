@@ -648,12 +648,6 @@ public class YogDzewa extends Mob {
 			return 30;
 		}
 
-
-		@Override
-		public int drRoll() {
-			return super.drRoll() + Random.NormalIntRange(0, 4);
-		}
-
 	}
 
 	//used so death to yog's ripper demons have their own rankings description

@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScaleArmor;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ShieldedSprite;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
 
 public class ArmoredBrute extends Brute {
@@ -44,12 +45,7 @@ public class ArmoredBrute extends Brute {
 		pierceArmor = 6;
 		punchDmg = 8;
 	}
-	
-	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(6, 10);
-	}
-	
+
 	@Override
 	protected void triggerEnrage () {
 		Buff.affect(this, ArmoredRage.class).setShield(HT/2 + 1);

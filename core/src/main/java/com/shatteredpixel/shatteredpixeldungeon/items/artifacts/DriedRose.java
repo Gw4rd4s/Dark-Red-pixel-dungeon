@@ -51,8 +51,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
@@ -702,29 +702,29 @@ public class DriedRose extends Artifact {
 		}
 		
 		@Override
-		public int drRoll() {
-			int dr = super.drRoll();
+		public int pierceDefRoll() {
+			int dr = super.pierceDefRoll();
 			if (rose != null && rose.armor != null){
-				dr += Random.NormalIntRange( rose.armor.DRMin(), rose.armor.DRMax());
+				dr +=  rose.armor.pierceDefRoll();
 			}
 			if (rose != null && rose.weapon != null){
-				dr += Random.NormalIntRange( 0, rose.weapon.defenseFactor( this ));
+				dr += rose.weapon.defenseFactor( this );
 			}
 			return dr;
 		}
+
 		@Override
-		public int[] defenseRoll2(){
-			int[] def = super.defenseRoll2();
+		public int punchDefRoll() {
+			int dr = super.punchDefRoll();
 			if (rose != null && rose.armor != null){
-				int[] armorDef = rose.armor.defenseRoll2();
-				def[0] += armorDef[0];
-				def[1] += armorDef[1];
+				dr +=  rose.armor.punchDefRoll();
 			}
-			//if (rose != null && rose.weapon != null){
-			//	def += Random.NormalIntRange( 0, rose.weapon.defenseFactor( this ));
-			//}
-			return def;
+			if (rose != null && rose.weapon != null){
+				dr += rose.weapon.defenseFactor( this );
+			}
+			return dr;
 		}
+
 		//used in some glyph calculations
 		public Armor armor(){
 			if (rose != null){
