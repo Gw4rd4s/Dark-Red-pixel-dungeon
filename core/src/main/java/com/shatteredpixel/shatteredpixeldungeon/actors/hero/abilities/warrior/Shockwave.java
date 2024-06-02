@@ -125,9 +125,9 @@ public class Shockwave extends ArmorAbility {
 									boolean wasEnemy = ch.alignment == Char.Alignment.ENEMY
 											|| (ch instanceof Mimic && ch.alignment == Char.Alignment.NEUTRAL);
 									damage = hero.attackProc(ch, damage);
-									ch.damage(damage, hero);
+									ch.damage(0,damage,0,0,0, hero);
 								} else {
-									ch.damage(damage, hero);
+									ch.damage(0,damage, 0,0,0,hero);
 								}
 								if (ch.isAlive()){
 									if (Random.Int(4) < hero.pointsInTalent(Talent.SHOCK_FORCE)){

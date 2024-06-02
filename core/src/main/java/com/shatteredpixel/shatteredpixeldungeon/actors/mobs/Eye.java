@@ -144,11 +144,17 @@ public class Eye extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src) {
 		//inverse to Shattered Pixel Dungeon
 		//eye takes more damage when charging
-		if (!beamCharged) dmg /= 3;
-		super.damage(dmg, src);
+		if (!beamCharged){
+			piDmg /= 4;
+			puDmg /= 3;
+			fDmg /= 3;
+			wDmg = (wDmg*3)/2;
+			vDmg /=2;
+		}
+		super.damage(piDmg, puDmg, fDmg, wDmg, vDmg, src);
 	}
 	
 	//used so resistances can differentiate between melee and magical attacks
@@ -178,11 +184,10 @@ public class Eye extends Mob {
 			if (ch == null) {
 				continue;
 			}
-
-			if (hit( this, ch)) {
-				int dmg = Random.NormalIntRange( 70, 90 );
+			int dmg = Random.NormalIntRange( 70, 90 );
+			if (dmg > block( this, ch)) {
 				dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
-				ch.damage( dmg, new DeathGaze() );
+				ch.damage( dmg,0,0,0,0, new DeathGaze() );
 
 				if (Dungeon.level.heroFOV[pos]) {
 					ch.sprite.flash();

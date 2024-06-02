@@ -231,13 +231,14 @@ public class YogDzewa extends Mob {
 					if (ch == Dungeon.hero) {
 						Statistics.bossScores[4] -= 500;
 					}
-
-					if (hit( this, ch)) {
-						if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) {
-							ch.damage(Random.NormalIntRange(30, 50), new Eye.DeathGaze());
-						} else {
-							ch.damage(Random.NormalIntRange(20, 30), new Eye.DeathGaze());
-						}
+					int dmg = 0;
+					if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) {
+						dmg = Random.NormalIntRange(30, 50);
+					} else {
+						dmg = Random.NormalIntRange(20, 30);
+					}
+					if (dmg > block( this, ch)) {
+						ch.damage(dmg,0,0,0,0, new Eye.DeathGaze());
 						if (Dungeon.level.heroFOV[pos]) {
 							ch.sprite.flash();
 							CellEmitter.center(pos).burst(PurpleParticle.BURST, Random.IntRange(1, 2));
@@ -375,10 +376,10 @@ public class YogDzewa extends Mob {
 	}
 
 	@Override
-	public void damage( int dmg, Object src ) {
+	public void damage( int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src ) {
 
 		int preHP = HP;
-		super.damage( dmg, src );
+		super.damage( piDmg, puDmg, fDmg,wDmg,  vDmg, src );
 
 		if (phase == 0 || findFist() != null) return;
 

@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.watabou.input;
+package com.watabou.noosa.input;
 
 import com.watabou.utils.PointF;
 import com.watabou.utils.Signal;

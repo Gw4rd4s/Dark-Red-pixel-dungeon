@@ -87,9 +87,10 @@ abstract public class Weapon extends EquipableItem {
 
 	protected int 	pierceDmg;  //sharp cutting piercing damage
 	protected int 	punchDmg;  //blunt smashing crushing damage
-	protected int 	burnDmg;	//burning damage
-	protected int	frostDmg;	//cold damage
+	protected int 	fireDmg;	//burning damage
+	protected int	waterDmg;	//cold damage
 	protected int	poisonDmg;	//poison damage
+	public int 	blocking; 		//blocking power
 
 	/**
 	 * <p>multiplier for SLASH ATTACK dmg</p>
@@ -365,16 +366,16 @@ abstract public class Weapon extends EquipableItem {
 	 * @param critBonus critical bonus to this type of damage
 	 * @return INT actual damage roll
 	 */
-	public int burnRoll(float critBonus){
-		return GameMath.damageRoll(buffedDmg(burnDmg), burnDmg, critBonus);
+	public int fireRoll(float critBonus){
+		return GameMath.damageRoll(buffedDmg(fireDmg), fireDmg, critBonus);
 	}
 	/**
 	 * Roll of frost damage
 	 * @param critBonus critical bonus to this type of damage
 	 * @return INT actual damage roll
 	 */
-	public int frostRoll(float critBonus){
-		return GameMath.damageRoll(buffedDmg(frostDmg), frostDmg, critBonus);
+	public int waterRoll(float critBonus){
+		return GameMath.damageRoll(buffedDmg(waterDmg), waterDmg, critBonus);
 	}
 	/**
 	 * Roll of poison damage

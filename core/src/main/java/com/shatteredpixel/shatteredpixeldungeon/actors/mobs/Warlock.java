@@ -25,7 +25,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
@@ -101,16 +100,60 @@ public class Warlock extends Mob implements Callback {
 
 		Invisibility.dispel(this);
 		Char enemy = this.enemy;
-		if (hit( this, enemy)) {
+		//randomly choose 2 types of damage
+		//types are not the same
+		int idx1 = Random.IntRange(0,4);
+		int idx2 = Random.IntRange(0,4);
+		if(idx1 == idx2) idx2 = (idx1 + 1) % 5;
+		int piDmg = 0;
+		int puDmg = 0;
+		int fDmg = 0;
+		int wDmg = 0;
+		int vDmg = 0;
+
+		switch(idx1){
+			case 0:
+				piDmg = pierceRoll(0);
+				break;
+			case 1:
+				puDmg = punchRoll(0);
+				break;
+			case 2:
+				fDmg = fireRoll(0);
+				break;
+			case 3:
+				wDmg = waterRoll(0);
+				break;
+			case 4:
+				vDmg = venomRoll(0);
+				break;
+		}
+		switch(idx2){
+			case 0:
+				piDmg = pierceRoll(0);
+				break;
+			case 1:
+				puDmg = punchRoll(0);
+				break;
+			case 2:
+				fDmg = fireRoll(0);
+				break;
+			case 3:
+				wDmg = waterRoll(0);
+				break;
+			case 4:
+				vDmg = venomRoll(0);
+				break;
+		}
+		int dmg = piDmg + puDmg +fDmg + wDmg + vDmg;
+		if (dmg > block( this, enemy)) {
 			//TODO would be nice for this to work on ghost/statues too
 			if (enemy == Dungeon.hero && Random.Int( 2 ) == 0) {
 				Buff.prolong( enemy, Degrade.class, Degrade.DURATION );
 				Sample.INSTANCE.play( Assets.Sounds.DEBUFF );
 			}
-			
-			int dmg = Random.NormalIntRange( 12, 18 );
-			dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
-			enemy.damage( dmg, new DarkBolt() );
+
+			enemy.damage( piDmg,puDmg,fDmg,wDmg,vDmg, new DarkBolt() );
 			
 			if (enemy == Dungeon.hero && !enemy.isAlive()) {
 				Badges.validateDeathFromEnemyMagic();

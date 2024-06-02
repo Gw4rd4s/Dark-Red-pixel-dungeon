@@ -108,16 +108,16 @@ public abstract class Shaman extends Mob {
 
 		Invisibility.dispel(this);
 		Char enemy = this.enemy;
-		if (hit( this, enemy)) {
+		int dmg = Random.NormalIntRange( 6, 15 );
+		if (dmg > block( this, enemy)) {
 			
 			if (Random.Int( 2 ) == 0) {
 				debuff( enemy );
 				if (enemy == Dungeon.hero) Sample.INSTANCE.play( Assets.Sounds.DEBUFF );
 			}
-			
-			int dmg = Random.NormalIntRange( 6, 15 );
+
 			dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
-			enemy.damage( dmg, new EarthenBolt() );
+			enemy.damage( 0,dmg, 0,0,0,new EarthenBolt() );
 			
 			if (!enemy.isAlive() && enemy == Dungeon.hero) {
 				Badges.validateDeathFromEnemyMagic();

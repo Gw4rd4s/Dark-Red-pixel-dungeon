@@ -21,7 +21,7 @@
 
 package com.watabou.noosa;
 
-import com.watabou.input.ScrollEvent;
+import com.watabou.noosa.input.ScrollEvent;
 import com.watabou.utils.Signal;
 
 //pointer area with additional support for detecting scrolling events

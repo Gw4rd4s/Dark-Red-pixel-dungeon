@@ -21,9 +21,9 @@
 
 package com.watabou.noosa;
 
-import com.watabou.input.GameAction;
-import com.watabou.input.KeyBindings;
-import com.watabou.input.KeyEvent;
+import com.watabou.noosa.input.GameAction;
+import com.watabou.noosa.input.KeyBindings;
+import com.watabou.noosa.input.KeyEvent;
 import com.watabou.utils.Signal;
 
 public class Scene extends Group {

@@ -38,7 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
-import com.watabou.input.GameAction;
+import com.watabou.noosa.input.GameAction;
 import com.watabou.noosa.Image;
 import com.watabou.utils.PathFinder;
 

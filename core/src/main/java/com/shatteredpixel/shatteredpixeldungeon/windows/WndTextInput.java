@@ -28,7 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
-import com.watabou.input.PointerEvent;
+import com.watabou.noosa.input.PointerEvent;
 import com.watabou.noosa.TextInput;
 
 public class WndTextInput extends Window {

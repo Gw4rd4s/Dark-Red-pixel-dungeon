@@ -215,7 +215,7 @@ public class CursedWand {
 					}
 					toHeal.HP = Math.min(toHeal.HT, toHeal.HP + damage);
 					toHeal.sprite.emitter().burst(Speck.factory(Speck.HEALING), 3);
-					toDamage.damage(damage, new CursedWand());
+					//toDamage.damage(damage, new CursedWand());
 					toDamage.sprite.emitter().start(ShadowParticle.UP, 0.05f, 10);
 
 					if (toDamage == Dungeon.hero){

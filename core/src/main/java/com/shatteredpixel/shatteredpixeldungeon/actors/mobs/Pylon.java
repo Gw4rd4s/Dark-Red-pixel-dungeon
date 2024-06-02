@@ -123,7 +123,7 @@ public class Pylon extends Mob {
 	private void shockChar( Char ch ){
 		if (ch != null && !(ch instanceof DM300)){
 			ch.sprite.flash();
-			ch.damage(Random.NormalIntRange(10, 20), new Electricity());
+			ch.damage(0,0,Random.NormalIntRange(10, 20),0,0,new Electricity());
 
 			if (ch == Dungeon.hero) {
 				Statistics.qualifiedForBossChallengeBadge = false;
@@ -183,18 +183,15 @@ public class Pylon extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
-		if (dmg >= 15){
-			//takes 15/16/17/18/19/20 dmg at 15/17/20/24/29/36 incoming dmg
-			dmg = 14 + (int)(Math.sqrt(8*(dmg - 14) + 1) - 1)/2;
-		}
+	public void damage(int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src) {
 
+		int dmg = piDmg+ puDmg+ fDmg+wDmg+ vDmg;
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null && !isImmune(src.getClass())){
 			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmg/2f);
 			else                                                    lock.addTime(dmg);
 		}
-		super.damage(dmg, src);
+		super.damage(piDmg, puDmg, fDmg, wDmg, vDmg, src);
 	}
 
 	@Override

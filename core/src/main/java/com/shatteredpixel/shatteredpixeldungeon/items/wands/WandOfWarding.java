@@ -331,7 +331,7 @@ public class WandOfWarding extends Wand {
 			//always hits
 			int dmg = Random.NormalIntRange( 2 + wandLevel, 8 + 4*wandLevel );
 			Char enemy = this.enemy;
-			enemy.damage( dmg, this );
+			//enemy.damage( dmg, this );
 			if (enemy.isAlive()){
 				Wand.wandProc(enemy, wandLevel, 1);
 			}
@@ -349,13 +349,13 @@ public class WandOfWarding extends Wand {
 					}
 					break;
 				case 4:
-					damage(5, this);
+					//damage(5, this);
 					break;
 				case 5:
-					damage(6, this);
+					//damage(6, this);
 					break;
 				case 6:
-					damage(7, this);
+					//damage(7, this);
 					break;
 			}
 		}

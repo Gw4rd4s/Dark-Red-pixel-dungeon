@@ -23,7 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.ui;
 
 import com.shatteredpixel.shatteredpixeldungeon.Chrome;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
-import com.watabou.input.PointerEvent;
+import com.watabou.noosa.input.PointerEvent;
 import com.watabou.noosa.ColorBlock;
 import com.watabou.noosa.NinePatch;
 import com.watabou.noosa.PointerArea;

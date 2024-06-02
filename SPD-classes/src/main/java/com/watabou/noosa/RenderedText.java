@@ -66,7 +66,7 @@ public class RenderedText extends Image {
 	}
 	
 	public String text(){
-		return text;
+		return this.text;
 	}
 	
 	public void size( int size ){

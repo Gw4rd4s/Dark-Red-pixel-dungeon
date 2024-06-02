@@ -813,11 +813,11 @@ public class CavesBossLevel extends Level {
 						Char ch = Actor.findChar(cell);
 						if (ch != null && !(ch instanceof DM300) && !ch.flying) {
 							Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
-							ch.damage( Random.NormalIntRange(6, 12), Electricity.class);
+							ch.damage( 0,0,Random.NormalIntRange(6, 12),0,0, Electricity.class);
 							ch.sprite.flash();
 
 							if (ch == Dungeon.hero){
-								if (energySourceSprite != null && energySourceSprite instanceof PylonSprite){
+								if (energySourceSprite instanceof PylonSprite){
 									//took damage while DM-300 was supercharged
 									Statistics.qualifiedForBossChallengeBadge = false;
 								}

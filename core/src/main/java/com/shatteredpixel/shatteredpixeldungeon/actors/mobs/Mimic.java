@@ -180,12 +180,12 @@ public class Mimic extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src) {
 		if (state == PASSIVE){
 			alignment = Alignment.ENEMY;
 			stopHiding();
 		}
-		super.damage(dmg, src);
+		super.damage( piDmg, puDmg, fDmg, wDmg, vDmg, src);
 	}
 
 	public void stopHiding(){

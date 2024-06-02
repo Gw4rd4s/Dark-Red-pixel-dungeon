@@ -21,7 +21,7 @@
 
 package com.watabou.noosa;
 
-import com.watabou.input.PointerEvent;
+import com.watabou.noosa.input.PointerEvent;
 import com.watabou.utils.Signal;
 
 public class PointerArea extends Visual implements Signal.Listener<PointerEvent> {

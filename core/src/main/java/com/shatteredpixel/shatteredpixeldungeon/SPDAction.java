@@ -22,9 +22,9 @@
 package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.badlogic.gdx.Input;
-import com.watabou.input.ControllerHandler;
-import com.watabou.input.GameAction;
-import com.watabou.input.KeyBindings;
+import com.watabou.noosa.input.ControllerHandler;
+import com.watabou.noosa.input.GameAction;
+import com.watabou.noosa.input.KeyBindings;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.FileUtils;
 

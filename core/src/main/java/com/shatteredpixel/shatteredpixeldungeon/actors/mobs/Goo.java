@@ -260,13 +260,13 @@ public class Goo extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src) {
 		if (!BossHealthBar.isAssigned()){
 			BossHealthBar.assignBoss( this );
 			Dungeon.level.seal();
 		}
 		boolean bleeding = (HP*2 <= HT);
-		super.damage(dmg, src);
+		super.damage(piDmg, puDmg, fDmg, wDmg, vDmg, src);
 		if ((HP*2 <= HT) && !bleeding){
 			BossHealthBar.bleed(true);
 			sprite.showStatus(CharSprite.NEGATIVE, Messages.get(this, "enraged"));
@@ -275,8 +275,8 @@ public class Goo extends Mob {
 		}
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null){
-			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmg);
-			else                                                    lock.addTime(dmg*1.5f);
+			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(piDmg+puDmg+ fDmg+ wDmg+ vDmg);
+			else                                                    lock.addTime((piDmg+puDmg+ fDmg+ wDmg+ vDmg)*1.5f);
 		}
 	}
 

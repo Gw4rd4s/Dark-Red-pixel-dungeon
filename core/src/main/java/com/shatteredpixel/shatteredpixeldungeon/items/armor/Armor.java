@@ -22,7 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.armor;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -78,8 +77,11 @@ import java.util.Arrays;
 public class Armor extends EquipableItem {
 
 	protected static final String AC_DETACH       = "DETACH";
-	private int pierceArmor;
-	private int punchArmor;
+	protected int pierceArmor;
+	protected int punchArmor;
+	protected int fireArmor;
+	protected int waterArmor;
+	protected int venomArmor;
 	public enum Augment {
 		EVASION (2f , -1f),
 		DEFENSE (-2f, 1f),
@@ -299,6 +301,27 @@ public class Armor extends EquipableItem {
 	 */
 	public int punchDefRoll(){
 		return GameMath.damageRoll(buffedArmor(punchArmor), punchArmor, 0);
+	}
+	/**
+	 * Roll of fire protection
+	 * @return INT actual damage roll
+	 */
+	public int fireDefRoll(){
+		return GameMath.damageRoll(buffedArmor(fireArmor), buffedArmor(fireArmor), 0);
+	}
+	/**
+	 * Roll of water protection
+	 * @return INT actual damage roll
+	 */
+	public int waterDefRoll(){
+		return GameMath.damageRoll(buffedArmor(waterArmor), buffedArmor(waterArmor), 0);
+	}
+	/**
+	 * Roll of venom protection
+	 * @return INT actual damage roll
+	 */
+	public int venomDefRoll(){
+		return GameMath.damageRoll(buffedArmor(venomArmor), buffedArmor(venomArmor), 0);
 	}
 	public int buffedArmor(int armor) {
 		return armor + ( armor * buffedLvl() ) / 2;

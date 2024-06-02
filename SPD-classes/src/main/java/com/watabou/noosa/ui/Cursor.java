@@ -24,7 +24,7 @@ package com.watabou.noosa.ui;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.watabou.input.ControllerHandler;
+import com.watabou.noosa.input.ControllerHandler;
 import com.watabou.noosa.Game;
 import com.watabou.utils.FileUtils;
 import com.watabou.utils.PointF;

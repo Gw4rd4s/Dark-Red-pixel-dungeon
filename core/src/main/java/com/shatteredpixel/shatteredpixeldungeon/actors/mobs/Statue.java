@@ -95,11 +95,11 @@ public class Statue extends Mob {
 	public int punchRoll(float critBonus) {return weapon.punchRoll(critBonus);	}
 
 	@Override
-	public int burnRoll(float critBonus){ return weapon.burnRoll(critBonus);}
+	public int fireRoll(float critBonus){ return weapon.fireRoll(critBonus);}
 	@Override
-	public int frostRoll(float critBonus){ return weapon.frostRoll(critBonus);}
+	public int waterRoll(float critBonus){ return weapon.waterRoll(critBonus);}
 	@Override
-	public int poisonRoll(float critBonus){ return weapon.poisonRoll(critBonus);}
+	public int venomRoll(float critBonus){ return weapon.poisonRoll(critBonus);}
 	@Override
 	public int attackSkill( Char target ) {
 		return (int)((9 + Dungeon.depth) * weapon.accuracyFactor( this, target ));
@@ -132,13 +132,13 @@ public class Statue extends Mob {
 	}
 
 	@Override
-	public void damage( int dmg, Object src ) {
+	public void damage( int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src ) {
 
 		if (state == PASSIVE) {
 			state = HUNTING;
 		}
 		
-		super.damage( dmg, src );
+		super.damage( piDmg, puDmg, fDmg, wDmg, vDmg, src );
 	}
 	
 	@Override

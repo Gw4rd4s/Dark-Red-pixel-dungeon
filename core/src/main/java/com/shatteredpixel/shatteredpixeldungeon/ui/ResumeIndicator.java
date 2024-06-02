@@ -26,7 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
-import com.watabou.input.GameAction;
+import com.watabou.noosa.input.GameAction;
 import com.watabou.noosa.Image;
 
 public class ResumeIndicator extends Tag {

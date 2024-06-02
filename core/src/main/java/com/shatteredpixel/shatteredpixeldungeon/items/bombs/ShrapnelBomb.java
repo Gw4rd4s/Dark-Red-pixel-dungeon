@@ -71,7 +71,7 @@ public class ShrapnelBomb extends Bomb {
 			int damage = Math.round(Random.NormalIntRange( Dungeon.scalingDepth()+5, 10 + Dungeon.scalingDepth() * 2 ));
 			damage = Math.round(damage * (1f - .05f*Dungeon.level.distance(cell, ch.pos)));
 			damage -= ch.pierceDefRoll();
-			ch.damage(damage, this);
+			ch.damage(damage,0,0,0,0, this);
 			if (ch == Dungeon.hero && !ch.isAlive()) {
 				Dungeon.fail(this);
 			}

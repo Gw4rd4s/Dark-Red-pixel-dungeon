@@ -87,10 +87,10 @@ public class DM100 extends Mob implements Callback {
 			spend( TIME_TO_ZAP );
 
 			Invisibility.dispel(this);
-			if (hit( this, enemy)) {
+			if (attack(enemy,1)) {
 				int dmg = Random.NormalIntRange(10, 16);
 				dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
-				enemy.damage( dmg, new LightningBolt() );
+				enemy.damage( 0,0,dmg,0,0, new LightningBolt() );
 
 				if (enemy.sprite.visible) {
 					enemy.sprite.centerEmitter().burst(SparkParticle.FACTORY, 3);

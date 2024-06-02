@@ -27,6 +27,9 @@ public class ClothArmor extends Armor {
 
 	{
 		image = ItemSpriteSheet.ARMOR_CLOTH;
+		pierceArmor = 2;
+		punchArmor = 2;
+		venomArmor = 100;
 
 		bones = false; //Finding them in bones would be semi-frequent and disappointing.
 	}

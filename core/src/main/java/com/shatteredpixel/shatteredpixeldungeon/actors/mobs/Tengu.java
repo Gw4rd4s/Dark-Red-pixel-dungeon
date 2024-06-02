@@ -122,7 +122,7 @@ public class Tengu extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src) {
 		if (!Dungeon.level.mobs.contains(this)){
 			return;
 		}
@@ -132,8 +132,8 @@ public class Tengu extends Mob {
 		int hpBracket = HT / 8;
 		
 		int beforeHitHP = HP;
-		super.damage(dmg, src);
-		dmg = beforeHitHP - HP;
+		super.damage(piDmg, puDmg, fDmg, wDmg, vDmg, src);
+		int dmg = beforeHitHP - HP;
 		
 		//tengu cannot be hit through multiple brackets at a time
 		if ((beforeHitHP/hpBracket - HP/hpBracket) >= 2){
@@ -608,11 +608,12 @@ public class Tengu extends Mob {
 					if (PathFinder.distance[cell] < Integer.MAX_VALUE) {
 						Char ch = Actor.findChar(cell);
 						if (ch != null && !(ch instanceof Tengu)) {
-							int dmg = Random.NormalIntRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth() * 2);
-							dmg -= ch.punchDefRoll();
-
-							if (dmg > 0) {
-								ch.damage(dmg, Bomb.class);
+							int puDmg = Random.NormalIntRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth() * 2);
+							puDmg -= ch.punchDefRoll();
+							int piDmg = Random.NormalIntRange(5 + Dungeon.scalingDepth(), 5 + Dungeon.scalingDepth() );
+							piDmg -= ch.pierceDefRoll();
+							if (piDmg > 0 && puDmg > 0) {
+								ch.damage(piDmg,puDmg,0,0,0, Bomb.class);
 							}
 
 							if (ch == Dungeon.hero){
@@ -1031,7 +1032,7 @@ public class Tengu extends Mob {
 							
 							Char ch = Actor.findChar(cell);
 							if (ch != null && !(ch instanceof Tengu)){
-								ch.damage(2 + Dungeon.scalingDepth(), new Electricity());
+								ch.damage(0,0,2 + Dungeon.scalingDepth(),0,0, new Electricity());
 								
 								if (ch == Dungeon.hero){
 									Statistics.qualifiedForBossChallengeBadge = false;

@@ -256,17 +256,17 @@ public class ShadowClone extends ArmorAbility {
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
+		public void damage(int piDmg,int puDmg, int fDmg, int wDmg, int vDmg, Object src) {
 
 			//TODO improve this when I have proper damage source logic
 			if (Random.Int(4) < Dungeon.hero.pointsInTalent(Talent.CLONED_ARMOR)
 					&& Dungeon.hero.belongings.armor() != null
 					&& Dungeon.hero.belongings.armor().hasGlyph(AntiMagic.class, this)
 					&& AntiMagic.RESISTS.contains(src.getClass())){
-				dmg -= AntiMagic.drRoll(Dungeon.hero, Dungeon.hero.belongings.armor().buffedLvl());
+				piDmg -= AntiMagic.drRoll(Dungeon.hero, Dungeon.hero.belongings.armor().buffedLvl());
 			}
 
-			super.damage(dmg, src);
+			super.damage( piDmg, puDmg, fDmg, wDmg, vDmg, src);
 		}
 
 		@Override

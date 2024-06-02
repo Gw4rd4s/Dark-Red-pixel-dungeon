@@ -180,11 +180,6 @@ public class Feint extends ArmorAbility {
 		}
 
 		@Override
-		public void damage( int dmg, Object src ) {
-
-		}
-
-		@Override
 		public int defenseSkill(Char enemy) {
 			if (enemy.alignment == Alignment.ENEMY) {
 				if (enemy instanceof Mob) {

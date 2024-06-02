@@ -30,7 +30,6 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SnakeSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.watabou.utils.Random;
 
 public class Snake extends Mob {
 	
@@ -41,6 +40,7 @@ public class Snake extends Mob {
 		defenseSkill = 25;
 		pierceDmg = 5;
 		punchDmg = 1;
+		venomDmg = 20;
 		EXP = 2;
 		maxLvl = 7;
 		

@@ -45,15 +45,19 @@ public class PhantomPiranha extends Piranha {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src) {
 		Char dmgSource = null;
 		if (src instanceof Char) dmgSource = (Char)src;
 		if (src instanceof Wand) dmgSource = Dungeon.hero;
 
 		if (dmgSource == null || !Dungeon.level.adjacent(pos, dmgSource.pos)){
-			dmg = Math.round(dmg/2f); //halve damage taken if we are going to teleport
+			piDmg = Math.round(piDmg/2f); //halve damage taken if we are going to teleport
+			puDmg = Math.round(puDmg/2f);
+			fDmg = Math.round(fDmg/2f);
+			wDmg = Math.round(wDmg/2f);
+			vDmg = Math.round(vDmg/2f);
 		}
-		super.damage(dmg, src);
+		super.damage(piDmg, puDmg, fDmg, wDmg, vDmg, src);
 
 		if (isAlive()) {
 			if (dmgSource != null) {

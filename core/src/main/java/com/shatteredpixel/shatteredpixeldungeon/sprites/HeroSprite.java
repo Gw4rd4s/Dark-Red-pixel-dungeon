@@ -37,7 +37,6 @@ import com.watabou.utils.PointF;
 import com.watabou.utils.RectF;
 
 public class HeroSprite extends CharSprite {
-	
 	private static final int FRAME_WIDTH	= 12;
 	private static final int FRAME_HEIGHT	= 15;
 	
@@ -69,7 +68,7 @@ public class HeroSprite extends CharSprite {
 		idle = new Animation( 1, true );
 		idle.frames( film, 0, 0, 0, 1, 0, 0, 1, 1 );
 		
-		run = new Animation( RUN_FRAMERATE, true );
+		run = new Animation( 1, true );
 		run.frames( film, 2, 3, 4, 5, 6, 7 );
 		
 		die = new Animation( 20, false );

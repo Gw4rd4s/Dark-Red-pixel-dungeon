@@ -438,7 +438,7 @@ public class DwarfKing extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src) {
 		//hero only counts as unarmed if they have no weapon and aren't benefiting from force
 		if (src == Dungeon.hero && (Dungeon.hero.belongings.weapon() != null || Dungeon.hero.buff(RingOfForce.Force.class) != null)){
 			Statistics.qualifiedForBossChallengeBadge = false;
@@ -448,9 +448,9 @@ public class DwarfKing extends Mob {
 		} else if (src instanceof Wand && !(src instanceof WandOfLightning)){
 			Statistics.qualifiedForBossChallengeBadge = false;
 		}
-
+		int dmg = piDmg + puDmg + fDmg + wDmg + vDmg;
 		if (isInvulnerable(src.getClass())){
-			super.damage(dmg, src);
+			super.damage(piDmg, puDmg, fDmg, wDmg, vDmg, src);
 			return;
 		} else if (phase == 3 && !(src instanceof Viscosity.DeferedDamage)){
 			if (dmg >= 0) {
@@ -462,7 +462,7 @@ public class DwarfKing extends Mob {
 			return;
 		}
 		int preHP = HP;
-		super.damage(dmg, src);
+		super.damage(piDmg, puDmg, fDmg, wDmg, vDmg, src);
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null && !isImmune(src.getClass())){

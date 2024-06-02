@@ -33,7 +33,6 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.StatueSprite;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Random;
 
 public class ArmoredStatue extends Statue {
 
@@ -77,7 +76,12 @@ public class ArmoredStatue extends Statue {
 	public int punchDefRoll() {
 		return super.punchDefRoll() + armor.punchDefRoll();
 	}
-
+	@Override
+	public int fireDefRoll(){return super.fireDefRoll() + armor.fireDefRoll();}
+	@Override
+	public int waterDefRoll(){return super.waterDefRoll() + armor.waterDefRoll();}
+	@Override
+	public int venomDefRoll(){return super.venomDefRoll() + armor.venomDefRoll();}
 	//used in some glyph calculations
 	public Armor armor(){
 		return armor;
@@ -100,14 +104,14 @@ public class ArmoredStatue extends Statue {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src) {
 		//TODO improve this when I have proper damage source logic
 		if (armor != null && armor.hasGlyph(AntiMagic.class, this)
 				&& AntiMagic.RESISTS.contains(src.getClass())){
-			dmg -= AntiMagic.drRoll(this, armor.buffedLvl());
+			piDmg -= AntiMagic.drRoll(this, armor.buffedLvl());
 		}
 
-		super.damage( dmg, src );
+		super.damage( piDmg, puDmg, fDmg, wDmg, vDmg, src );
 
 		//for the rose status indicator
 		Item.updateQuickslot();

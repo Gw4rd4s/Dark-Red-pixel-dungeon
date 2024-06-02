@@ -21,11 +21,11 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
-import com.watabou.input.ControllerHandler;
-import com.watabou.input.GameAction;
-import com.watabou.input.KeyBindings;
-import com.watabou.input.KeyEvent;
-import com.watabou.input.PointerEvent;
+import com.watabou.noosa.input.ControllerHandler;
+import com.watabou.noosa.input.GameAction;
+import com.watabou.noosa.input.KeyBindings;
+import com.watabou.noosa.input.KeyEvent;
+import com.watabou.noosa.input.PointerEvent;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.PointerArea;

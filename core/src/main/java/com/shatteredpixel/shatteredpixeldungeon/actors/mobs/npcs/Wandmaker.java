@@ -78,7 +78,7 @@ public class Wandmaker extends NPC {
 	}
 
 	@Override
-	public void damage( int dmg, Object src ) {
+	public void damage( int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src ) {
 		//do nothing
 	}
 

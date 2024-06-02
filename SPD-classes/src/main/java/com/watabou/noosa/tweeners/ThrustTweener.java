@@ -26,6 +26,6 @@ public class ThrustTweener extends Tweener{
         if(progress >= 0.5){//reverse back
             progress = 1 - progress;
         }
-        visual.point( PointF.inter( start, end, 2*progress - 0.5f) );
+        visual.point( PointF.inter( this.start, this.end, 2*progress - 0.5f) );
     }
 }

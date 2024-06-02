@@ -61,7 +61,7 @@ public class GameMath {
 
 	/**
 	 * Calculates normally distributed damage
-	 * @param avg average damage dealt. Less than 2^9 -1 or 511!
+	 * @param avg average damage dealt
 	 * @param range range of damage from lower to upper bound
 	 * @param critBonus critical bonus to damage
 	 * @return INT normally distributed
@@ -70,5 +70,15 @@ public class GameMath {
 		float min = avg + range * (2 * critBonus - 0.5f);
 		float max = avg + range * 0.5f;
 		return Random.NormalIntRange( (int) min,(int) max);
+	}
+
+	/**
+	 * Calcualtes descending ratio
+	 * @param denom denominator
+	 * @param numer numerator
+	 * @return <b>FLOAT</b> = 1 - denom / numer
+	 */
+	public static float descendRatio(int denom, int numer){
+		return (1f - (float)(denom) / numer );
 	}
 }

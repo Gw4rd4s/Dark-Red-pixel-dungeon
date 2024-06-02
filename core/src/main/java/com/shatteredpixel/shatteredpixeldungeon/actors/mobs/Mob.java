@@ -57,6 +57,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Surprise;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
@@ -120,8 +121,22 @@ public abstract class Mob extends Char {
 	protected boolean enemySeen;
 	protected boolean alerted = false;
 
-	protected int pierceDmg;
-	protected int punchDmg;
+	//right and left hand weapon and armor
+	protected Weapon weaponL;
+	protected Weapon weaponR;
+	protected Armor armor;
+
+	//getters
+	public Weapon weaponL(){
+		return weaponL;
+	}
+	public Weapon weaponR(){
+		return weaponR;
+	}
+	public Armor armor(){
+		return armor;
+	}
+
 	protected static final float TIME_TO_WAKE_UP = 1f;
 
 	protected boolean firstAdded = true;
@@ -141,6 +156,10 @@ public abstract class Mob extends Char {
 	private static final String MAX_LVL	= "max_lvl";
 
 	private static final String ENEMY_ID	= "enemy_id";
+
+	private static final String WEAPONL = "weaponL";
+	private static final String WEAPONR = "weaponR";
+	private static final String ARMOR = "armor";
 	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -161,6 +180,10 @@ public abstract class Mob extends Char {
 		bundle.put( SEEN, enemySeen );
 		bundle.put( TARGET, target );
 		bundle.put( MAX_LVL, maxLvl );
+
+		bundle.put( WEAPONR, weaponR);
+		bundle.put( WEAPONL, weaponL);
+		bundle.put( ARMOR, armor);
 
 		if (enemy != null) {
 			bundle.put(ENEMY_ID, enemy.id() );
@@ -188,6 +211,9 @@ public abstract class Mob extends Char {
 		enemySeen = bundle.getBoolean( SEEN );
 
 		target = bundle.getInt( TARGET );
+		weaponL = (Weapon) bundle.get(WEAPONL);
+		weaponR = (Weapon) bundle.get(WEAPONR);
+		armor = (Armor) bundle.get(ARMOR);
 
 		if (bundle.contains(MAX_LVL)) maxLvl = bundle.getInt(MAX_LVL);
 
@@ -738,7 +764,7 @@ public abstract class Mob extends Char {
 	}
 
 	@Override
-	public void damage( int dmg, Object src ) {
+	public void damage( int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src ) {
 
 		if (state == SLEEPING) {
 			state = WANDERING;
@@ -747,7 +773,7 @@ public abstract class Mob extends Char {
 			alerted = true;
 		}
 		
-		super.damage( dmg, src );
+		super.damage( piDmg, puDmg, fDmg, wDmg, vDmg, src );
 	}
 	
 	

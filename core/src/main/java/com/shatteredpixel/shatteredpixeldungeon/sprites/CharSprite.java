@@ -63,12 +63,17 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	// Color constants for floating text
 	public static final int DEFAULT		= 0xFFFFFF;
 	public static final int POSITIVE	= 0x00FF00;
-	public static final int NEGATIVE	= 0xFF0000;
-	public static final int WARNING		= 0xFF8800;
+	public static final int NEGATIVE	= 0xFF0000; //also piercing damage
+	public static final int WARNING		= 0xFF8800; //also fire damage
 	public static final int NEUTRAL		= 0xFFFF00;
+
+	public static final int PUNCHING = 0x666666;
+	public static final int WATER = 0x0099FF;
+	public static final int POISON = 0x7300E6;
+	public static final int DEEP = 0xCCCCCC;
 	
 	public static final float DEFAULT_MOVE_INTERVAL = 0.1f;
-	private static float moveInterval = DEFAULT_MOVE_INTERVAL;
+	protected float moveInterval = DEFAULT_MOVE_INTERVAL;
 	private static final float FLASH_INTERVAL	= 0.05f;
 
 	//the amount the sprite is raised from flat when viewed in a raised perspective
@@ -84,7 +89,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	public enum State {
 		BURNING, LEVITATING, INVISIBLE, PARALYSED, FROZEN, ILLUMINATED, CHILLED, DARKENED, MARKED, HEALING, SHIELDED, HEARTS
 	}
-	private int stunStates = 0;
 	
 	protected Animation idle;
 	protected Animation run;
@@ -202,7 +206,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 			}
 		}
 	}
-	
+
 	public void idle() {
 		play(idle);
 	}
@@ -235,10 +239,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 			GameScene.ripple( from );
 		}
 
-	}
-	
-	public static void setMoveInterval( float interval){
-		moveInterval = interval;
 	}
 	
 	//returns where the center of this sprite will be after it completes any motion in progress

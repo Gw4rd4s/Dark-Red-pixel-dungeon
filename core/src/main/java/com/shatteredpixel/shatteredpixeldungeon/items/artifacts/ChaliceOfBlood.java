@@ -28,9 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -101,9 +99,7 @@ public class ChaliceOfBlood extends Artifact {
 		hero.busy();
 		hero.spend(3f);
 		GLog.w( Messages.get(this, "onprick") );
-		if (damage <= 0){
-			damage = 1;
-		} else {
+		if (damage > 0){
 			Sample.INSTANCE.play(Assets.Sounds.CURSED);
 			hero.sprite.emitter().burst( ShadowParticle.CURSE, 4+(damage/10) );
 		}
@@ -114,9 +110,9 @@ public class ChaliceOfBlood extends Artifact {
 			Badges.validateDeathFromFriendlyMagic();
 			Dungeon.fail( this );
 			GLog.n( Messages.get(this, "ondeath") );
-		} else {
-			upgrade();
+			return;
 		}
+		upgrade();
 	}
 
 	@Override

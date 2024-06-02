@@ -30,11 +30,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StormCloud;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
@@ -57,6 +57,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.FistSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -144,9 +145,9 @@ public abstract class YogFist extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src) {
 		int preHP = HP;
-		super.damage(dmg, src);
+		super.damage(piDmg, puDmg, fDmg, wDmg, vDmg, src);
 		int dmgTaken = HP - preHP;
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
@@ -197,6 +198,15 @@ public abstract class YogFist extends Mob {
 			spriteClass = FistSprite.Burning.class;
 
 			properties.add(Property.FIERY);
+
+			pierceDmg = 4;
+			punchDmg = 4;
+			fireDmg = 18;
+
+			pierceArmor = 6;
+			punchArmor = 7;
+			fireArmor = 1500;
+			waterArmor = -1200;
 		}
 
 		@Override
@@ -242,6 +252,7 @@ public abstract class YogFist extends Mob {
 				CellEmitter.get( enemy.pos ).burst( Speck.factory( Speck.STEAM ), 10 );
 			} else {
 				Buff.affect( enemy, Burning.class ).reignite( enemy );
+				enemy.damage(0,0,fireRoll(0)/2,0,0, Fire.class);
 			}
 
 			for (int i : PathFinder.NEIGHBOURS9){
@@ -268,13 +279,37 @@ public abstract class YogFist extends Mob {
 
 		{
 			spriteClass = FistSprite.Soiled.class;
+			punchDmg = 15;
+			pierceDmg = 5;
+
+			punchArmor = 8;
+			pierceArmor = 10;
+			fireArmor = 300;
+			waterArmor = 180;
 		}
 
 		@Override
 		public boolean act() {
 
 			boolean result = super.act();
-
+			int grassCells = 0;
+			for (int i : PathFinder.NEIGHBOURS9) {
+				if (Dungeon.level.map[pos+i] == Terrain.FURROWED_GRASS
+						|| Dungeon.level.map[pos+i] == Terrain.HIGH_GRASS){
+					grassCells++;
+				}
+			}
+			//grass alter its elemental resistances and so physical
+			this.pierceArmor = 8;
+			this.punchArmor = 10;
+			this.waterArmor = 180;
+			this.fireArmor = 300;
+			if (grassCells > 0){
+				this.pierceArmor = 8 + grassCells * 10;
+				this.punchArmor = 10 + grassCells * 12;
+				this.waterArmor = 180 + grassCells * 120;
+				this.fireArmor = 300 - grassCells * 90;
+			}
 			//1.33 grass tiles on average
 			int furrowedTiles = Random.chances(new float[]{0, 2, 1});
 
@@ -301,31 +336,13 @@ public abstract class YogFist extends Mob {
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
-			int grassCells = 0;
-			for (int i : PathFinder.NEIGHBOURS9) {
-				if (Dungeon.level.map[pos+i] == Terrain.FURROWED_GRASS
-				|| Dungeon.level.map[pos+i] == Terrain.HIGH_GRASS){
-					grassCells++;
-				}
-			}
-			if (grassCells > 0) dmg = Math.round(dmg * (6-grassCells)/6f);
-
-			//can be ignited, but takes no damage from burning
-			if (src.getClass() == Burning.class){
-				return;
-			}
-
-			super.damage(dmg, src);
-		}
-
-		@Override
 		protected void zap() {
 			spend( 1f );
 
 			Invisibility.dispel(this);
 			Char enemy = this.enemy;
-			if (hit( this, enemy)) {
+			int dmg = GameMath.damageRoll(pierceDmg,pierceDmg,0) + GameMath.damageRoll(punchDmg, punchDmg,0);
+			if (dmg > block( this, enemy)) {
 
 				Buff.affect( enemy, Roots.class, 3f );
 
@@ -365,6 +382,16 @@ public abstract class YogFist extends Mob {
 			spriteClass = FistSprite.Rotting.class;
 
 			properties.add(Property.ACIDIC);
+			punchDmg = 8;
+			pierceDmg = 5;
+			venomDmg = 10;
+
+			punchArmor = 10;
+			pierceArmor = 5;
+
+			venomArmor = 900;
+			waterArmor = 150;
+			fireArmor = -150;
 		}
 
 		@Override
@@ -381,23 +408,9 @@ public abstract class YogFist extends Mob {
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
-			if (!isInvulnerable(src.getClass())
-					&& !(src instanceof Bleeding)){
-				dmg = Math.round( dmg * resist( src.getClass() ));
-				if (dmg < 0){
-					return;
-				}
-				Bleeding b = buff(Bleeding.class);
-				if (b == null){
-					b = new Bleeding();
-				}
-				b.announced = false;
-				b.set(dmg*.6f);
-				b.attachTo(this);
-				sprite.showStatus(CharSprite.WARNING, Messages.titleCase(b.name()) + " " + (int)b.level());
-			} else{
-				super.damage(dmg, src);
+		public void damage(int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src) {
+			if (!isInvulnerable(src.getClass())){
+				super.damage(piDmg, puDmg, fDmg, wDmg, vDmg, src);
 			}
 		}
 
@@ -432,18 +445,40 @@ public abstract class YogFist extends Mob {
 
 			properties.add(Property.LARGE);
 			properties.add(Property.INORGANIC);
+
+			punchDmg = 15;
+			pierceDmg = 8;
+			venomDmg = 2;
+
+			punchArmor = 5;
+			pierceArmor = 15;
+
+			venomArmor = 10000;
+			waterArmor = -200;
+			fireArmor = 180;
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
+		public void damage(int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src) {
 			if (!isInvulnerable(src.getClass()) && !(src instanceof Viscosity.DeferedDamage)){
-				dmg = Math.round( dmg * resist( src.getClass() ));
-				if (dmg >= 0) {
-					Buff.affect(this, Viscosity.DeferedDamage.class).prolong(dmg);
-					sprite.showStatus(CharSprite.WARNING, Messages.get(Viscosity.class, "deferred", dmg));
+				if (piDmg >= 0) {
+					Buff.affect(this, Viscosity.DeferedDamage.class).prolong(piDmg/2);
+					sprite.showStatus(CharSprite.WARNING, Messages.get(Viscosity.class, "deferred", piDmg/2));
+					piDmg /= 4;
 				}
-			} else{
-				super.damage(dmg, src);
+				if (puDmg >= 0) {
+					Buff.affect(this, Viscosity.DeferedDamage.class).prolong(puDmg);
+					sprite.showStatus(CharSprite.WARNING, Messages.get(Viscosity.class, "deferred", puDmg));
+					puDmg /= 2;
+				}
+				if (wDmg >= 0) {
+					float waterCoef = GameMath.gate(-2f,GameMath.descendRatio(waterDefRoll(),HT), 1f);
+					wDmg = - Math.round( wDmg * waterCoef);
+					Buff.affect(this, Viscosity.DeferedDamage.class).prolong(wDmg);
+					sprite.showStatus(CharSprite.WARNING, Messages.get(Viscosity.class, "deferred", wDmg));
+				}
+				//takes no venom damage and water damage is converted to defer damage
+				super.damage(piDmg, puDmg, fDmg, 0, 0, src);
 			}
 		}
 
@@ -463,6 +498,14 @@ public abstract class YogFist extends Mob {
 			properties.add(Property.ELECTRIC);
 
 			canRangedInMelee = false;
+			punchDmg = 7;
+			pierceDmg = 3;
+			fireDmg = 10;
+
+			punchArmor = 5;
+			pierceArmor = 8;
+
+			fireArmor = 300;
 		}
 
 		@Override
@@ -479,9 +522,10 @@ public abstract class YogFist extends Mob {
 
 			Invisibility.dispel(this);
 			Char enemy = this.enemy;
-			if (hit( this, enemy)) {
+			int dmg = GameMath.damageRoll(2*fireDmg,fireDmg,0);
+			if (dmg > block( this, enemy)) {
 
-				enemy.damage( Random.NormalIntRange(10, 20), new LightBeam() );
+				enemy.damage( 0,0, 3*fireRoll(0)/2,0,0, new LightBeam() );
 				Buff.prolong( enemy, Blindness.class, Blindness.DURATION/2f );
 
 				if (!enemy.isAlive() && enemy == Dungeon.hero) {
@@ -498,9 +542,9 @@ public abstract class YogFist extends Mob {
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
+		public void damage(int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src) {
 			int beforeHP = HP;
-			super.damage(dmg, src);
+			super.damage(piDmg, puDmg, fDmg, wDmg, vDmg, src);
 			if (isAlive() && beforeHP > HT/2 && HP < HT/2){
 				HP = HT/2;
 				Buff.prolong( Dungeon.hero, Blindness.class, Blindness.DURATION*1.5f );
@@ -529,6 +573,19 @@ public abstract class YogFist extends Mob {
 			spriteClass = FistSprite.Dark.class;
 
 			canRangedInMelee = false;
+
+			punchDmg = 7;
+			pierceDmg = 3;
+			fireDmg = 5;
+			waterDmg = 5;
+			venomDmg = 5;
+
+			punchArmor = 2;
+			pierceArmor = 2;
+
+			fireArmor = 420;
+			waterArmor = 420;
+			venomArmor = 420;
 		}
 
 		@Override
@@ -545,9 +602,56 @@ public abstract class YogFist extends Mob {
 
 			Invisibility.dispel(this);
 			Char enemy = this.enemy;
-			if (hit( this, enemy)) {
+			//randomly choose 2 types of damage
+			//types are not the same
+			int idx1 = Random.IntRange(0,4);
+			int idx2 = Random.IntRange(0,4);
+			if(idx1 == idx2) idx2 = (idx1 + 1) % 5;
 
-				enemy.damage( Random.NormalIntRange(10, 20), new DarkBolt() );
+			int piDmg = 0;
+			int puDmg = 0;
+			int fDmg = 0;
+			int wDmg = 0;
+			int vDmg = 0;
+
+			switch(idx1){
+				case 0:
+					piDmg = pierceRoll(0);
+					break;
+				case 1:
+					puDmg = punchRoll(0);
+					break;
+				case 2:
+					fDmg = fireRoll(0);
+					break;
+				case 3:
+					wDmg = waterRoll(0);
+					break;
+				case 4:
+					vDmg = venomRoll(0);
+					break;
+			}
+			switch(idx2){
+				case 0:
+					piDmg = pierceRoll(0);
+					break;
+				case 1:
+					puDmg = punchRoll(0);
+					break;
+				case 2:
+					fDmg = fireRoll(0);
+					break;
+				case 3:
+					wDmg = waterRoll(0);
+					break;
+				case 4:
+					vDmg = venomRoll(0);
+					break;
+			}
+			int dmg = piDmg + puDmg +fDmg + wDmg + vDmg;
+			if (dmg > block( this, enemy)) {
+
+				enemy.damage( piDmg, puDmg, fDmg, wDmg, vDmg, new DarkBolt() );
 
 				Light l = enemy.buff(Light.class);
 				if (l != null){
@@ -568,9 +672,9 @@ public abstract class YogFist extends Mob {
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
+		public void damage(int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src) {
 			int beforeHP = HP;
-			super.damage(dmg, src);
+			super.damage(piDmg, puDmg, fDmg, wDmg, vDmg, src);
 			if (isAlive() && beforeHP > HT/2 && HP < HT/2){
 				HP = HT/2;
 				Light l = Dungeon.hero.buff(Light.class);
@@ -593,6 +697,7 @@ public abstract class YogFist extends Mob {
 				if (l != null){
 					l.detach();
 				}
+				Buff.affect(Dungeon.hero, Doom.class);
 				GameScene.flash(0, false);
 			}
 		}

@@ -23,21 +23,19 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatSprite;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Random;
 
 public class Rat extends Mob {
 
 	{
 		spriteClass = RatSprite.class;
 		//experimenting with randomized stats
-		HP = HT = 16 + Random.NormalIntRange(-2,2);
+		HP = HT = 16;
 		defenseSkill = 2;
-		punchArmor = 1+ Random.NormalIntRange(-1,1);
-		pierceArmor = 1+ Random.NormalIntRange(-1,1);
+		punchArmor = 1;
+		pierceArmor = 1;
 		pierceDmg = 4;
 		punchDmg = 1;
 		maxLvl = 5;

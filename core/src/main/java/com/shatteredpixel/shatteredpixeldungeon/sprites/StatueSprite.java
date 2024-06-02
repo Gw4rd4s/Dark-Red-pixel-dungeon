@@ -26,10 +26,11 @@ import com.watabou.noosa.TextureFilm;
 import com.watabou.utils.GameMath;
 
 public class StatueSprite extends MobSprite {
-	
+	{
+		this.moveInterval = 0.2f;
+	}
 	public StatueSprite() {
 		super();
-		
 		texture( Assets.Sprites.STATUE );
 		
 		TextureFilm frames = new TextureFilm( texture, 12, 15 );
@@ -37,10 +38,10 @@ public class StatueSprite extends MobSprite {
 		idle = new Animation( 2, true );
 		idle.frames( frames, 0, 0, 0, 0, 0, 1, 1 );
 		
-		run = new Animation( 15, true );
+		run = new Animation( 8, true );
 		run.frames( frames, 2, 3, 4, 5, 6, 7 );
 		
-		attack = new Animation( 12, false );
+		attack = new Animation( 6, false );
 		attack.frames( frames, 8, 9, 10 );
 		
 		die = new Animation( 5, false );

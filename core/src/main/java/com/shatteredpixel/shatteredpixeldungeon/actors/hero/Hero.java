@@ -56,10 +56,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PhysicalEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Challenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.ElementalStrike;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.NaturesPower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
@@ -80,11 +78,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapons.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Brimstone;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
-import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CapeOfThorns;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EtherealChains;
@@ -110,13 +106,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfForce;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfHaste;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfTenacity;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapons.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapons.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapons.missiles.MissileWeapon;
@@ -137,8 +130,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.SlashSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.StabSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.AttackSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
@@ -616,6 +608,31 @@ public class Hero extends Char {
 		}
 		return def;
 	}
+	@Override
+	public int fireDefRoll(){
+		int def = super.fireDefRoll();
+		if(belongings.armor != null){
+			def += belongings.armor.fireDefRoll();
+		}
+		return def;
+	}
+	@Override
+	public int waterDefRoll(){
+		int def = super.waterDefRoll();
+		if(belongings.armor != null){
+			def += belongings.armor.waterDefRoll();
+		}
+		return def;
+	}
+	@Override
+	public int venomDefRoll(){
+		int def = super.venomDefRoll();
+		if(belongings.armor != null){
+			def += belongings.armor.venomDefRoll();
+		}
+		return def;
+	}
+
 	@Override
 	public int pierceRoll(float critBonus){
 		int dmg = super.pierceRoll(critBonus);
@@ -1285,6 +1302,9 @@ public class Hero extends Char {
 	 * @param fullRest fall asleep IF TRUE. Wait 1 turn when FALSE
 	 */
 	public void rest( boolean fullRest ) {
+		//activate blocking
+		//todo add 
+		if(blockCD <= 0) blockCD = 8;
 		spendAndNextConstant( TIME_TO_REST );
 		if (hasTalent(Talent.HOLD_FAST)){
 			Buff.affect(this, HoldFast.class).pos = pos;
@@ -1304,51 +1324,17 @@ public class Hero extends Char {
 	public int attackProc( final Char enemy, int damage ) {
 		damage = super.attackProc( enemy, damage );
 
-		Weapon wep;
-		if (RingOfForce.fightingUnarmed(this) && !RingOfForce.unarmedGetsWeaponEnchantment(this)){
-			wep = null;
-		} else {
-			wep = belongings.attackingWeapon();
-		}
+		Weapon wep = belongings.attackingWeapon();
 
 		if (wep != null) damage = wep.proc( this, enemy, damage );
 
 		damage = Talent.onAttackProc( this, enemy, damage );
-		
-		switch (subClass) {
-		case SNIPER:
-			if (wep instanceof MissileWeapon && !(wep instanceof SpiritBow.SpiritArrow) && enemy != this) {
-				Actor.add(new Actor() {
-					
-					{
-						actPriority = VFX_PRIO;
-					}
-					
-					@Override
-					protected boolean act() {
-						if (enemy.isAlive()) {
-							int bonusTurns = hasTalent(Talent.SHARED_UPGRADES) ? wep.buffedLvl() : 0;
-							Buff.prolong(Hero.this, SnipersMark.class, SnipersMark.DURATION + bonusTurns).set(enemy.id(), bonusTurns);
-						}
-						Actor.remove(this);
-						return true;
-					}
-				});
-			}
-			break;
-		default:
-		}
 		
 		return damage;
 	}
 	
 	@Override
 	public int defenseProc( Char enemy, int damage ) {
-		
-		if (damage > 0 && subClass == HeroSubClass.BERSERKER){
-			Berserk berserk = Buff.affect(this, Berserk.class);
-			berserk.damage(damage);
-		}
 		
 		if (belongings.armor() != null) {
 			damage = belongings.armor().proc( enemy, this, damage );
@@ -1363,7 +1349,7 @@ public class Hero extends Char {
 	}
 	
 	@Override
-	public void damage( int dmg, Object src ) {
+	public void damage( int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src ) {
 		if (buff(TimekeepersHourglass.timeStasis.class) != null)
 			return;
 
@@ -1379,52 +1365,30 @@ public class Hero extends Char {
 			GLog.w( Messages.get(this, "pain_resist") );
 		}
 
-		Endure.EndureTracker endure = buff(Endure.EndureTracker.class);
-		if (!(src instanceof Char)){
-			//reduce damage here if it isn't coming from a character (if it is we already reduced it)
-			if (endure != null){
-				dmg = Math.round(endure.adjustDamageTaken(dmg));
-			}
-			//the same also applies to challenge scroll damage reduction
-			if (buff(ScrollOfChallenge.ChallengeArena.class) != null){
-				dmg *= 0.67f;
-			}
-			//and to monk meditate damage reduction
-			if (buff(MonkEnergy.MonkAbility.Meditate.MeditateResistance.class) != null){
-				dmg *= 0.2f;
-			}
-		}
-
-		CapeOfThorns.Thorns thorns = buff( CapeOfThorns.Thorns.class );
-		if (thorns != null) {
-			dmg = thorns.proc(dmg, (src instanceof Char ? (Char)src : null),  this);
-		}
-
-		dmg = (int)Math.ceil(dmg * RingOfTenacity.damageMultiplier( this ));
-
-		//TODO improve this when I have proper damage source logic
-		if (belongings.armor() != null && belongings.armor().hasGlyph(AntiMagic.class, this)
-				&& AntiMagic.RESISTS.contains(src.getClass())){
-			dmg -= AntiMagic.drRoll(this, belongings.armor().buffedLvl());
-		}
-
 		if (buff(Talent.WarriorFoodImmunity.class) != null){
-			if (pointsInTalent(Talent.IRON_STOMACH) == 1)       dmg = Math.round(dmg*0.25f);
-			else if (pointsInTalent(Talent.IRON_STOMACH) == 2)  dmg = Math.round(dmg*0.00f);
+			if (pointsInTalent(Talent.IRON_STOMACH) == 1){
+				piDmg = Math.round(piDmg*0.25f);
+				puDmg = Math.round(puDmg*0.25f);
+				fDmg = Math.round(fDmg*0.25f);
+				wDmg = Math.round(wDmg*0.25f);
+				vDmg = Math.round(vDmg*0.25f);
+			}
+			else if (pointsInTalent(Talent.IRON_STOMACH) == 2){
+				piDmg = 0;
+				puDmg = 0;
+				fDmg = 0;
+				wDmg = 0;
+				vDmg = 0;
+			}
 		}
 
 		int preHP = HP + shielding();
 		if (src instanceof Hunger) preHP -= shielding();
-		super.damage( dmg, src );
+		super.damage( piDmg, puDmg, fDmg, wDmg, vDmg, src );
 		int postHP = HP + shielding();
-		if (src instanceof Hunger) postHP -= shielding();
 		int effectiveDamage = preHP - postHP;
 
 		if (effectiveDamage <= 0) return;
-
-		if (buff(Challenge.DuelParticipant.class) != null){
-			buff(Challenge.DuelParticipant.class).addDamage(effectiveDamage);
-		}
 
 		//flash red when hit for serious damage.
 		float percentDMG = effectiveDamage / (float)preHP; //percent of current HP that was taken
@@ -1448,7 +1412,55 @@ public class Hero extends Char {
 			}
 		}
 	}
-	
+
+	@Override
+	public void damage( int dmg, Object src ) {
+		if (buff(TimekeepersHourglass.timeStasis.class) != null)
+			return;
+
+		//regular damage interrupt, triggers on any damage except specific mild DOT effects
+		// unless the player recently hit 'continue moving', in which case this is ignored
+		if (!(src instanceof Hunger || src instanceof Viscosity.DeferedDamage) && damageInterrupt) {
+			interrupt();
+			resting = false;
+		}
+
+		if (this.buff(Drowsy.class) != null){
+			Buff.detach(this, Drowsy.class);
+			GLog.w( Messages.get(this, "pain_resist") );
+		}
+
+		int preHP = HP + shielding();
+		if (src instanceof Hunger) preHP -= shielding();
+		super.damage( dmg, src );
+		int postHP = HP + shielding();
+		int effectiveDamage = preHP - postHP;
+
+		if (effectiveDamage <= 0) return;
+
+		//flash red when hit for serious damage.
+		float percentDMG = effectiveDamage / (float)preHP; //percent of current HP that was taken
+		float percentHP = 1 - ((HT - postHP) / (float)HT); //percent health after damage was taken
+		// The flash intensity increases primarily based on damage taken and secondarily on missing HP.
+		float flashIntensity = 0.25f * (percentDMG * percentDMG) / percentHP;
+		//if the intensity is very low don't flash at all
+		if (flashIntensity >= 0.05f){
+			flashIntensity = Math.min(1/3f, flashIntensity); //cap intensity at 1/3
+			GameScene.flash( (int)(0xFF*flashIntensity) << 16 );
+			if (isAlive()) {
+				if (flashIntensity >= 1/6f) {
+					Sample.INSTANCE.play(Assets.Sounds.HEALTH_CRITICAL, 1/3f + flashIntensity * 2f);
+				} else {
+					Sample.INSTANCE.play(Assets.Sounds.HEALTH_WARN, 1/3f + flashIntensity * 4f);
+				}
+				//hero gets interrupted on taking serious damage, regardless of any other factor
+				interrupt();
+				resting = false;
+				damageInterrupt = true;
+			}
+		}
+	}
+
 	public void checkVisibleMobs() {
 		ArrayList<Mob> visible = new ArrayList<>();
 
@@ -1616,7 +1628,7 @@ public class Hero extends Char {
 			//Perform slash attack if Actor is able to
 			if (hitBySlash != null && wep.slashCoefs[0] > 0) {
 				delay = attackDelay();//slash uses melee speed, not movement speed!!!
-				((SlashSprite) this.sprite.parent.recycle(SlashSprite.class)).
+				((AttackSprite) this.sprite.parent.recycle(AttackSprite.class)).
 					playSlash(this.sprite,                                //the one who swings weapon, rotate weapon around it
 							hitBySlash[0].sprite,                    //1st target
 							wep                   					//weapon to show
@@ -2002,23 +2014,6 @@ public class Hero extends Char {
 		Dungeon.deleteGame( GamesInProgress.curSlot, true );
 	}
 
-	//effectively cache this buff to prevent having to call buff(...) a bunch.
-	//This is relevant because we call isAlive during drawing, which has both performance
-	//and thread coordination implications if that method calls buff(...) frequently
-	private Berserk berserk;
-
-	@Override
-	public boolean isAlive() {
-		
-		if (HP <= 0){
-			if (berserk == null) berserk = buff(Berserk.class);
-			return berserk != null && berserk.berserking();
-		} else {
-			berserk = null;
-			return super.isAlive();
-		}
-	}
-
 	@Override
 	public void move(int step, boolean travelling) {
 		boolean wasHighGrass = Dungeon.level.map[step] == Terrain.HIGH_GRASS;
@@ -2060,7 +2055,7 @@ public class Hero extends Char {
 
 		Invisibility.dispel();
 		//Stab visuals
-		((StabSprite) this.sprite.parent.recycle(StabSprite.class)).
+		((AttackSprite) this.sprite.parent.recycle(AttackSprite.class)).
 				playStab(this.sprite,					//the one who swings weapon, rotate weapon around it
 						enemy.sprite,					//target
 						this.belongings.weapon			//weapon to show
@@ -2155,7 +2150,7 @@ public class Hero extends Char {
 
 	public boolean search( boolean intentional ) {
 		
-		if (!isAlive()) return false;
+		if (HP<0) return false;
 		
 		boolean smthFound = false;
 

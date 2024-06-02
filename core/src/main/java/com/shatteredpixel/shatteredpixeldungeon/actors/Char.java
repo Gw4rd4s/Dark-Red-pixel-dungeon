@@ -28,9 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Adrenaline;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArcaneArmor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -46,15 +44,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FireImbue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostImbue;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Fury;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hex;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LifeLink;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSleep;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
@@ -65,23 +59,18 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Speed;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Stamina;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Challenge;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.DeathMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Elemental;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Tengu;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Potential;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
@@ -98,7 +87,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Blazi
 import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Kinetic;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapons.enchantments.Shocking;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapons.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Door;
@@ -135,22 +123,27 @@ public abstract class Char extends Actor {
 	/**punching type of damage*/
 	protected int punchDmg;
 	/**fire, burning, hot type of damage*/
-	protected int burnDmg;
+	protected int fireDmg;
 	/**cold, chilling, freezing type of damage*/
-	protected int frostDmg;
-	/**toxic, poisonous type of damage*/
-	protected int poisonDmg;
+	protected int waterDmg;
+	/**toxic, poisonous, venomous type of damage*/
+	protected int venomDmg;
 	/**armor against piercing*/
 	protected int pierceArmor;
 	/**armor against punching*/
 	protected int punchArmor;
-	/**response to hot dmg, +100% healing, -100% damaging, -200% twice damaging*/
-	protected float burnLika = -1f;
-	/**response to cold dmg, +100% healing, -100% damaging, -200% twice damaging*/
-	protected float frostLika = -1f;
-	/**response to poison dmg, +100% healing, -100% damaging, -200% twice damaging*/
-	protected float poisonLika = -0.5f;
-
+	/**responses to fire, water and venom dmg
+	 * response = total armor / max health, min -2, max 1
+	 * +100% healing, -100% damaging, -200% twice damaging*/
+	protected int fireArmor;
+	protected int waterArmor;
+	protected int venomArmor;
+	/**attacking power: degrades stamina, replacement for accuracy*/
+	protected int attackSkill;
+	/**blocking count down: number of turns before another block*/
+	protected int blockCD;
+	/**number of additional blocks in blocking turn*/
+	protected int blockPersists;
 	protected float baseSpeed	= 1;
 	protected PathFinder.Path path;
 
@@ -184,6 +177,7 @@ public abstract class Char extends Actor {
 		if (properties().contains(Property.IMMOVABLE)){
 			throwItems();
 		}
+		blockCD = Math.max(blockCD--, 0);
 		return false;
 	}
 
@@ -268,9 +262,6 @@ public abstract class Char extends Actor {
 		c.spend( 1 / c.speed() );
 
 		if (c == Dungeon.hero){
-			if (Dungeon.hero.subClass == HeroSubClass.FREERUNNER){
-				Buff.affect(Dungeon.hero, Momentum.class).gainStack();
-			}
 
 			Dungeon.hero.busy();
 		}
@@ -305,14 +296,16 @@ public abstract class Char extends Actor {
 	protected static final String BUFFS	    = "buffs";
 	protected static final String PIERCE_DMG = "pierceDmg";
 	protected static final String PUNCH_DMG = "punchDmg";
-	protected static final String BURN_DMG = "burnDmg";
-	protected static final String FROST_DMG = "frostDmg";
+	protected static final String FIRE_DMG = "fireDmg";
+	protected static final String WATER_DMG = "waterDmg";
 	protected static final String POISON_DMG = "poisonDmg";
 	protected static final String PIERCE_ARMOR = "pierceArmor";
 	protected static final String PUNCH_ARMOR = "punchArmor";
-	protected static final String BURN_LIKABILITY = "burnLika";
-	protected static final String FROST_LIKABILITY = "frostLika";
-	protected static final String POISON_LIKABILITY = "poisonLika";
+	protected static final String FIRE_ARMOR = "fireCoef";
+	protected static final String WATER_ARMOR = "waterCoef";
+	protected static final String VENOM_ARMOR = "poisonCoef";
+	protected static final String BLOCKCD = "blockCD";
+	protected static final String BLOCKPERSISTS = "blockPersists";
 
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -325,14 +318,16 @@ public abstract class Char extends Actor {
 		bundle.put( BUFFS, buffs );
 		bundle.put( PIERCE_DMG, pierceDmg);
 		bundle.put( PUNCH_DMG, punchDmg);
-		bundle.put( FROST_DMG, burnDmg);
-		bundle.put( BURN_DMG, frostDmg);
-		bundle.put( POISON_DMG, poisonDmg);
+		bundle.put( FIRE_DMG, fireDmg);
+		bundle.put( WATER_DMG, waterDmg);
+		bundle.put( POISON_DMG, venomDmg);
 		bundle.put( PIERCE_ARMOR, pierceArmor);
 		bundle.put( PUNCH_ARMOR, punchArmor);
-		bundle.put( BURN_LIKABILITY, burnLika);
-		bundle.put( FROST_LIKABILITY, frostLika);
-		bundle.put( POISON_LIKABILITY, poisonLika);
+		bundle.put( FIRE_ARMOR, fireArmor);
+		bundle.put( WATER_ARMOR, waterArmor);
+		bundle.put( VENOM_ARMOR, venomArmor);
+		bundle.put( BLOCKCD, blockCD);
+		bundle.put( BLOCKPERSISTS, blockPersists);
 	}
 	
 	@Override
@@ -345,14 +340,16 @@ public abstract class Char extends Actor {
 		HT = bundle.getInt( TAG_HT );
 		pierceDmg = bundle.getInt(PIERCE_DMG);
 		punchDmg = bundle.getInt(PUNCH_DMG);
-		burnDmg = bundle.getInt(BURN_DMG);
-		frostDmg = bundle.getInt(FROST_DMG);
-		poisonDmg = bundle.getInt(POISON_DMG);
+		fireDmg = bundle.getInt(FIRE_DMG);
+		waterDmg = bundle.getInt(WATER_DMG);
+		venomDmg = bundle.getInt(POISON_DMG);
 		pierceArmor = bundle.getInt(PIERCE_ARMOR);
 		punchArmor = bundle.getInt(PUNCH_ARMOR);
-		burnLika = bundle.getInt(BURN_LIKABILITY);
-		frostLika = bundle.getInt(FROST_LIKABILITY);
-		poisonLika = bundle.getInt(POISON_LIKABILITY);
+		fireArmor = bundle.getInt(FIRE_ARMOR);
+		waterArmor = bundle.getInt(WATER_ARMOR);
+		venomArmor = bundle.getInt(VENOM_ARMOR);
+		blockCD = bundle.getInt(BLOCKCD);
+		blockPersists = bundle.getInt(BLOCKPERSISTS);
 
 		for (Bundlable b : bundle.getCollection( BUFFS )) {
 			if (b != null) {
@@ -379,20 +376,11 @@ public abstract class Char extends Actor {
 			}
 			return false;
 		}
-
-		if (hit( this, enemy, accMulti)) {
-
+		//interrupt if hero gets hit
+		if (this instanceof Hero && ((Hero) this).damageInterrupt){
+			((Hero) this).interrupt();
+		}
 			float tempMulti = 1f;
-
-			if (buff( Fury.class ) != null) {
-				tempMulti *= 1.5f;
-			}
-
-			for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
-				tempMulti *= buff.meleeDamageFactor();
-			}
-
-			tempMulti *= AscensionChallenge.statModifier(this);
 
 			if (enemy.buff(ScrollOfChallenge.ChallengeArena.class) != null){
 				tempMulti *= 0.67f;
@@ -402,79 +390,52 @@ public abstract class Char extends Actor {
 				tempMulti *= 0.67f;
 			}
 
-			int pierceDamage = Math.round(tempMulti * (critBonus) );
-			int punchDamage = Math.round(tempMulti * punchRoll(critBonus) );
-			int burnDamage = Math.round(tempMulti * burnRoll(critBonus) );
-			int frostDamage = Math.round(tempMulti * frostRoll(critBonus) );
-			int poisonDamage = Math.round(tempMulti * poisonRoll(critBonus) );
-			
-			//TODO: This works on both types, improve this
-			pierceDamage = enemy.defenseProc( this, pierceDamage );
-			punchDamage = enemy.defenseProc( this, punchDamage );
-			//armor: subtracting
-			pierceDamage -= Math.round(pierceDefRoll() * AscensionChallenge.statModifier(enemy) );
-			punchDamage -= Math.round(punchDefRoll() * AscensionChallenge.statModifier(enemy) );
-			//likabilities: multiplicative
-			//minus because this is damage not health
-			burnDamage = -Math.round( burnLika * burnDamage );
-			frostDamage = -	Math.round( frostLika * frostDamage );
-			poisonDamage = - Math.round( poisonLika * poisonDamage );
-			//limits
-			pierceDamage = Math.max( pierceDamage, 0 );
-			punchDamage = Math.max( punchDamage, 0 );
+			int piDmg = Math.round(tempMulti * pierceRoll(critBonus) );
+			int puDmg = Math.round(tempMulti * punchRoll(critBonus) );
+			int fDmg = Math.round(tempMulti * fireRoll(critBonus) );
+			int wDmg = Math.round(tempMulti * waterRoll(critBonus) );
+			int vDmg = Math.round(tempMulti * venomRoll(critBonus) );
 
-			//TODO: add distinctive color, visual or something to distinguish damage types during gameplay
-			int effectiveDamage = pierceDamage + punchDamage + burnDamage + frostDamage + poisonDamage;
-			if (enemy.buff(Viscosity.ViscosityTracker.class) != null){
-				effectiveDamage = enemy.buff(Viscosity.ViscosityTracker.class).deferDamage(effectiveDamage);
-				enemy.buff(Viscosity.ViscosityTracker.class).detach();
-			}
-
-			//vulnerable specifically applies after armor reductions
-			if ( enemy.buff( Vulnerable.class ) != null){
-				// 1.333333333 coefficient but INT
-				effectiveDamage *= 4;
-				effectiveDamage /= 3;
-			}
-			
-			effectiveDamage = attackProc( enemy, effectiveDamage );
-			
-			if (visibleFight) {
-				if (effectiveDamage > 0 || !enemy.blockSound(Random.Float(0.96f, 1.05f))) {
-					hitSound(Random.Float(0.87f, 1.15f));
-				}
-			}
+			//TODO: Forgets return value: breaks glyph of stone, wand of living earth...
+			enemy.defenseProc( this, piDmg + puDmg + fDmg + wDmg + vDmg);
+			//todo: Forgets return value: this breaks a lot of stuff
+			attackProc( enemy, piDmg + puDmg + fDmg + wDmg + vDmg );
 
 			// If the enemy is already dead, interrupt the attack.
 			// This matters as defence procs can sometimes inflict self-damage, such as armor glyphs.
 			if (!enemy.isAlive()){
 				return true;
 			}
-
-			enemy.damage( effectiveDamage, this );
+			int blckPwr = enemy.block( this, enemy);
+			//damage was blocked completely
+			if ( (piDmg+puDmg+fDmg+wDmg+vDmg) <= blckPwr ) {
+				if (visibleFight) {
+					//ToDo: add blocking animation
+				//TODO enemy.defenseSound? currently miss plays for monks/crab even when they parry
+				Sample.INSTANCE.play(Assets.Sounds.MISS);
+				}
+				return false;
+			}
+			//armor & blocking: subtracting
+			piDmg -= enemy.pierceDefRoll() + blckPwr;
+			puDmg -= enemy.punchDefRoll() + blckPwr;
+			//blocking: subtracting
+			fDmg -= blckPwr;
+			wDmg -= blckPwr;
+			vDmg -= blckPwr;
+			//physical damage can not be negative
+			piDmg = Math.max( piDmg, 0 );
+			puDmg = Math.max( puDmg, 0 );
+			//and so elemental damage can not be negative from blocking
+			fDmg = Math.max( fDmg, 0);
+			wDmg = Math.max( wDmg, 0);
+			vDmg = Math.max( vDmg, 0);
+			enemy.damage(piDmg, puDmg, fDmg, fDmg, vDmg, this );
 
 			if (buff(FireImbue.class) != null)  buff(FireImbue.class).proc(enemy);
 			if (buff(FrostImbue.class) != null) buff(FrostImbue.class).proc(enemy);
 
-			Talent.CombinedLethalityTriggerTracker combinedLethality = buff(Talent.CombinedLethalityTriggerTracker.class);
-			if (combinedLethality != null){
-				if ( enemy.isAlive() && enemy.alignment != alignment && !Char.hasProp(enemy, Property.BOSS)
-						&& !Char.hasProp(enemy, Property.MINIBOSS) && this instanceof Hero &&
-						(enemy.HP/(float)enemy.HT) <= 0.4f*((Hero)this).pointsInTalent(Talent.COMBINED_LETHALITY)/3f) {
-					enemy.HP = 0;
-					if (!enemy.isAlive()) {
-						enemy.die(this);
-					} else {
-						//helps with triggering any on-damage effects that need to activate
-						enemy.damage(-1, this);
-						DeathMark.processFearTheReaper(enemy);
-					}
-					enemy.sprite.showStatus(CharSprite.NEGATIVE, Messages.get(Talent.CombinedLethalityTriggerTracker.class, "executed"));
-				}
-				combinedLethality.detach();
-			}
-
-			enemy.sprite.bloodBurstA( sprite.center(), effectiveDamage );
+			enemy.sprite.bloodBurstA( sprite.center(), piDmg + puDmg + fDmg + wDmg + vDmg );
 			enemy.sprite.flash();
 			//enemy dead check
 			if (!enemy.isAlive() && visibleFight) {
@@ -496,74 +457,50 @@ public abstract class Char extends Actor {
 				}
 			}
 
+			if(blckPwr > Math.round(this.HT / 10f)){
+				//todo add blocking animation if block more than 10% hp
+			}
 			return true;
-			
-		}
-
-		enemy.sprite.showStatus( CharSprite.NEUTRAL, enemy.defenseVerb() );
-		if (visibleFight) {
-			//TODO enemy.defenseSound? currently miss plays for monks/crab even when they parry
-			Sample.INSTANCE.play(Assets.Sounds.MISS);
-		}
-			
-			return false;
 	}
 
 	public static int INFINITE_ACCURACY = 1_000_000;
 	public static int INFINITE_EVASION = 1_000_000;
 
-	public static final boolean hit( Char attacker, Char defender) {
-		return hit(attacker, defender, 1f);
-	}
+	public int block( Char attacker, Char defender) {
+		float blck = 0;
+		//invisible chars never blocks (for the hero this is surprise attacking)
+		//todo add surprise to monsters!
+		if (attacker.invisible > 0 && attacker.canSurpriseAttack()) return -1;
+		// last turns of cold down = no blocking
+		if( defender.blockCD < 4) return 0;
 
-	public static boolean hit( Char attacker, Char defender, float accMulti) {
-		float acuStat = attacker.attackSkill( defender );
-		float defStat = defender.defenseSkill( attacker );
+		//getting blocking values
+		if(defender instanceof Hero && ((Hero) defender).belongings.weapon != null) blck += ((Hero) defender).belongings.weapon.blocking;
+		if(defender instanceof Mob && ((Mob) defender).weaponL() != null) blck += ((Mob) defender).weaponL().blocking;
+		if(defender instanceof Mob && ((Mob) defender).weaponR() != null) blck += ((Mob) defender).weaponR().blocking;
 
-		if (defender instanceof Hero && ((Hero) defender).damageInterrupt){
-			((Hero) defender).interrupt();
-		}
+		//natural decaying
+		blck *= ( defender.blockCD /4f - 1);
 
-		//invisible chars always hit (for the hero this is surprise attacking)
-		if (attacker.invisible > 0 && attacker.canSurpriseAttack()){
-			acuStat = INFINITE_ACCURACY;
-		}
-
-		if (defender.buff(MonkEnergy.MonkAbility.Focus.FocusBuff.class) != null){
-			defStat = INFINITE_EVASION;
-			defender.buff(MonkEnergy.MonkAbility.Focus.FocusBuff.class).detach();
-			Buff.affect(defender, MonkEnergy.MonkAbility.Focus.FocusActivation.class, 0);
-		}
-
-		//if accuracy or evasion are large enough, treat them as infinite.
-		//note that infinite evasion beats infinite accuracy
-		if (defStat >= INFINITE_EVASION){
-			return false;
-		} else if (acuStat >= INFINITE_ACCURACY){
-			return true;
-		}
-
-		float acuRoll = Random.Float( acuStat );
-		if (attacker.buff(Bless.class) != null) acuRoll *= 1.25f;
-		if (attacker.buff(  Hex.class) != null) acuRoll *= 0.8f;
-		if (attacker.buff( Daze.class) != null) acuRoll *= 0.5f;
+		if (attacker.buff(Bless.class) != null) blck *= 0.8f;
+		if (attacker.buff(  Hex.class) != null) blck *= 1.25f;
+		if (attacker.buff( Daze.class) != null) blck *= 2f;
 		for (ChampionEnemy buff : attacker.buffs(ChampionEnemy.class)){
-			acuRoll *= buff.evasionAndAccuracyFactor();
+			blck *= buff.evasionAndAccuracyFactor();
 		}
-		acuRoll *= AscensionChallenge.statModifier(attacker);
-		
-		float defRoll = Random.Float( defStat );
-		if (defender.buff(Bless.class) != null) defRoll *= 1.25f;
-		if (defender.buff(  Hex.class) != null) defRoll *= 0.8f;
-		if (defender.buff( Daze.class) != null) defRoll *= 0.5f;
+		blck *= AscensionChallenge.statModifier(attacker);
+		//same as attacker code above: but inverted numbers
+		if (defender.buff(Bless.class) != null) blck *= 1.25f;
+		if (defender.buff(  Hex.class) != null) blck *= 0.8f;
+		if (defender.buff( Daze.class) != null) blck *= 0.5f;
 		for (ChampionEnemy buff : defender.buffs(ChampionEnemy.class)){
-			defRoll *= buff.evasionAndAccuracyFactor();
+			blck *= buff.evasionAndAccuracyFactor();
 		}
-		defRoll *= AscensionChallenge.statModifier(defender);
-		
-		return (acuRoll * accMulti) >= defRoll;
+		blck *= AscensionChallenge.statModifier(defender);
+
+		return Math.round(blck);
 	}
-	
+
 	public int attackSkill( Char target ) {
 		return 0;
 	}
@@ -597,24 +534,24 @@ public abstract class Char extends Actor {
 	 * @param critBonus critical bonus to this type of damage
 	 * @return INT actual damage roll
 	 */
-	public int burnRoll(float critBonus){
-		return GameMath.damageRoll(burnDmg, burnDmg, critBonus);
+	public int fireRoll(float critBonus){
+		return GameMath.damageRoll(fireDmg, fireDmg, critBonus);
 	}
 	/**
 	 * Roll of frost damage
 	 * @param critBonus critical bonus to this type of damage
 	 * @return INT actual damage roll
 	 */
-	public int frostRoll(float critBonus){
-		return GameMath.damageRoll(frostDmg, frostDmg, critBonus);
+	public int waterRoll(float critBonus){
+		return GameMath.damageRoll(waterDmg, waterDmg, critBonus);
 	}
 	/**
 	 * Roll of poison damage
 	 * @param critBonus critical bonus to this type of damage
 	 * @return INT actual damage roll
 	 */
-	public int poisonRoll(float critBonus){
-		return GameMath.damageRoll(poisonDmg, poisonDmg, critBonus);
+	public int venomRoll(float critBonus){
+		return GameMath.damageRoll(venomDmg, venomDmg, critBonus);
 	}
 	//TODO: bark skin buff is not used. Add this here!
 	/**
@@ -631,14 +568,25 @@ public abstract class Char extends Actor {
 	public int punchDefRoll(){
 		return GameMath.damageRoll(punchArmor, punchArmor, 0);
 	}
-
+	/**
+	 * Roll of fire protection
+	 * @return INT actual damage roll
+	 */
+	public int fireDefRoll(){return GameMath.damageRoll(fireArmor, fireArmor,0);}
+	/**
+	 * Roll of water protection
+	 * @return INT actual damage roll
+	 */
+	public int waterDefRoll(){return GameMath.damageRoll(waterArmor, waterArmor,0);}
+	/**
+	 * Roll of venom protection
+	 * @return INT actual damage roll
+	 */
+	public int venomDefRoll(){return GameMath.damageRoll(venomArmor, venomArmor,0);}
 	//TODO it would be nice to have a pre-armor and post-armor proc.
 	// atm attack is always post-armor and defence is already pre-armor
 	
 	public int attackProc( Char enemy, int damage ) {
-		for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
-			buff.onAttackProc( enemy );
-		}
 		return damage;
 	}
 	
@@ -686,12 +634,11 @@ public abstract class Char extends Actor {
 
 	/**
 	 * Apply damage to this character
-	 * @param dmg damage to receive, if this is weapon dmg, then it is after armor applied and piercing and punching added to gather
-	 * @param src Used for Life Link buff
+	 * @param src Special argument: Used for Life Link buff and type of damage
 	 */
-	public void damage( int dmg, Object src ) {
-		
-		if (!isAlive() ||  dmg < 0) {
+	public void damage(int piDmg, int puDmg, int fDmg, int wDmg, int vDmg, Object src ) {
+		//dead or no damage
+		if (!isAlive() ||  (piDmg < 0 && puDmg < 0) ) {
 			return;
 		}
 
@@ -700,9 +647,138 @@ public abstract class Char extends Actor {
 			return;
 		}
 
-		//for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
-		//	dmg = (int) Math.ceil(dmg * buff.damageTakenFactor());
-		//}
+		//Damage spread through life link
+		if (!(src instanceof LifeLink) && buff(LifeLink.class) != null){
+			HashSet<LifeLink> links = buffs(LifeLink.class);
+			for (LifeLink link : links.toArray(new LifeLink[0])){
+				if (Actor.findById(link.object) == null){
+					links.remove(link);
+					link.detach();
+				}
+			}
+			piDmg = (int)Math.ceil(piDmg / (float)(links.size()+1));
+			puDmg = (int)Math.ceil(puDmg / (float)(links.size()+1));
+			fDmg = (int)Math.ceil(fDmg / (float)(links.size()+1));
+			wDmg = (int)Math.ceil(wDmg / (float)(links.size()+1));
+			vDmg = (int)Math.ceil(vDmg / (float)(links.size()+1));
+			for (LifeLink link : links){
+				Char ch = (Char)Actor.findById(link.object);
+				if (ch != null) {
+					ch.damage(piDmg, puDmg, fDmg, wDmg, vDmg, link);
+					if (HP <= 0) {//dead
+						link.detach();
+					}
+				}
+			}
+		}
+		float fireCoef = GameMath.gate(-1f,GameMath.descendRatio(fireDefRoll(),HT), 2f);
+		float waterCoef = GameMath.gate(-1f,GameMath.descendRatio(waterDefRoll(),HT), 2f);
+		float venomCoef = GameMath.gate(-1f,GameMath.descendRatio(venomDefRoll(),HT), 2f);
+
+		//detach buffs
+		Terror t = buff(Terror.class);
+		if (t != null){
+			t.recover();
+		}
+		Dread d = buff(Dread.class);
+		if (d != null){
+			d.recover();
+		}
+		Charm c = buff(Charm.class);
+		if (c != null){
+			c.recover(src);
+		}
+		if (this.buff(Frost.class) != null){
+			Buff.detach( this, Frost.class );
+		}
+		if (this.buff(MagicalSleep.class) != null){
+			Buff.detach(this, MagicalSleep.class);
+		}
+		if (this.buff(Doom.class) != null && !isImmune(Doom.class)){
+			piDmg = 3 * piDmg / 2;
+			puDmg = 3 * puDmg / 2;
+			//elemental damage is affected only when it harms this character.
+			if(fireCoef < 0) fDmg = 3 * fDmg / 2;
+			if(waterCoef < 0) wDmg = 3 * wDmg / 2;
+			if(venomCoef < 0) vDmg = 3 * vDmg / 2;
+		}
+
+		fDmg = Math.round( fireCoef * fDmg );
+		wDmg = Math.round( waterCoef * wDmg );
+		vDmg = Math.round( venomCoef * vDmg );
+		if (buff( Paralysis.class ) != null) {
+			buff( Paralysis.class ).processDamage(piDmg + puDmg + fDmg + wDmg + vDmg);
+		}
+
+		int HPdiff = HP;
+		HP -= (piDmg + puDmg + fDmg + wDmg + vDmg);
+		HP = Math.min(HT, HP);
+		HPdiff = HP - HPdiff;
+
+		if (HP < 0 && src instanceof Char && alignment == Alignment.ENEMY){
+			if (((Char) src).buff(Kinetic.KineticTracker.class) != null){
+				int dmgToAdd = -HP;
+				dmgToAdd -= ((Char) src).buff(Kinetic.KineticTracker.class).conservedDamage;
+				dmgToAdd = Math.round(dmgToAdd * Weapon.Enchantment.genericProcChanceMultiplier((Char) src));
+				if (dmgToAdd > 0) {
+					Buff.affect((Char) src, Kinetic.ConservedDamage.class).setBonus(dmgToAdd);
+				}
+				((Char) src).buff(Kinetic.KineticTracker.class).detach();
+			}
+		}
+		
+		if (sprite != null) {
+			String dText = "";
+			if(piDmg > 0) dText = "^" + piDmg + " ";
+			if(puDmg > 0) dText = dText + "&" + puDmg + " ";
+			//damaging elemental power in this section only, healing in next
+			if(fDmg > 0) dText = dText + fDmg + "# ";
+			if(wDmg > 0) dText = dText + wDmg + "~ ";
+			if(vDmg > 0) dText = dText + vDmg + "@";
+			//elemental healing, if any
+			if(fDmg < 0) dText = dText + "+" + Integer.toString(fDmg).substring(1) + "# ";
+			if(wDmg < 0) dText = dText + "+" + Integer.toString(wDmg).substring(1) + "~ ";
+			if(vDmg < 0) dText = dText + "+" + Integer.toString(vDmg).substring(1) + "@";
+
+			//largest damage type determines the display color
+			int color = CharSprite.NEGATIVE;//default or piercing
+			if( puDmg >= piDmg && puDmg >= fDmg && puDmg >= wDmg && puDmg >= vDmg) color = CharSprite.PUNCHING;
+			if( fDmg >= piDmg && fDmg >= puDmg && fDmg >= wDmg && fDmg >= vDmg) color = CharSprite.WARNING;
+			if( wDmg >= piDmg && wDmg >= puDmg && wDmg >= fDmg && wDmg >= vDmg) color = CharSprite.WATER;
+			if( vDmg >= piDmg && vDmg >= puDmg && vDmg >= fDmg && vDmg >= wDmg) color = CharSprite.POISON;
+			if(HPdiff > 0) color = CharSprite.POSITIVE;//healing if health gets greater
+
+			if(dText.isEmpty() || HPdiff == 0) {//no damage or Character has max health and taking healing effect
+				sprite.showStatus(CharSprite.NEUTRAL, "0");
+			}else {
+				sprite.showStatus(color, dText);
+				//todo: add healing effect
+			}
+		}
+
+		HP = Math.max(0, HP); //no negative health
+
+		if (!isAlive()) {
+			die( src );
+		}
+	}
+
+	/**
+	 * Direct damage, no armor or resistances, only invulnerability
+	 * @param dmg damage to deal
+	 * @param src source of damage or life link
+	 */
+	public void damage(int dmg, Object src ) {
+		//dead or no damage
+		if (HP <= 0 || dmg > 0) {
+			return;
+		}
+
+		if(isInvulnerable(src.getClass())){
+			sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "invulnerable"));
+			return;
+		}
+
 		//Damage spread through life link
 		if (!(src instanceof LifeLink) && buff(LifeLink.class) != null){
 			HashSet<LifeLink> links = buffs(LifeLink.class);
@@ -717,13 +793,13 @@ public abstract class Char extends Actor {
 				Char ch = (Char)Actor.findById(link.object);
 				if (ch != null) {
 					ch.damage(dmg, link);
-					if (!ch.isAlive()) {
+					if (HP <= 0) {//dead
 						link.detach();
 					}
 				}
 			}
 		}
-
+		//detach buffs
 		Terror t = buff(Terror.class);
 		if (t != null){
 			t.recover();
@@ -745,85 +821,24 @@ public abstract class Char extends Actor {
 		if (this.buff(Doom.class) != null && !isImmune(Doom.class)){
 			dmg *= 1.67f;
 		}
-		if (alignment != Alignment.ALLY && this.buff(DeathMark.DeathMarkTracker.class) != null){
-			dmg *= 1.25f;
-		}
-		
-		Class<?> srcClass = src.getClass();
-		if (isImmune( srcClass )) {
-			dmg = 0;
-		} else {
-			dmg = Math.round( dmg * resist( srcClass ));
-		}
-		
-		//TODO improve this when I have proper damage source logic
-		if (AntiMagic.RESISTS.contains(src.getClass()) && buff(ArcaneArmor.class) != null){
-			dmg -= Random.NormalIntRange(0, buff(ArcaneArmor.class).level());
-			if (dmg < 0) dmg = 0;
-		}
-		
+
 		if (buff( Paralysis.class ) != null) {
 			buff( Paralysis.class ).processDamage(dmg);
 		}
 
-		int shielded = dmg;
-		//FIXME: when I add proper damage properties, should add an IGNORES_SHIELDS property to use here.
-		if (!(src instanceof Hunger)){
-			for (ShieldBuff s : buffs(ShieldBuff.class)){
-				dmg = s.absorbDamage(dmg);
-				if (dmg == 0) break;
-			}
-		}
-		shielded -= dmg;
 		HP -= dmg;
 
-		//Grim logic
-		//TODO this is retarded! Improve or remove this!
-		if (HP > 0 && buff(Grim.GrimTracker.class) != null){
-
-			float finalChance = buff(Grim.GrimTracker.class).maxChance;
-			finalChance *= (float)Math.pow( ((HT - HP) / (float)HT), 2);
-
-			if (Random.Float() < finalChance) {
-				int extraDmg = Math.round(HP*resist(Grim.class));
-				dmg += extraDmg;
-				HP -= extraDmg;//unassigned dmg
-
-				sprite.emitter().burst( ShadowParticle.UP, 5 );
-				if (!isAlive() && buff(Grim.GrimTracker.class).qualifiesForBadge){
-					Badges.validateGrimWeapon();
-				}
-			}
-		}
-
-		if (HP < 0 && src instanceof Char && alignment == Alignment.ENEMY){
-			if (((Char) src).buff(Kinetic.KineticTracker.class) != null){
-				int dmgToAdd = -HP;
-				dmgToAdd -= ((Char) src).buff(Kinetic.KineticTracker.class).conservedDamage;
-				dmgToAdd = Math.round(dmgToAdd * Weapon.Enchantment.genericProcChanceMultiplier((Char) src));
-				if (dmgToAdd > 0) {
-					Buff.affect((Char) src, Kinetic.ConservedDamage.class).setBonus(dmgToAdd);
-				}
-				((Char) src).buff(Kinetic.KineticTracker.class).detach();
-			}
-		}
-		
 		if (sprite != null) {
-			sprite.showStatus(HP > HT / 2 ?
-							CharSprite.WARNING :
-							CharSprite.NEGATIVE,
-					Integer.toString(dmg + shielded));
+			sprite.showStatus(CharSprite.DEEP,Integer.toString(dmg));
 		}
 
-		if (HP < 0) HP = 0;
+		HP = Math.max(0, HP); //no negative health
 
 		if (!isAlive()) {
 			die( src );
-		} else if (HP == 0 && buff(DeathMark.DeathMarkTracker.class) != null){
-			DeathMark.processFearTheReaper(this);
 		}
 	}
-	
+
 	public void destroy() {
 		HP = 0;
 		Actor.remove( this );
@@ -857,13 +872,8 @@ public abstract class Char extends Actor {
 		if (src != Chasm.class) sprite.die();
 	}
 
-	//we cache this info to prevent having to call buff(...) in isAlive.
-	//This is relevant because we call isAlive during drawing, which has both performance
-	//and thread coordination implications
-	public boolean deathMarked = false;
-	
 	public boolean isAlive() {
-		return HP > 0 || deathMarked;
+		return HP > 0;
 	}
 
 	public boolean isActive() {

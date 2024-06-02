@@ -23,7 +23,6 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.watabou.noosa.TextureFilm;
 
 public class MimicSprite extends MobSprite {
@@ -51,7 +50,7 @@ public class MimicSprite extends MobSprite {
 		TextureFilm frames = new TextureFilm( texture, 16, 16 );
 
 		hiding = new Animation( 1, true );
-		hiding.frames( frames, 0+c, 0+c, 0+c, 0+c, 0+c, 1+c);
+		hiding.frames( frames, 0+c, 0+c, 0+c, 0+c, 0+c, c, c, c, c, 1+c);
 
 		idle = new Animation( 5, true );
 		idle.frames( frames, 2+c, 2+c, 2+c, 3+c, 3+c );
